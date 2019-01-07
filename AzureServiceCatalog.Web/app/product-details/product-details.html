@@ -1,0 +1,78 @@
+﻿<div class="col-lg-12">
+    <h2 class="row">
+        {{vm.product.name}}
+    </h2>
+    <div class="row">
+        <h3>Parameters</h3>
+        <ul class="col-lg-12">
+            <li ng-repeat="(key, value) in vm.product.data.parameters track by key">
+                {{value.metadata.displayLabel || vm.lodash.startCase(key)}}
+                <span ng-if="value.metadata.description" class="glyphicon glyphicon-info-sign" uib-tooltip="{{value.metadata.description}}"></span>
+            </li>
+        </ul>
+    </div>
+    <div class="row">
+        <h3>
+            Included Resources
+            <button class="btn btn-xs" ng-click="vm.expandAllResources()"><span></span>Expand All</button>
+            <button class="btn btn-xs" ng-click="vm.collapseAllResources()">Collapse All</button>
+        </h3>
+        <div class="text-primary col-sm-12 col-md-6 col-lg-4 resource-container" ng-repeat="resource in vm.product.data.resources | orderBy : 'name'" ng-include="'resourceDisplay'"></div>
+        <script type="text/ng-template" id="resourceDisplay">
+            <div class="resource-display" ng-init="vm.resourceExpanders[resource.$$hashKey] = false" ng-class="{'active': vm.resourceExpanders[resource.$$hashKey] }" ng-click="vm.toggleExpand(resource.$$hashKey)" dont-propagate="click" >
+                <h4 class="resource-header">
+                    <img class="resource-header-image" ng-src="{{vm.productListService.determineResourceImage(resource)}}" />
+                    {{vm.productListService.parseResourceTypeName(resource)}}
+                    <button class="btn btn-xs" dont-propagate="click" ng-click="vm.dialogsService.openJsonModal(resource, vm.productListService.parseResourceTypeName(resource))">Show Details</button>
+                    <span class="pull-right glyphicon glyphicon-chevron-right header-chevron"></span>
+                    <small class="pull-right" ng-if="resource.resources" tooltip-placement="left" uib-tooltip="{{'Has ' + resource.resources.length + ' child resource' + (resource.resources.length !== 1 ? 's.':'.')}}">
+                    {{resource.resources.length}}
+                    <span class="glyphicon glyphicon-flag"></span>&nbsp;
+                    </small>
+                </h4>
+                <ul>
+                    <li ng-if="resource.properties" ng-repeat="(key, value) in resource.properties track by key" ng-include="'propertiesTree'"></li>
+                    <li ng-if="resource.resources">
+                        <strong class="text-success">Child Resources:</strong>
+                        <ul>
+                            <li ng-repeat="resource in resource.resources" ng-include="'resourceDisplay'"></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </script>
+
+        <script type="text/ng-template" id="propertiesTree">
+            <strong class="text-success">{{vm.lodash.startCase(key)}}: </strong>
+            <span ng-if="vm.displaySimpleTemplate(value)">{{vm.getResourceParameterDisplayValue(key, value)}}</span>
+            <ul ng-if="vm.displayObjectTemplate(key, value)">
+                <li ng-repeat="(key, value) in value track by key" ng-include="'propertiesTree'"></li>
+            </ul>
+            <div ng-if="vm.displayArrayTemplate(key, value)">
+                <div ng-repeat="item in value">
+                    <ul ng-if="!vm.isNameValueObject(item)">
+                        <li ng-if="!vm.displaySimpleTemplate(item)" ng-repeat="(key, value) in item track by key" ng-include="'propertiesTree'"></li>
+                        <li ng-if="vm.displaySimpleTemplate(item)">{{vm.getResourceParameterDisplayValue(null, item)}}</li>
+                    </ul>
+                    <ul ng-if="vm.isNameValueObject(item)">
+                        <li ng-repeat="(key, value) in vm.constructNameValuePair(item) track by key" ng-include="'propertiesTree'"></li>
+                    </ul>
+                </div>
+            </div>
+
+            <li ng-if="value.properties">
+                <strong class="text-success">Properties:</strong>
+                <ul>
+                    <li ng-repeat="(key, value) in resource.properties track by key" ng-include="'propertiesTree'"></li>
+                </ul>
+            </li>
+        </script>
+
+    </div>
+    <!--<div ng-show="vm.userDetail.canDeploy" class="bootstrap-header-margin row">-->
+    <div class="bootstrap-header-margin row">
+        <a class="btn btn-success btn-lg col-md-4 col-md-offset-1" ui-sref="product-deployment({ id: vm.product.rowKey})">
+            <span class="glyphicon glyphicon-cloud" aria-hidden="true"></span> Provision Now
+        </a>
+    </div>
+</div>

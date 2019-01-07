@@ -1,0 +1,118 @@
+﻿<div ng-controller="ShellCtrl as shell">
+    <div id="adminNavBar" class="navbar navbar-fixed-top navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" ui-sref="home" ng-class="{'cursor-default': shell.activation}">
+                    <i class="glyphicon glyphicon-home"></i>
+                    <span>Service Catalog</span>
+                </a>
+            </div>
+            <div class="collapse navbar-collapse" ng-class="{'in': !navCollapsed}">
+                <ul class="nav navbar-nav">
+                    <form class="navbar-form navbar-left" role="search">
+                        <div class="form-group">
+                            <select class="form-control" ng-hide="true" ng-model="shell.selectedTenant" ng-options="t as t.DisplayName for t in shell.tenants"></select>
+                        </div>
+                    </form>
+                </ul>
+
+                <!--User dropdown menu-->
+                <div class="nav-bar">
+                    <ul class="nav navbar-nav navbar-right" style="position: relative;">
+                        <li>
+                            <a data-toggle="collapse" data-target=".navbar-collapse" ng-hide="shell.isState('activation-login') || shell.activation"
+                               href="http://www.appliedis.com/expertise/cloud-computing" target="_blank">About</a>
+                        </li>
+                        <!--<li><a data-toggle="collapse" data-target=".navbar-collapse" ui-sref="login" ng-hide="shell.isAuthenticated">Login</a></li>-->
+                        <li ng-class="{'active':shell.isState('activation-login')}">
+                            <a data-toggle="collapse" data-target=".navbar-collapse" ui-sref="activation-login" ng-hide="shell.isAuthenticated || shell.isState('activation-login')">
+                                <span class="glyphicon glyphicon-user"></span> Sign Up
+                            </a>
+                        </li>
+
+                        <li uib-dropdown ng-show="shell.isAuthenticated && !shell.isActivation">
+                            <a class="dropdown-toggle" uib-dropdown-toggle>
+                                <span class="glyphicon glyphicon-cloud"></span> Resources
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a data-toggle="collapse" data-target=".navbar-collapse" ui-sref="resource-groups">Spend</a></li>
+                                <li><a ui-sref="deployments">Deployments</a></li>
+                            </ul>
+                        </li>
+
+                        <li uib-dropdown ng-show="shell.isAuthenticated && !shell.isActivation && (shell.userDetail.canCreate || shell.userDetail.canAdmin)">
+                            <a class="dropdown-toggle" uib-dropdown-toggle>
+                                <span class="glyphicon glyphicon-cog"></span> Manage
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a data-toggle="collapse" data-target=".navbar-collapse" ui-sref="product-list" ng-show="shell.userDetail.canCreate">Product Catalog</a></li>
+                                <li ng-show="shell.userDetail.canCreate && shell.userDetail.canAdmin" role="separator" class="divider"></li>
+                                <li ng-show="shell.userDetail.canAdmin"><a ui-sref="manage-policy-list">Policies</a></li>
+                                <li ng-show="shell.userDetail.canAdmin"><a ui-sref="manage-policy-assignments">Policy Assignments</a></li>
+                                <li ng-show="shell.userDetail.canAdmin" role="separator" class="divider"></li>
+                                <li ng-show="shell.userDetail.canAdmin"><a ui-sref="manage-host-subscription">Host Subscription</a></li>
+                                <li ng-show="shell.userDetail.canAdmin"><a ui-sref="manage-enrolled-subscriptions">Enrolled Subscriptions</a></li>
+                                <li ng-show="shell.userDetail.canAdmin"><a ui-sref="manage-user-groups">User Groups</a></li>
+                                <li ng-show="shell.userDetail.canAdmin"><a ui-sref="manage-security">Security</a></li>
+                                <li ng-show="shell.userDetail.canAdmin" role="separator" class="divider"></li>
+                                <li ng-show="shell.userDetail.canAdmin"><a ui-sref="deactivate-tenant">Deactivate Tenant</a></li>
+                            </ul>
+                        </li>
+
+                        <li uib-dropdown ng-show="shell.isAuthenticated">
+                            <img src="https://secure.gravatar.com/avatar/d2b57db2fef2c9f0aa3b17bccb9b0f80.jpg?d=mm" style="height: 50px; padding-top: 1px" />
+                            <button class="btn dropdown-toggle navbar-btn" uib-dropdown-toggle type="button" style="background-color:transparent;color:white;">
+                                {{shell.userName}}
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a ng-href="Account/SignOut?domain={{shell.userDetail.organization.verifiedDomain}}">Logout</a>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <form class="navbar-form navbar-right" role="search" ng-show="shell.isAuthenticated && !shell.activation">
+                        <button type="submit" class="btn btn-success" uib-btn-checkbox ng-model="shell.tasksVisible">
+                            <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
+                            {{shell.tasksVisible ? 'Hide' : 'Show'}} Tasks
+                        </button>
+                    </form>
+
+                    <div id="feedbackPost" ng-click="shell.showFeedback()">
+                       <label>Feedback</label>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+
+    <div ng-show="shell.shellShowSpinner || (!shell.shellShowSpinner && shell.showSpinner)" class="page-splash dissolve-animation">
+        <div data-spinner="shell.spinnerOptions"></div>
+        <div class="page-splash-message page-splash-message-subtle">{{shell.spinnerMessage}}</div>
+    </div>
+
+
+    <div uib-collapse="!shell.tasksVisible" class="tasks-pane">
+        <div class="well well-sm" data-ng-include="'/app/layout/tasks-pane.html'"></div>
+    </div>
+
+    
+
+    <ol ng-show="shell.isAuthenticated && !shell.isActivation" class="breadcrumb">
+        <li><a ui-sref="home">{{shell.userDetail.organization.verifiedDomain}}</a></li>
+        <li ng-repeat="parent in shell.parentStates">
+            <a ui-sref="{{parent.state}}">{{parent.title}}</a>
+        </li>
+        <li class="active" ng-show="shell.currentNav">{{shell.currentNav}}</li>
+    </ol>
+
+    <div ui-view id="ng-view" class="container slide-animation admin-content"></div>
+
+</div>

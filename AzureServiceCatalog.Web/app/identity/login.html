@@ -1,0 +1,43 @@
+﻿<div ng-show="vm.directoryMissing" class="container text-center">
+    <uib-alert>
+        <h2>You must login with a specific URL.</h2>
+        <h3>Please contact your Administrator for correct Login URL.</h3>
+    </uib-alert>
+</div>
+
+<div ng-hide="vm.directoryMissing" class="container text-center">
+    <div class="col-md-9 scrollit">
+        <img src="/Content/images/service-catalog-login.png" alt="" />
+    </div>
+    <div class="col-md-3 fixed">
+        <h3>Login to tenant:</h3>
+        <p class="text-primary">{{vm.identityInfo.directoryName}}.onmicrosoft.com</p>
+        <p>You may login with either a Work/School account OR a Microsoft account.</p>
+
+
+        <div id="org">
+            <!--<a href="/account/signin"><img src="/Content/Images/org.png" style="height:65px;width:350px;" class="img-thumbnail" /></a>-->
+            <a href="/account/signin"><img src="/Content/Images/work-account.png" style="height:65px;width:350px;" class="img-thumbnail" /></a>
+        </div>
+
+        <!--<h3>OR</h3>-->
+
+        <div>
+            <!--<a ng-href="{{vm.msLoginUrl}}"><img src="/Content/Images/msa.png" style="height:65px;width:350px;" class="img-thumbnail" /></a>-->
+            <a ng-href="{{vm.msLoginUrl}}"><img src="/Content/Images/ms-account.png" style="height:65px;width:350px;" class="img-thumbnail" /></a>
+        </div>
+    </div>
+
+    <!--<h3>Login to Service Catalog</h3>
+    <p>You may login with either a Work/School account OR a Microsoft account.</p>
+
+    <div id="org">
+        <a href="/account/signin"><img src="/Content/Images/org.png" style="height:65px;width:350px;" class="img-thumbnail" /></a>
+    </div>
+
+    <h3>OR</h3>
+
+    <div>
+        <a ng-href="{{vm.msLoginUrl}}"><img src="/Content/Images/msa.png" style="height:65px;width:350px;" class="img-thumbnail" /></a>
+    </div>-->
+</div>

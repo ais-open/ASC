@@ -1,0 +1,49 @@
+﻿<div>
+    <h2>Previously Provisioned</h2>
+    <h4>Specify the parameters for the previously provisioned product you wish to view</h4>
+
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-md-2 control-label">Subscription</label>
+            <div class="col-md-3">
+                <ui-select name="subscription" class="overFlow" ng-model="vm.selectedSubscription" theme="bootstrap" on-select="vm.subscriptionChanged()" required>
+                    <ui-select-match placeholder="Select Subscription...">
+                        {{$select.selected.displayName | characters: 30}}
+                    </ui-select-match>
+                    <ui-select-choices repeat="sub in vm.subscriptions | filter: {displayName: $select.search}">
+                        <span class="exactFit" ng-bind-html="sub.displayName | highlight:$select.search"></span>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">Resource Group</label>
+            <div class="col-md-3">
+                <ui-select class="overFlow" ng-model="vm.selectedResourceGroup" theme="bootstrap" on-select="vm.resourceGroupChanged()" required>
+                    <ui-select-match placeholder="Select Resource Group...">
+                        {{$select.selected.name | characters: 30}}
+                    </ui-select-match>
+                    <ui-select-choices repeat="sub in vm.resourceGroups | filter: {name: $select.search}">
+                        <span class="exactFit" ng-bind-html="sub.name | highlight:$select.search"></span>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">Deployment Name</label>
+            <div class="col-md-3">
+                <ui-select class="overFlow" ng-model="vm.selectedDeployment" theme="bootstrap" on-select="vm.deploymentChanged()" required>
+                    <ui-select-match placeholder="Select Deployment...">
+                        {{$select.selected.name | characters: 30}}
+                    </ui-select-match>
+                    <ui-select-choices repeat="sub in vm.deployments | filter: {name: $select.search}">
+                        <span class="exactFit" ng-bind-html="sub.name | highlight:$select.search"></span>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+        </div>
+
+    </form>
+</div>

@@ -1,0 +1,93 @@
+﻿<ol class="breadcrumb">
+    <li><a>{{vm.subscriptionDetail.organization.verifiedDomain}}</a></li>
+    <li class="active">Enrollment</li>
+</ol>
+
+<div class="container">
+
+    <div class="no-content-warning" ng-if="vm.hostSubscriptionDetected">
+        <h1>Enrollment has already been completed.</h1>
+        <h4>Did you mean to log into your organization-specific tenant?</h4>
+        <p><a ng-href="?directoryName={{vm.trimmedOrgDomain}}">https://aisservicecatalog.com/?directoryName={{vm.trimmedOrgDomain}}</a></p>
+    </div>
+
+    <div ng-show="vm.showManagement && !vm.showEnrollmentSuccess">
+        <div ng-show="vm.currentStep === 2">
+            <div ng-if="vm.isGlobalAdministrator">
+                <div ng-if="vm.adminSubscriptions.length  === 0">
+                    <h3>No Azure Subscriptions found</h3>
+                    <div ng-if="vm.subscriptionDetail.subscriptions.length === 0">
+                        <uib-alert type="info">
+                            The AIS Service Catalog application must create a storage account within an Azure subscription. We were unable to locate a
+                            suitable Azure subscription within your Azure Active Directory tenant. You may click the following link to
+                            <a href="https://azure.microsoft.com/en-us/free/">create a free Azure account</a> here.
+                        </uib-alert>
+                    </div>
+                    <div ng-if="vm.subscriptionDetail.subscriptions.length !== 0">
+                        <uib-alert type="info">
+                            The AIS Service Catalog activation requires atleast one Subscription where you have the <strong>Admin access</strong>.
+                            You don't have admin access to any of the {{vm.subscriptionDetail.subscriptions.length}} subscription(s).
+                            Please have your administrator login and activate ASC.
+                        </uib-alert>
+                    </div>
+                </div>
+                <div ng-if="vm.adminSubscriptions.length !== 0">
+                    <h3>Select the Subscription that will host Service Catalog metadata</h3>
+                    <uib-alert type="info">
+                        We will <strong>create</strong> a Storage Account on your behalf in the subscription you specified as the host for the Service Catalog metadata.
+                        A <strong>new</strong> Resource Group <strong>{{vm.defaultResourceGroup}}</strong> will be automatically created to contain this new Storage Account:
+                    </uib-alert>
+
+                    <div class="row padded-row comment-text">
+                        <div class="col-md-2">
+                            Subscription:
+                        </div>
+                        <div class="col-md-4">
+                            <ui-select name="subscription" class="overFlow" ng-model="vm.selectedHost" theme="bootstrap" on-select="vm.subscriptionChanged($item, $model)" required>
+                                <ui-select-match placeholder="Select Subscription...">
+                                    {{$select.selected.subscriptionName | characters: 30}}
+                                </ui-select-match>
+                                <ui-select-choices repeat="sub in vm.adminSubscriptions | filter: {subscriptionName: $select.search}">
+                                    <span class="exactFit" ng-bind-html="sub.subscriptionName | highlight:$select.search"></span>
+                                    <small>
+                                        ({{sub.subscriptionId}})
+                                    </small>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+
+                    </div>
+
+                    <div ng-if="vm.adminSubscriptions.length !== 0">
+                        <button class="btn btn-success btn-lg pull-right" ng-click="vm.activationComplete()">Enroll</button>
+                    </div>
+                </div>
+            </div>
+            <div ng-if="!vm.isGlobalAdministrator">
+                <div ng-if="vm.isActivatedByAdmin">
+                    <uib-alert type="danger">
+                        ASC has been activated by your administration in your Organization's Active Directory (<strong>{{vm.trimmedOrgDomain}}</strong>).
+                        But none of the subscription(s), you have access to, have been enrolled.
+                        Please have your administration enroll your subscription(s) in ASC.
+                    </uib-alert>
+                </div>
+                <div ng-if="!vm.isActivatedByAdmin">
+                    <uib-alert type="danger">
+                        ASC activation requires Administrator privileges.
+                        You don't have admin access to your Organization's Active Directory (<strong>{{vm.trimmedOrgDomain}}</strong>).
+                        Please have your administrator login and activate ASC.
+                    </uib-alert>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div ng-show="vm.showEnrollmentSuccess">
+        <h3>You have Enrolled successfully!</h3>
+        <h4>Here is your tenant-specific URL that your organization should use:</h4>
+        <p>
+            <a ng-href="/{{vm.trimmedOrgDomain}}">https://aisservicecatalog.com/{{vm.trimmedOrgDomain}}</a>
+        </p>
+        <p>(You may click the link to visit your home page now. Also, make a note of the above link for future logins)</p>
+    </div>
+</div>

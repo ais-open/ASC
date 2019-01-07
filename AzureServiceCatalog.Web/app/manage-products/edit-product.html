@@ -1,0 +1,45 @@
+﻿<div>
+    <h1>{{vm.selectedItem.eTag ? 'Edit' : 'Add'}} Product Details</h1>
+    <div class="row">
+        <div class="col-md-12" ng-show="vm.selectedItem">
+            <form name="productForm" class="form-inline control-columns" novalidate>
+                <div class="form-group col-xs-12" ng-class="{ 'has-error' : userForm.productName.$invalid && !userForm.productName.$pristine }">
+                    <label class="col-lg-2 col-xs-12 col-sm-3">Product Name: </label>
+                    <input type="text" name="productName" class="form-control" ng-model="vm.selectedItem.name" required>
+                </div>
+                <div class="form-group col-xs-12">
+                    <label class="col-lg-2 col-xs-12 col-sm-3">Product Price: </label>
+                    <div class="input-group">
+                        <div class="input-group-addon">$</div>
+                        <input placeholder="Amount" class="currency form-control" type="number" step="0.01" min="0" ng-model="vm.selectedItem.productPrice" />
+                    </div>
+
+                </div>
+                <div class="form-group col-xs-12">
+                    <label class="col-lg-2 col-xs-12 col-sm-3">Description: </label>
+                    <textarea type="text" class="form-control" ng-model="vm.selectedItem.description"></textarea>
+                </div>
+                <div class="form-group col-xs-12">
+                    <label for="isPublishedCheckbox" class="col-lg-2 col-xs-12 col-sm-3">
+                        Is Published?
+                    </label>
+                    <input class="" id="isPublishedCheckbox" type="checkbox" ng-model="vm.selectedItem.isPublished"/>
+                </div>
+            </form>
+
+            <button class="btn btn-default" ng-click="vm.dialogs.openEditFieldModal(vm.selectedItem, 'image', 'productImage', vm.selectedItem.productImagePath)">{{(vm.selectedItem.productImage || vm.selectedItem.productImagePath) ? 'Change' : 'Add'}} Image</button>
+            <button class="btn btn-primary" ng-disabled="!vm.canSave(productForm)" ng-click="vm.save()">Save</button>
+            <button class="btn" ng-disabled="vm.isClean()" ng-click="vm.reset()">Reset</button>
+            <button class="btn btn-primary" ng-disabled="!vm.selectedItem.rowKey" ng-click="vm.downloadTemplate()"><span class="glyphicon glyphicon-arrow-down"></span> Download</button>
+            <button class="btn btn-danger" ng-click="vm.deleteTemplate()" ng-disabled="!vm.selectedItem.rowKey">Delete</button>
+            <p ng-show="productForm.product.$invalid && !productForm.product.$pristine" class="help-block, text-danger">Your product name is required.</p>
+
+            <div ng-show="vm.showJSON">
+                <ul class="text-danger" style="list-style-type: none">
+                    <li ng-repeat="error in vm.jsonErrors">{{error.text}} at line {{error.row}} on column {{error.column}} </li>
+                </ul>
+                <div ui-ace="vm.aceConfig" ng-model="vm.selectedItem.templateData"></div>
+            </div>
+        </div>
+    </div>
+</div>

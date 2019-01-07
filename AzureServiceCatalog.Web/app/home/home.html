@@ -1,0 +1,27 @@
+﻿<div class="product-tile-container col-lg-3 col-md-4 col-sm-6 col-xs-12 " ng-repeat="product in vm.products | orderBy: 'name'" ng-if="product.isPublished">
+    <div class="product-tile">
+        <h4 class="text-primary bold-text product-header">
+            <a ui-sref="product-details({id: product.rowKey, product: product})" title={{product.name}}>
+                <img ng-src="{{product.productImagePath || 'Content/images/azure.png'}}" ng-attr-title="{{product.name}}"/>
+                {{product.name}}
+            </a>
+            <small class="product-price">${{product.productPrice}}/month</small>
+        </h4>
+        <hr/>
+        <div class="caption">
+            {{product.description}}<br/>
+
+            <span class="product-tile-included-resources bold-text text-primary">Included Resources:</span>
+            <span class="product-tile-included-resources" ng-repeat="resource in product.data.resources">
+                {{vm.resourceDictionary[resource.type].name || resource.type}}{{vm.getResourceNameDisplay(resource)}}<span ng-if="!$last">,</span>
+            </span>
+        </div>
+    </div>
+</div>
+<div class="no-content-warning" ng-if="!vm.hasPublishedProducts">
+    <h1>No products have been published yet</h1>
+    <h2 ng-if="shell.userDetail.canCreate">
+        Please go to Manage <span class="glyphicon glyphicon-arrow-right"></span> Product Catalog and publish a new product
+    </h2>
+    <h2 ng-if="!shell.userDetail.canCreate">Please contact an administrator to add new products</h2>
+</div>

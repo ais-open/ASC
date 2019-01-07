@@ -1,0 +1,152 @@
+﻿@{
+    Layout = null;
+}
+<!doctype html>
+<html class="no-js" ng-app="ascApp">
+<head>
+    <meta charset="utf-8">
+    <title>Service Catalog</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="/content/bootstrap-united/css/bootstrap.united.min.css" />
+    <link rel="stylesheet" href="/lib/angular-ui-select/dist/select.min.css" />
+    <link rel="stylesheet" href="/lib/angular-ui-grid/ui-grid.min.css" />
+    <link rel="stylesheet" href="/lib/angular-toastr/dist/angular-toastr.min.css" />
+    <link rel="stylesheet" href="~/lib/angular-toggle-switch/angular-toggle-switch.css" />
+    <link rel="stylesheet" href="~/lib/angular-toggle-switch/angular-toggle-switch-bootstrap.css" />
+    <link rel="stylesheet" href="~/lib/nvd3/build/nv.d3.min.css" />
+    <link rel="stylesheet" href="~/lib/angular-ui-tree/dist/angular-ui-tree.css" />
+    <link rel="stylesheet" href="/content/main.css">
+</head>
+<body>
+
+    <div id="applicationHost" class="container body-content admin-appHost">
+        <div data-ng-include="'/app/layout/shell.html'"></div>
+    </div>
+
+    <div id="footer">
+        <div class="container">
+            <a class="btn btn-link" href="http://www.appliedis.com/contact-us" target="_blank">Contact Us</a>
+            <a class="btn btn-link" href="http://www.appliedis.com/terms-of-use" target="_blank">Terms of Use</a>
+            <a class="btn btn-link" href="http://www.appliedis.com/privacy" target="_blank">Privacy</a>
+            <small><span class="text-info">Copyright &copy;2015 <a href="http://www.appliedis.com/" target="_blank">Applied Information Sciences, Inc.</a> All Rights Reserved</span></small>
+        </div>
+    </div>
+
+    <script src="~/lib/ace-builds/src-min-noconflict/ace.js"></script>
+
+    <!-- build:js js/lib.js -->
+    <!--bower:js-->
+    <script src="/lib/angular/angular.js"></script>
+    <script src="/lib/adal-angular/lib/adal.js"></script>
+    <script src="/lib/adal-angular/lib/adal-angular.js"></script>
+    <script src="/lib/angular-sanitize/angular-sanitize.js"></script>
+    <script src="/lib/angular-animate/angular-animate.js"></script>
+    <script src="/lib/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="/lib/angular-toastr/dist/angular-toastr.tpls.js"></script>
+    <script src="/lib/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="/lib/angular-ui-select/dist/select.js"></script>
+    <script src="/lib/angular-ui-grid/ui-grid.js"></script>
+    <script src="/lib/lodash/lodash.js"></script>
+    <script src="/lib/spin.js/spin.js"></script>
+    <script src="/lib/moment/moment.js"></script>
+    <script src="/lib/angular-ui-ace/ui-ace.js"></script>
+    <script src="/lib/angular-truncate/src/truncate.js"></script>
+    <script src="/lib/angular-toggle-switch/angular-toggle-switch.js"></script>
+    <script src="/lib/d3/d3.js"></script>
+    <script src="/lib/nvd3/build/nv.d3.js"></script>
+    <script src="/lib/angular-nvd3/dist/angular-nvd3.js"></script>
+    <script src="/lib/angular-ui-tree/dist/angular-ui-tree.js"></script>
+    <!--endbower-->
+    <!--endbuild-->
+    <!-- build:js js/app.js -->
+    <!-- inject:js -->
+    <script src="/app/app.js"></script>
+    <script src="/app/shared/state-watcher.service.js"></script>
+    <script src="/app/shared/resource-group-selector.controller.js"></script>
+    <script src="/app/shared/json-modal.controller.js"></script>
+    <script src="/app/shared/edit-field-modal.controller.js"></script>
+    <script src="/app/shared/constants.js"></script>
+    <script src="/app/shared/confirm-modal.controller.js"></script>
+    <script src="/app/shared/authorization-checker.service.js"></script>
+    <script src="/app/services/task-manager.service.js"></script>
+    <script src="/app/services/product-list.service.js"></script>
+    <script src="/app/services/dialogs.service.js"></script>
+    <script src="/app/services/app-storage-service.js"></script>
+    <script src="/app/services/app-spinner.service.js"></script>
+    <script src="/app/services/acs-api.service.js"></script>
+    <script src="/app/services/Bill-Info.service.js"></script>
+    <script src="/app/security/security.controller.js"></script>
+    <script src="/app/security/security-initial-data.service.js"></script>
+    <script src="/app/product-details/product-details.controller.js"></script>
+    <script src="/app/resource-groups/resource-groups.controller.js"></script>
+    <script src="/app/product-deployment/product-deployment.controller.js"></script>
+    <script src="/app/product-deployment/product-deployment-initial-data.service.js"></script>
+    <script src="/app/product-deployment/new-resource-group-modal.controller.js"></script>
+    <script src="/app/product-deployment/new-resource-group-initial-data.service.js"></script>
+    <script src="/app/policy-assignments/policy-assignment-list.controller.js"></script>
+    <script src="/app/policy-assignments/edit-policy-assignment.controller.js"></script>
+    <script src="/app/policy-assignments/edit-policy-assignment-initial-data.service.js"></script>
+    <script src="/app/policy/policy-list.controller.js"></script>
+    <script src="/app/policy/edit-policy.controller.js"></script>
+    <script src="/app/manage-products/quick-starts-modal.controller.js"></script>
+    <script src="/app/manage-products/product-list.controller.js"></script>
+    <script src="/app/manage-products/edit-product.controller.js"></script>
+    <script src="/app/manage-products/add-product-designer.controller.js"></script>
+    <script src="/app/layout/tasks-pane.controller.js"></script>
+    <script src="/app/layout/shell.controller.js"></script>
+    <script src="/app/layout/deployment-operations.controller.js"></script>
+    <script src="/app/identity/select-group.controller.js"></script>
+    <script src="/app/identity/manage-user-groups.controller.js"></script>
+    <script src="/app/identity/manage-host-subscription.controller.js"></script>
+    <script src="/app/identity/manage-enrolled-subscriptions.controller.js"></script>
+    <script src="/app/identity/login.controller.js"></script>
+    <script src="/app/identity/deactivate-tenant.controller.js"></script>
+    <script src="/app/identity/activation.controller.js"></script>
+    <script src="/app/identity/activation-login.controller.js"></script>
+    <script src="/app/home/home.controller.js"></script>
+    <script src="/app/directives/spinner.directive.js"></script>
+    <script src="/app/directives/resource-group-selector.component.js"></script>
+    <script src="/app/directives/lvl-uuid.js"></script>
+    <script src="/app/directives/lvl-drag-drop.directive.js"></script>
+    <script src="/app/directives/file-reader.directive.js"></script>
+    <script src="/app/directives/dontPropagate.directive.js"></script>
+    <script src="/app/deployments/deployments.controller.js"></script>
+    <script src="/app/deployments/deployment.controller.js"></script>
+    <script src="/app/app.run.js"></script>
+    <script src="/app/app.config.js"></script>
+    <script src="~/app/support/feedback.controller.js"></script>
+    <!-- endinject -->
+    <!--endbuild-->
+
+    <script>
+        (function () {
+            'use strict';
+            angular.module('ascApp')
+                .constant('identityInfo', {
+                    isAuthenticated: @this.ViewBag.IsAuthenticated,
+                    name: '@this.ViewBag.AuthenticatedUserName',
+                    directoryName: '@this.ViewBag.DirectoryName',
+                    isActivation: @this.ViewBag.Activation,
+                    isActivationLogin: @this.ViewBag.ActivationLogin,
+                    clientId: '@this.ViewBag.ClientId',
+                    tenant: '@this.ViewBag.Tenant'
+                });
+        })();
+    </script>
+
+    <script type="text/javascript">
+        var appInsights=window.appInsights||function(config){
+            function r(config){t[config]=function(){var i=arguments;t.queue.push(function(){t[config].apply(t,i)})}}var t={config:config},u=document,e=window,o="script",s=u.createElement(o),i,f;for(s.src=config.url||"//az416426.vo.msecnd.net/scripts/a/ai.0.js",u.getElementsByTagName(o)[0].parentNode.appendChild(s),t.cookie=u.cookie,t.queue=[],i=["Event","Exception","Metric","PageView","Trace"];i.length;)r("track"+i.pop());return r("setAuthenticatedUserContext"),r("clearAuthenticatedUserContext"),config.disableExceptionTracking||(i="onerror",r("_"+i),f=e[i],e[i]=function(config,r,u,e,o){var s=f&&f(config,r,u,e,o);return s!==!0&&t["_"+i](config,r,u,e,o),s}),t
+            }({ instrumentationKey:"@System.Configuration.ConfigurationManager.AppSettings["iKey"]" });
+
+        window.appInsights = appInsights;
+        appInsights.trackPageView();
+    </script>
+
+
+
+    @*<script type="text/javascript" id="UR_initiator"> (function () { var iid = 'uriid_'+(new Date().getTime())+'_'+Math.floor((Math.random()*100)+1); if (!document._fpu_) document.getElementById('UR_initiator').setAttribute('id', iid); var bsa = document.createElement('script'); bsa.type = 'text/javascript'; bsa.async = true; bsa.src = '//aisservicecatalog.useresponse.com/sdk/supportCenter.js?initid='+iid+'&wid=6'; (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(bsa); })(); </script>*@
+</body>
+</html>

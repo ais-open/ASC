@@ -1,0 +1,38 @@
+﻿(function () {
+    'use strict';
+
+    angular.module('ascApp').controller('ManageUserGroupsCtrl', ManageUserGroupsCtrl);
+    ManageUserGroupsCtrl.$inject = ['$uibModal', 'initialData', 'ascApi', 'toastr'];
+
+    /* @ngInject */
+    function ManageUserGroupsCtrl($uibModal, initialData, ascApi, toastr) {
+        /* jshint validthis: true */
+        var vm = this;
+        vm.createGroups = [];
+        vm.adminGroups = [];
+        vm.filterGroups = filterGroups;
+        vm.organization = initialData;
+        vm.save = save;
+
+        activate();
+
+        function activate() {
+            vm.createGroups = vm.organization.organizationADGroups;
+            vm.adminGroups = vm.organization.organizationADGroups;
+        }
+
+        function filterGroups(filter, groupType) {
+            if (filter) {
+                ascApi.getOrganizationGroups(filter).then(function (data) {
+                    vm[groupType] = data;
+                });
+            }
+        }
+
+        function save() {
+            ascApi.saveOrganization(vm.organization).then(function (data) {
+                toastr.success('The Organization AD Groups were saved successfully.', 'Save Successful');
+            });
+        }
+    }
+})();

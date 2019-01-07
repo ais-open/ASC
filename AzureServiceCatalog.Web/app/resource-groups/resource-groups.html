@@ -1,0 +1,76 @@
+﻿<div>
+    <h2>Spend</h2>
+    <!--<button class="btn btn-primary" ui-sref="edit-service">Add New Service</button>
+    <button class="btn btn-success" ui-sref="product-catalog">View Product Catalog</button>
+    <p></p>-->
+
+    <div class="row padded-row comment-text">
+        <div class="col-md-3">
+            <ui-select name="subscription" class="overFlow" ng-model="vm.selectedSubscription" theme="bootstrap" on-select="vm.subscriptionChanged()" required>
+                <ui-select-match placeholder="Select Subscription...">
+                    {{$select.selected.displayName | characters: 30}}
+                </ui-select-match>
+                <ui-select-choices repeat="sub in vm.subscriptions | filter: {displayName: $select.search}">
+                    <span class="exactFit" ng-bind-html="sub.displayName | highlight:$select.search"></span>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <table class="table table-striped table-hover table-condensed">
+                <tbody>
+                    <tr ng-repeat="resGroup in vm.resourceGroups">
+                        <td>
+                            <a class="btn btn-link overflowCheck" ng-click="vm.showData(resGroup)">
+                                {{resGroup.name}} <small>({{resGroup.location}})</small>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-md-8" ng-hide="vm.selectedItem">
+            <uib-alert type="info">
+                Select a Service in the list on the left.
+            </uib-alert>
+        </div>
+
+        <div class="col-md-8" ng-show="vm.selectedItem">
+            <div class="row">
+                <h4><strong>Resource Group: {{vm.selectedItem.resourceGroup.name}}</strong></h4>
+            </div>
+            <div class="row">
+                <table class="table table-striped table-condensed">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Location</th>
+                            <th>Type</th>
+                            <th>Last 30 Days Spend</th>
+                            <th>Today's Spend</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="res in vm.selectedItem.resources">
+                            <td>{{res.name}}</td>
+                            <td>{{res.location}}</td>
+                            <td>{{res.type}}</td>
+                            <td>{{res.costFormatted}}</td>
+                            <td>{{res.todaysCostFormatted}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row">
+                <div>
+                    <nvd3 options="vm.options" data="vm.resourceData"></nvd3>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

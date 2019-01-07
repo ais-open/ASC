@@ -1,0 +1,218 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en" ng-app="enrollApp">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>AIS Service Catalog</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="~/Content/landing-theme/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Custom CSS -->
+    <link href="~/Content/landing-theme/css/landing-page.css" rel="stylesheet" />
+
+    <!-- Custom Fonts -->
+    <link href="~/Content/landing-theme/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+    @*<link rel="stylesheet" href="/content/main.css">*@
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <style>
+        h3.uidialog {
+            margin: 0px;
+        }
+    </style>
+</head>
+
+<body ng-controller="LandingCntrl as vm">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top topnav" role="navigation">
+        <div class="container topnav">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand topnav" href="#">AIS Service Catalog</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="http://www.appliedis.com/expertise/cloud-computing">About</a>
+                    </li>
+                    <li>
+                        <a href="#" ng-click="vm.showEnrollmentRequestForm()">Contact Us</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+
+    <!-- Header -->
+    <a name="about"></a>
+    <div class="intro-header">
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="intro-message">
+                        <h1>Service Catalog</h1>
+                        <h3>Provision and Manage your enterprise-approved cloud resources</h3>
+                        <hr class="intro-divider">
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/lY32zGIQ248" frameborder="0" allowfullscreen></iframe>
+                        <br />
+                        <ul class="list-unstyled">
+                            <li>
+                                <H3>Start Free Trial</H3>
+                            </li>
+                            <li>
+                                <a href="/account/signin?activation=true" class="btn btn-default btn-lg"><i class="fa fa-cloud fa-fw"></i> <span class="network-name">Work/School Account</span></a>
+                                <br />
+                                <br />
+                             </li>
+                            <li>   
+                                <a href="/?activationLogin=true#/activation-login" class="btn btn-default btn-lg"><i class="fa fa-cloud fa-fw"></i> <span class="network-name">Microsoft Personal Account</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.intro-header -->
+    <!-- Page Content -->
+
+    <a name="services"></a>
+    <div class="content-section-a">
+
+        <div class="container">
+            <div class="row text-center" style="padding-bottom: 30px;">
+                <h1>Benefits</h1>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 text-center">
+                    <div>
+                        <img src="~/Content/landing-theme/img/dev-128.png" alt="" />
+                    </div>
+                    <h3>For Developers</h3>
+                    <p>
+                        Quickly provision cloud resources in a self-service portal
+                    </p>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <div>
+                        <img src="~/Content/landing-theme/img/terminal-windows-128.png" alt="" />
+                    </div>
+                    <h3>For IT Operations</h3>
+                    <p>
+                        Only permit provisioning of enterprise-approved cloud resources
+                    </p>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <div>
+                        <img src="~/Content/landing-theme/img/dollar-analysis-bars-chart-128.png" alt="" />
+                    </div>
+                    <h3>For Accounting</h3>
+                    <p>
+                        Monitor usage and spend of cloud resources by department or cost center
+                    </p>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.content-section-a -->
+
+    <div class="banner">
+
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <h2>Try it out  now &mdash; it's free!</h2>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.banner -->
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <ul class="list-inline">
+                        <li>
+                            <a href="#">Home</a>
+                        </li>
+                        <li class="footer-menu-divider">&sdot;</li>
+                        <li>
+                            <a href="http://www.appliedis.com/expertise/cloud-computing">About</a>
+                        </li>
+                        <li class="footer-menu-divider">&sdot;</li>
+                        <li>
+                        
+                        </li>
+                    </ul>
+                    @*<p class="copyright text-muted small">Copyright &copy; Applied Information Sciences 2016. All Rights Reserved</p>*@
+                    <p class="copyright text-muted small">
+                        Copyright <a href="/?activationLogin=true#/activation-login">&copy;</a> Applied Information Sciences 2016. All Rights Reserved
+                    </p>
+
+                    <p class="text-muted small">Version: @this.ViewBag.AppVersion</p>
+                    <div class="text-muted small">Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/lib/angular/angular.js"></script>
+    <script src="/lib/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+
+    <script src="~/app/enroll-support/enrollment-support-app.js"></script>
+    <script src="~/app/enroll-support/enrollment-support-service.js"></script>
+    <script src="~/app/enroll-support/enrollment-support.controller.js"></script>
+    <script src="~/app/enroll-support/landing.controller.js"></script>
+
+    <script type="text/javascript">
+        var appInsights=window.appInsights||function(config){
+            function r(config){t[config]=function(){var i=arguments;t.queue.push(function(){t[config].apply(t,i)})}}var t={config:config},u=document,e=window,o="script",s=u.createElement(o),i,f;for(s.src=config.url||"//az416426.vo.msecnd.net/scripts/a/ai.0.js",u.getElementsByTagName(o)[0].parentNode.appendChild(s),t.cookie=u.cookie,t.queue=[],i=["Event","Exception","Metric","PageView","Trace"];i.length;)r("track"+i.pop());return r("setAuthenticatedUserContext"),r("clearAuthenticatedUserContext"),config.disableExceptionTracking||(i="onerror",r("_"+i),f=e[i],e[i]=function(config,r,u,e,o){var s=f&&f(config,r,u,e,o);return s!==!0&&t["_"+i](config,r,u,e,o),s}),t
+            }({ instrumentationKey:"@System.Configuration.ConfigurationManager.AppSettings["iKey"]" });
+
+        window.appInsights = appInsights;
+        appInsights.trackPageView();
+    </script>
+</body>
+
+</html>

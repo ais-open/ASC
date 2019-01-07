@@ -1,0 +1,21 @@
+﻿<div class="modal-header">
+    <h2 class="text-capitalize">{{vm.lodash.startCase(vm.field.fieldName)}}</h2>
+</div>
+
+<div class="modal-body">
+    <textarea class="form-control" ng-model="vm.field.fieldValue" ng-if="vm.field.fieldType === 'textarea'"></textarea>
+    <input type="text" class="form-control" ng-model="vm.field.fieldValue" ng-if="vm.field.fieldType === 'text'"/>
+    <div ng-if="vm.field.fieldType === 'image'">
+        <img ng-src="{{vm.field.fieldValue || vm.field.blobStorageLocation}}" class="modal-center-image"/>
+        <div class="btn btn-primary file-select-button">
+            Select File
+            <input type="file" class="form-control" accept="image/*" file-reader="vm.fileSelectionChanged" ng-model="vm.field.fieldValue" />
+        </div>
+    </div>
+    <!--Add additional field types if needed-->
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="vm.ok()">Ok</button>
+    <button class="btn btn-default" ng-click="vm.cancel()">Cancel</button>
+</div>

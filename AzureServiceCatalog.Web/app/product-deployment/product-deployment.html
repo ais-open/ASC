@@ -1,0 +1,75 @@
+﻿<form name="frmDeploy" class="form-horizontal" novalidate>
+    <div>
+        <h2><strong class="text-center">Product Provisioning</strong></h2>
+
+        <div class="row padded-row comment-text">
+            <div class="col-md-2">
+                Subscription:
+            </div>
+            <div class="col-md-3">
+                <ui-select name="subscription" class="overFlow" ng-model="vm.selectedSubscription" theme="bootstrap" on-select="vm.subscriptionChanged($item, $model)" required>
+                    <ui-select-match placeholder="Select Subscription...">
+                        {{$select.selected.displayName | characters: 30}}
+                    </ui-select-match>
+                    <ui-select-choices repeat="sub in vm.subscriptions | filter: {displayName: $select.search}">
+                        <span class="exactFit" ng-bind-html="sub.displayName | highlight:$select.search"></span>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+        </div>
+
+        <!--<resource-group-selector resource-groups="vm.resourceGroups"
+                                 subscription-id="vm.selectedSubscription.id"
+                                 selected-resource-group="vm.selectedResourceGroup"
+                                 resource-group-changed="vm.resourceGroupChanged"></resource-group-selector>-->
+
+        <div class="row padded-row comment-text">
+            <div class="col-md-2">
+                Resource Group:
+            </div>
+            <div class="col-md-3">
+                <ui-select class="overFlow" ng-model="vm.selectedResourceGroup" theme="bootstrap" on-select="vm.resourceGroupChanged($item, $model)" required>
+                    <ui-select-match placeholder="Select Resource Group...">
+                        {{$select.selected.name | characters:30}}
+                    </ui-select-match>
+
+                    <ui-select-choices repeat="rg in vm.resourceGroups | filter: { name: $select.search }">
+                        <span class="exactFit" ng-bind-html="rg.name | highlight:$select.search"></span>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-warning" ng-disabled="frmDeploy.subscription.$error.required" ng-click="vm.addNewRG()">Add New Resource Group</button>
+            </div>
+        </div>
+
+
+
+        <h4>Parameters</h4>
+        <div class="form-group" ng-repeat="parameter in vm.parameters">
+            <label class="col-md-2 control-label">
+                {{vm.lodash.startCase(parameter.name)}}
+                <span ng-show="parameter.info.metadata.description" class="glyphicon glyphicon-info-sign" aria-hidden="true" uib-tooltip="{{parameter.info.metadata.description}}" tooltip-placement="left"></span>
+            </label>
+
+            <div class="col-md-3" ng-show="{{vm.lodash.includes(['string', 'int'], parameter.info.type) && !parameter.info.allowedValues && !parameter.info.metadata.policy}}">
+                <input type="text" class="form-control" ng-model="parameter.value" placeholder="Enter Value" required />
+            </div>
+            <div class="col-md-3" ng-show="{{parameter.info.type === 'securestring' && !parameter.info.allowedValues}}">
+                <input type="password" class="form-control" ng-model="parameter.value" placeholder="Enter Value" required />
+            </div>
+            <div class="col-md-3" ng-show="{{vm.lodash.includes(['string', 'int'], parameter.info.type) && parameter.info.allowedValues}}">
+                <select class="form-control" ng-model="parameter.value" ng-options="p for p in parameter.info.allowedValues"></select>
+            </div>
+            <div class="col-md-3" ng-show="{{vm.lodash.includes(['string', 'int'], parameter.info.type) && !!parameter.info.metadata.policy}}">
+                <select class="form-control" ng-model="parameter.value" ng-options="p for p in vm.policyLookup[parameter.info.metadata.policy]"></select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <button ng-disabled="!frmDeploy.$valid" class="btn btn-primary" ng-click="vm.deploy()">Deploy</button>
+            </div>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,29 @@
+﻿{
+    "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+  "parameters": {
+    "siteName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the Web App being monitored."
+      }
+    }
+  },
+    "resources": [
+        {
+            "apiVersion": "2014-04-01",
+            "name": "[parameters('siteName')]",
+            "type": "microsoft.insights/components",
+            "location": "Central US",
+            "dependsOn": [
+                "[concat('Microsoft.Web/sites/', parameters('siteName'))]"
+            ],
+            "tags": {
+                "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/sites/', parameters('siteName'))]": "Resource"
+            },
+            "properties": {
+                "ApplicationId": "[parameters('siteName')]"
+            }
+        }
+    ]
+}

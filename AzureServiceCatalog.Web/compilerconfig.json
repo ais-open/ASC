@@ -1,0 +1,14 @@
+﻿[
+  {
+    "outputFile": "Content/main.css",
+    "inputFile": "Content/main.less"
+  },
+  {
+    "outputFile": "Content/landing-theme/css/landing-page.css",
+    "inputFile": "Content/landing-theme/css/landing-page.less"
+  },
+  {
+    "outputFile": "app/feedback/angular-feedback.js",
+    "inputFile": "app/feedback/angular-feedback.coffee"
+  }
+]

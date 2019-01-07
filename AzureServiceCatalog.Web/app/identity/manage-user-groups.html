@@ -1,0 +1,46 @@
+﻿<div>
+    <h3>Select Azure Active Directory Groups that will be used for Service Catalog accounts</h3>
+
+    <div class="col-md-6">
+        <table class="table table-condensed table-striped">
+            <thead>
+                <tr>
+                    <th>Permissions</th>
+                    <th>Group Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Users in this group can create products in the catalog</td>
+                    <td class="col-md-4">
+                        <ui-select class="overFlow" ng-model="vm.organization.createProductGroup" theme="bootstrap" required>
+                            <ui-select-match placeholder="Select Group...">
+                                {{$select.selected.name | characters: 30}}
+                            </ui-select-match>
+                            <ui-select-choices repeat="grp.id as grp in vm.createGroups | orderBy: 'name' | filter: { name: $select.search}"
+                                               refresh="vm.filterGroups($select.search, 'createGroups')">
+                                <span class="exactFit" ng-bind-html="grp.name | highlight:$select.search"></span>
+                            </ui-select-choices>
+                        </ui-select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Users in this group are adminstrators for the catalog.</td>
+                    <td class="col-md-4">
+                        <ui-select class="overFlow" ng-model="vm.organization.adminGroup" theme="bootstrap" required>
+                            <ui-select-match placeholder="Select Group...">
+                                {{$select.selected.name | characters: 30}}
+                            </ui-select-match>
+                            <ui-select-choices repeat="grp.id as grp in vm.adminGroups | orderBy: 'name' | filter: { name: $select.search}"
+                                               refresh="vm.filterGroups($select.search, 'adminGroups')">
+                                <span class="exactFit" ng-bind-html="grp.name | highlight:$select.search"></span>
+                            </ui-select-choices>
+                        </ui-select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <button class="btn btn-success" ng-click="vm.save()">Save</button>
+    </div>
+</div>

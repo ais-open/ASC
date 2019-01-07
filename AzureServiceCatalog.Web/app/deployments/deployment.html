@@ -1,0 +1,65 @@
+﻿<div>
+    <h2>
+        Provision <small>({{vm.correlationId}})</small>
+        <button class="btn btn-xs btn-info" ng-click="vm.refresh()" uib-tooltip="Audit logs commonly have a latency of a few seconds - click here if empty results">
+            <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Refresh
+        </button>
+    </h2>
+
+    <div class="row padded-row">
+        <div class="col-md-7">
+            <table class="table table-condensed table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Event</th>
+                        <th>Level</th>
+                        <th>Status</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="selectable" ng-class="{info: log.eventDataId === vm.selectedEventId }" ng-repeat="log in vm.auditLogs" ng-click="vm.selectAudit(log)">
+                        <td>{{log.operationName.localizedValue}}</td>
+                        <td>
+                            <i class="glyphicon text-center"
+                               ng-show="log.level === 'Informational' || log.level === 'Error'"
+                               ng-class="{ 'text-info glyphicon-info-sign': log.level === 'Informational', 'text-danger glyphicon-exclamation-sign': log.level === 'Error'}"></i>
+                            {{log.level}}
+                        </td>
+                        <td>
+                            <label class="label label-default" ng-class="{ 'label-success': log.status.localizedValue === 'Succeeded', 'label-danger': log.status.localizedValue === 'Failed'}">
+                                {{log.status.localizedValue}}
+                            </label>
+                        </td>
+                        <td>
+                            {{vm.formatTime(log.eventTimestamp)}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-md-5" ng-show="vm.selectedLog">
+            <h4>Detail</h4>
+            <form class="form-horizontal">
+                <div class="form-group" ng-repeat="property in vm.selectedLogProperties">
+                    <label class="control-label col-md-4">{{property.label}}</label>
+                    <div class="col-md-8">
+                        <p class="form-control-static">{{property.text}}</p>
+                    </div>
+                </div>
+
+                <div class="form-group" ng-show="vm.selectedStatusCode">
+                    <label class="control-label col-md-4">Status Detail</label>
+                    <div class="col-md-8">
+                        <p class="form-control-static">
+                            {{vm.selectedStatusCode}}
+                            <pre class="code" ng-show="vm.selectedStatusMsg">{{ vm.selectedStatusMsg | json }}</pre>
+                        </p>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

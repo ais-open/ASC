@@ -1,0 +1,40 @@
+﻿<div ng-controller="TasksPaneCtrl as vm">
+
+    <h4>Tasks:</h4>
+    <table class="table table-condensed table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Status</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="task in vm.tasks">
+                <td>{{task.name}}</td>
+                <td>
+                    <label class="label label-default" ng-class="{ 'label-success': task.status === 'Succeeded', 'label-danger': task.status === 'Failed'}">
+                        {{task.status}}
+                    </label>
+                </td>
+                <td>
+                    <div data-spinner="vm.spinnerOptions" class="task-spinner" ng-hide="task.status === 'Succeeded' || task.status === 'Failed'"></div>
+                    <div class="center-content">
+                        <a ui-sref="deployment({ subscriptionId: task.subscriptionId, correlationId: task.correlationId })">
+                            <i class="glyphicon text-center" uib-tooltip="Click to view details"
+                               ng-show="task.status === 'Succeeded' || task.status === 'Failed'"
+                               ng-class="{ 'text-success glyphicon-ok': task.status === 'Succeeded', 'text-danger glyphicon-exclamation-sign': task.status === 'Failed'}"></i>
+                        </a>
+                    </div>
+                </td>
+                <td>
+                    <button class="btn btn-danger btn-xs" ng-click="vm.dismiss(task)">Dismiss</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <uib-alert type="info" ng-show="vm.tasks.length === 0">
+        No active tasks.
+    </uib-alert>
+</div>

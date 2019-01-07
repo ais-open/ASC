@@ -1,0 +1,155 @@
+﻿<div>
+    <h2>{{vm.policy.id ? 'Edit' : 'Add'}} Policy</h2>
+    <p>
+        <a target="_blank" href="https://azure.microsoft.com/en-us/documentation/articles/resource-manager-policy/">Learn about ARM Policy</a>
+    </p>
+
+    <div class="row">
+        <div class="col-md-12">
+            <form name="policyForm" class="form-inline control-columns" novalidate>
+                <div class="form-group col-xs-12" ng-class="{ 'has-error' : userForm.productName.$invalid && !userForm.productName.$pristine }">
+                    <label class="col-lg-2 col-xs-12 col-sm-3">Policy Name: </label>
+                    <input type="text" name="policyName" class="form-control" ng-model="vm.policy.name" placeholder="Unique Policy Name" required>
+                </div>
+                <div class="form-group col-xs-12" ng-class="{ 'has-error' : userForm.productName.$invalid && !userForm.productName.$pristine }">
+                    <label class="col-lg-2 col-xs-12 col-sm-3">Description: </label>
+                    <input type="text" name="policyName" class="form-control" ng-model="vm.policy.properties.description" placeholder="Description" required>
+                </div>
+            </form>
+
+            <button class="btn btn-success" ng-click="vm.save()">Save</button>
+            <button class="btn btn-danger" ng-click="vm.deletePolicy()">Delete</button>
+
+            <div>
+                <h4>
+                    IF &nbsp;
+                    <a class="btn btn-success btn-xs" data-nodrag ng-click="vm.newOperatorSubItem(vm.root, 'not')"
+                       ng-show="vm.buttonVisible(vm.root)" style="margin-right: 8px;">
+                        <span class="glyphicon glyphicon-plus"></span>not
+                    </a>
+                    <a class="btn btn-success btn-xs" data-nodrag ng-click="vm.newOperatorSubItem(vm.root, 'allOf')"
+                       ng-show="vm.buttonVisible(vm.root)" style="margin-right: 8px;">
+                        <span class="glyphicon glyphicon-plus"></span>and
+                    </a>
+                    <a class="btn btn-success btn-xs" data-nodrag ng-click="vm.newOperatorSubItem(vm.root, 'anyOf')"
+                       ng-show="vm.buttonVisible(vm.root)" style="margin-right: 8px;">
+                        <span class="glyphicon glyphicon-plus"></span> or
+                    </a>
+                    <a class="btn btn-info btn-xs" data-nodrag ng-click="vm.newConditionSubItem(vm.root)"
+                       ng-show="vm.buttonVisible(vm.root)" style="margin-right: 8px;">
+                        <span class="glyphicon glyphicon-plus"></span>Condition
+                    </a>
+                </h4>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div ui-tree data-drag-enabled="fasle" id="tree-root">
+                            <ol ui-tree-nodes ng-model="vm.root.nodes">
+                                <li ng-repeat="node in vm.root.nodes" ui-tree-node data-nodrag ng-include="'nodes_renderer.html'"></li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <script type="text/ng-template" id="nodes_renderer.html">
+                    <div ui-tree-handle class="tree-node tree-node-content">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <span ng-show="this.$modelValue.type === 'operator'">
+                                    {{node.title}}
+                                </span>
+
+                                <form class="form-inline" ng-show="this.$modelValue.type === 'condition'">
+                                    <div class="form-group">
+                                        <label for="exampleInputName2">{{node.title}}:</label>
+
+                                        <select class="form-control" ng-model="node.target">
+                                            <option>(Select)</option>
+                                            <optgroup label="Fields">
+                                                <option>name</option>
+                                                <option>kind</option>
+                                                <option>type</option>
+                                                <option>location</option>
+                                                <option>tags</option>
+                                                <option>tags.*</option>
+                                            </optgroup>
+                                            <optgroup label="Sources">
+                                                <option>action</option>
+                                            </optgroup>
+                                        </select>
+
+                                        <input type="text" id="tag-field" ng-show="node.target === 'tags.*'" class="form-control" ng-model="node.tagsField" placeholder="tags field" />
+
+                                        <select class="form-control" ng-model="node.operator">
+                                            <option>(Select Operator)</option>
+                                            <option>equals</option>
+                                            <option>like</option>
+                                            <option>contains</option>
+                                            <option>in</option>
+                                            <option>containsKey</option>
+                                        </select>
+                                        <input type="text" class="form-control" ng-model="node.value" placeholder="value" />
+                                        <div class="checkbox" uib-tooltip="Use values for this condition in allowed values lookup?">
+                                            <input type="checkbox" ng-change="vm.lookupPathChecked(node)" ng-model="node.lookupPath" />
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="col-md-4 pull-right">
+                                <a class="pull-right btn btn-danger btn-xs" data-nodrag ng-click="remove(this)">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </a>
+
+                                <a class="pull-right btn btn-info btn-xs" data-nodrag ng-click="vm.newConditionSubItem(this)"
+                                   ng-show="vm.buttonVisible(this)" style="margin-right: 8px;">
+                                    <span class="glyphicon glyphicon-plus"></span>Condition
+                                </a>
+
+                                <a class="pull-right btn btn-success btn-xs" data-nodrag ng-click="vm.newOperatorSubItem(this, 'anyOf')"
+                                   ng-show="vm.buttonVisible(this)" style="margin-right: 8px;">
+                                    <span class="glyphicon glyphicon-plus"></span> or
+                                </a>
+                                <a class="pull-right btn btn-success btn-xs" data-nodrag ng-click="vm.newOperatorSubItem(this, 'allOf')"
+                                   ng-show="vm.buttonVisible(this)" style="margin-right: 8px;">
+                                    <span class="glyphicon glyphicon-plus"></span>and
+                                </a>
+                                <a class="pull-right btn btn-success btn-xs" data-nodrag ng-click="vm.newOperatorSubItem(this, 'not')"
+                                   ng-show="vm.buttonVisible(this)" style="margin-right: 8px;">
+                                    <span class="glyphicon glyphicon-plus"></span>not
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <ol ui-tree-nodes="" ng-model="node.nodes" ng-class="{hidden: collapsed}">
+                        <li ng-repeat="node in node.nodes" ui-tree-node ng-include="'nodes_renderer.html'">
+                        </li>
+                    </ol>
+                </script>
+
+
+                <h4>THEN</h4>
+                <div class="col-md-2">
+                    <select class="form-control" ng-model="vm.policy.properties.policyRule.then.effect">
+                        <option value="deny">Deny</option>
+                        <option value="audit">Audit</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--<div class="row">
+        <pre class="code">{{ vm.root | json }}</pre>
+    </div>-->
+    <!--<br />-->
+    <div class="padded-row">
+        <button class="btn btn-info btn-xs" ng-click="vm.preview()">Preview Policy</button>
+    </div>
+
+    <!--<div class="row" ng-hide="true">
+        <pre class="code">{{ vm.policyItem | json }}</pre>
+    </div>-->
+
+
+</div>

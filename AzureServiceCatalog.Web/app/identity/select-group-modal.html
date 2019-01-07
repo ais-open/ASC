@@ -1,0 +1,15 @@
+﻿<div class="modal-header">
+    <h2>Select Active Directory Group</h2>
+</div>
+
+<div class="modal-body">
+    <!--<select id="ad-group-select" class="form-control" multiple ng-options="g as g for g in vm.data"
+            ng-model="vm.selected"></select>-->
+    <select id="ad-group-select" class="form-control" multiple ng-options="g as g.name for g in vm.data"
+            ng-model="vm.selected"></select>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="vm.ok()">Select</button>
+    <button class="btn btn-default" ng-click="vm.cancel()">Cancel</button>
+</div>

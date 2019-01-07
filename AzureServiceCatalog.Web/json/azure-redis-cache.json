@@ -1,0 +1,66 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "redisCacheName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the Redis Cache resource."
+      }
+    },
+    "redisCacheSKUName": {
+      "type": "string",
+      "allowedValues": [ "Basic", "Standard" ],
+      "defaultValue": "Standard",
+      "metadata": {
+        "description": "Name of the Redis Cache resource."
+      }
+    },
+    "redisCacheSKUFamily": {
+      "type": "string",
+      "allowedValues": [ "C" ],
+      "defaultValue": "C",
+      "metadata": {
+        "description": "SKU Family of the Redis Cache."
+      }
+    },
+    "redisCacheSKUCapacity": {
+      "type": "int",
+      "allowedValues": [ 0, 1, 2, 3, 4, 5, 6 ],
+      "defaultValue": 0,
+      "metadata": {
+        "description": "Capacity of Redis Cache SKU."
+      }
+    },
+    "redisCacheVersion": {
+      "type": "string",
+      "allowedValues": [ "2.8" ],
+      "defaultValue": "2.8",
+      "metadata": {
+        "description": "Version of Redis Cache."
+      }
+    }
+  },
+  "variables": {
+    "location": "[resourceGroup().location]"
+  },
+  "resources": [
+    {
+      "apiVersion": "2014-04-01-preview",
+      "name": "[parameters('redisCacheName')]",
+      "type": "Microsoft.Cache/Redis",
+      "location": "[variables('location')]",
+      "tags": {
+        "displayName": "RedisCache"
+      },
+      "properties": {
+        "sku": {
+          "name": "[parameters('redisCacheSKUName')]",
+          "family": "[parameters('redisCacheSKUFamily')]",
+          "capacity": "[parameters('redisCacheSKUCapacity')]"
+        },
+        "redisVersion": "[parameters('redisCacheVersion')]"
+      }
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+﻿
+    <div class="modal-header bg-primary">
+        <h3 class="uidialog"> Contact Us <a class="pull-right btn btn-primary bold" data-dismiss="modal" title="Close" ng-click="vm.cancel()"> X </a></h3>
+    </div>
+    <div class="modal-body">
+
+        <form name="enrollForm" class="form-horizontal" ng-show="vm.showForm" novalidate>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="firstName">First Name: <span class="text-primary">*</span></label>
+                <div class="col-sm-9">
+                    <input name="firstName" type="text" class="form-control" ng-model="vm.firstName" required />
+                    <div ng-show="(enrollForm.$submitted || enrollForm.firstName.$touched) && enrollForm.firstName.$error.required" class="text-danger">
+                        First Name is required
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="lastName">Last Name: <span class="text-primary">*</span></label>
+                <div class="col-sm-9">
+                    <input name="lastName" type="text" class="form-control" ng-model="vm.lastName" required />
+                    <div ng-show="(enrollForm.$submitted || enrollForm.lastName.$touched) && enrollForm.lastName.$error.required" class="text-danger">
+                        Last Name is required
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="company">Company: <span class="text-primary">*</span></label>
+                <div class="col-sm-9">
+                    <input name="company" type="text" class="form-control" ng-model="vm.company" required />
+                    <div ng-show="(enrollForm.$submitted || enrollForm.company.$touched) && enrollForm.company.$error.required" class="text-danger">
+                        Company is required
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="title">Title: <span class="text-primary">*</span></label>
+                <div class="col-sm-9">
+                    <input name="title" type="text" class="form-control" ng-model="vm.title" required />
+                    <div ng-show="(enrollForm.$submitted || enrollForm.title.$touched) && enrollForm.title.$error.required" class="text-danger">
+                        Title is required
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="email">Email: <span class="text-primary">*</span></label>
+                <div class="col-sm-9">
+                    <input name="email" type="email" class="form-control" ng-model="vm.email" required />
+                    <div ng-show="(enrollForm.$submitted || enrollForm.email.$touched)" class="text-danger">
+                        <div ng-show="enrollForm.email.$error.required">Email is required</div>
+                        <div ng-show="enrollForm.email.$error.email">Enter a valid email address</div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="phone">Phone: <span class="text-primary">*</span></label>
+                <div class="col-sm-9">
+                    <input name="phone" type="text" class="form-control" ng-model="vm.phone" required />
+                    <div ng-show="(enrollForm.$submitted || enrollForm.phone.$touched) && enrollForm.phone.$error.required" class="text-danger">
+                        Phone is required
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="comments">Comments:</label>
+                <div class="col-sm-9">
+                    <textarea name="comments" class="form-control" ng-model="vm.comments" rows="3"></textarea>
+                </div>
+            </div>
+        </form>
+
+        <div ng-show="vm.showSuccess" class="text-success bold">
+            <p>Your request was submitted successfully! We will review your request and get back to you!</p>
+        </div>
+        <div ng-show="vm.showError" class="text-danger bold">
+            Your request could not be submitted. Please try again later.
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="vm.sendMessage()" ng-show="vm.showForm" ng-disabled="enrollForm.$invalid">Send Request</button>
+        <button class="btn btn-default" ng-click="vm.cancel()">Close</button>
+    </div>
+

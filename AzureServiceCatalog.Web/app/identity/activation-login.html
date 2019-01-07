@@ -1,0 +1,59 @@
+﻿<div class="container text-center">
+    <h3>Enroll your Azure Active Directory and Subscription(s)</h3>
+
+    <div ng-hide="vm.showLoginOptions || vm.showAlreadyEnrolled">
+        <p>
+            <button class="btn btn-info btn-sm" ng-click="vm.showEnrollHelp = !vm.showEnrollHelp">Tell me more about Enrollment</button>
+            <div uib-collapse="!vm.showEnrollHelp">
+                The enrollment for the AIS Service Catalog is a straight forward process.
+                The AIS Service Catalog is a multi-tenant application - your organization's Azure Active Directory is the tenant.
+                After you login, the standard consent screen will give the Service Catalog permission to call the Azure Management APIs
+                on subscriptions associated with your Active Directory. The Service Catalog will create a Storage Account in
+                <span class="bold-text">your</span> subscription that you specify to store your metadata.
+            </div>
+        </p>
+
+        <h4>Specify the name of the Azure Directory you wish to enroll:</h4>
+
+        <div class="input-group" style="width:350px; margin: 0 auto;">
+            <input name="directoryName" type="text" class="form-control" placeholder="Directory Name" ng-model="vm.domain"
+                   uib-tooltip="Directory Name (e.g., contoso.onmicrosoft.com)" tooltip-placement="left">
+            <span class="input-group-btn">
+                <button class="btn btn-success" type="submit" ng-click="vm.checkDirectory()">Go</button>
+            </span>
+        </div>
+
+        <p style="padding: 20px;">
+            If you need help finding your Directory name, watch the 30-second video below:
+        </p>
+
+        <iframe width="672" height="378" src="https://www.youtube.com/embed/P8cl3CJ3gU8" frameborder="0" allowfullscreen></iframe>
+    </div>
+
+    <div ng-show="vm.showLoginOptions">
+        <p>You may Login with either a Work/School account OR a Microsoft account.</p>
+
+        <div id="org">
+            <a href="/account/signin?activation=true"><img src="/Content/Images/org.png" style="height:65px;width:350px;" class="img-thumbnail" /></a>
+        </div>
+
+        <h3>OR</h3>
+
+        <div id="msa" style="cursor:pointer" >
+            <form method="get" action="/account/signin">
+                <input type="image" src="/Content/images/msa.png" style="height:64px;width:350px" class="img-thumbnail"/>
+                <input name="isMSA" type="hidden" value="true" />
+                <input name="activation" type="hidden" value="true" />
+                <input name="directoryName" type="hidden" value="{{vm.domain}}" />
+            </form>
+        </div>
+    </div>
+
+    <div ng-show="vm.showAlreadyEnrolled">
+        <h3>This organization is already enrolled.</h3>
+        <h4>Log into your organization-specific tenant:</h4>
+        <p><a ng-href="/{{vm.trimmedOrgDomain}}">https://aisservicecatalog.com/{{vm.trimmedOrgDomain}}</a></p>
+    </div>
+
+
+</div>

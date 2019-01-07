@@ -1,0 +1,43 @@
+﻿<div>
+    <h3>Select the Subscription that will host Service Catalog metadata</h3>
+
+    <uib-alert type="danger" ng-show="vm.hostSubscriptionDetected">
+        ALERT - Subscription highlighted below is already connected! This screen will now be read-only.
+    </uib-alert>
+    <table class="table table-condensed">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Subscription Name</th>
+                <th>Subscription Id</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="sub in vm.subscriptions" ng-class="{ 'danger': sub.subscriptionIsConnected }">
+                <td>
+                    <div class="radio" ng-hide="vm.hostSubscriptionDetected">
+                        <label>
+                            <input type="radio" name="optradio" ng-model="vm.selectedHost" ng-value="sub" ng-change="vm.hostSubscriptionChanged()">
+                        </label>
+                    </div>
+                </td>
+                <td class="middle-align">{{sub.displayName }}</td>
+                <td class="middle-align">{{sub.id }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div>
+        <hr />
+        <uib-alert type="info">
+            Please specify the Resource Group that will contain this new Storage Account:
+        </uib-alert>
+
+        <resource-group-selector resource-groups="vm.resourceGroups"
+                                 subscription-id="vm.selectedHost.id"
+                                 selected-resource-group="vm.selectedResourceGroup"
+                                 suppress-save-new="true"></resource-group-selector>
+    </div>
+
+    <button class="btn btn-success pull-right" ng-click="vm.save()">Save</button>
+</div>

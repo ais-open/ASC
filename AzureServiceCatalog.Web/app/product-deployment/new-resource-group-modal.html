@@ -1,0 +1,36 @@
+﻿<div class="modal-header">
+    <h2>New Resource Group</h2>
+</div>
+
+<div class="modal-body">
+    <form class="form">
+        <div class="form-group">
+            <label>New Resource Group Name</label>
+            <input type="text" class="form-control" placeholder="Resource Group Name" ng-model="vm.newResourceGroupName">
+        </div>
+        <div class="form-group">
+            <label>Location</label>
+            <select class="form-control" ng-model="vm.location" ng-options="l for l in vm.locations"></select>
+        </div>
+        <div class="form-group">
+            <label>AD Group(s) to be Granted permission to this new Resource Group</label>
+
+            <ui-select multiple name="subscription" class="overFlow" ng-model="vm.selectedGroups" theme="bootstrap" required>
+                <ui-select-match placeholder="Select Group(s)...">
+                    {{$item.name | characters: 30}}
+                </ui-select-match>
+                <ui-select-choices repeat="group in vm.adGroups | filter: {name: $select.search}">
+                    <span class="exactFit" ng-bind-html="group.name | highlight:$select.search"></span>
+                    <small>
+                        ({{group.description}})
+                    </small>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+    </form>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-success" ng-click="vm.ok()">Create</button>
+    <button class="btn btn-default" ng-click="vm.cancel()">Cancel</button>
+</div>

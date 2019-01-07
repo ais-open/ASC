@@ -1,0 +1,37 @@
+﻿<div class="modal-header">
+    <h2>Deployment Operations</h2>
+</div>
+
+<div class="modal-body">
+    <table class="table table-striped table-condensed">
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>Resource</th>
+                <th>Provisioning State</th>
+                <th>Status Code</th>
+                <th>Status Message</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="operation in vm.data.operations">
+                <td>{{operation.properties.timestamp | date: 'medium' }}</td>
+                <td>
+                    <span class="bold-text">{{operation.properties.targetResource.resourceName}}</span>
+                    ({{operation.properties.targetResource.resourceType}})
+                </td>
+                <td>
+                    <label class="label" ng-class="{{operation.properties.provisioningState === 'Succeeded'}} ? 'label-success' : 'label-danger'">
+                        {{operation.properties.provisioningState}}
+                    </label>
+                </td>
+                <td>{{operation.properties.statusCode}}</td>
+                <td>{{vm.getStatusMessage(operation.properties.statusMessage)}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="vm.ok()">Close</button>
+</div>

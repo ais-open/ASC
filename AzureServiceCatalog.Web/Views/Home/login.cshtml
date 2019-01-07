@@ -1,0 +1,135 @@
+﻿@{
+    Layout = null;
+    var msLoginUrl = "/" + this.ViewBag.DirectoryName + "/signin";
+}
+
+<!doctype html>
+<html class="no-js" ng-app="ascApp">
+<head>
+    <meta charset="utf-8">
+    <title>Service Catalog</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="/content/bootstrap-united/css/bootstrap.united.min.css" />
+    <link rel="stylesheet" href="/content/main.css">
+</head>
+<body>
+
+    <div id="applicationHost" class="">
+        <div id="adminNavBar" class="navbar navbar-fixed-top navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" ui-sref="home">
+                        <i class="icon-home"></i>
+                        <span>Service Catalog</span>
+                    </a>
+                </div>
+                <div class="nav-bar">
+                    <ul class="nav navbar-nav navbar-right" style="position: relative;">
+                        <li><a data-toggle="collapse" data-target=".navbar-collapse" href="http://www.appliedis.com/expertise/cloud-computing" target="_blank">About</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row" ng-controller="LoginCtrl as vm">
+            <div class="col-md-8 scrollit">
+                <img src="/Content/images/service-catalog-login.png" alt="" style="z-index: -1"/>
+                <div style="position:absolute;left:300px;top:200px;font-size: 32px;">
+                    Service Catalog
+                </div>
+            </div>
+            <div class="col-md-4 fixed">
+                <h3>Login to tenant:</h3>
+                <p class="text-primary">@this.ViewBag.DirectoryName<text>.onmicrosoft.com</text></p>
+                <p>You may login with either a Work/School account OR a Microsoft account.</p>
+
+
+                <div id="org">
+                    <a href="@msLoginUrl"><img src="/Content/Images/work-account.png" class="img-thumbnail" /></a>
+                </div>
+
+                <div>
+                    <a href="@(msLoginUrl + "?isMSA=true")"><img src="/Content/Images/ms-account.png" class="img-thumbnail" /></a>
+                    @*<button class="btn btn-primary" ng-click="vm.login()">MS Login</button>*@
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer">
+        <div class="container">
+            <span class="pull-right text-info credit">
+                Service Catalog - &copy;
+                <a href="http://www.appliedis.com/">Applied Information Sciences</a>
+            </span>
+        </div>
+    </div>
+
+@*
+    <script src="/lib/angular/angular.js"></script>
+    <script src="/lib/adal-angular/lib/adal.js"></script>
+    <script src="/lib/adal-angular/lib/adal-angular.js"></script>
+    <script>
+        var app = angular.module('ascApp', ['AdalAngular']);
+
+        app.config(configApp);
+
+        configApp.$inject = ['$httpProvider', 'adalAuthenticationServiceProvider'];
+
+        function configApp($httpProvider, adalProvider) {
+            console.log('**inside app config');
+            adalProvider.init(
+                {
+                    //TODO: remove hard-coded clientId and tenant
+                    //clientId: 'c82174ab-bc73-477e-afb5-56d112a0c0d3',
+                    clientId: '@this.ViewBag.ClientId',
+                    //tenant: 'stevemic21yahoo.onmicrosoft.com',
+                    //tenant: identityInfo.tenant || 'common',
+                    tenant: '@this.ViewBag.DirectoryName' + '.onmicrosoft.com',
+                    cacheLocation: 'localStorage' // optional cache location default is sessionStorage
+                }, $httpProvider); // pass http provider to inject request interceptor to attach tokens
+        }
+
+
+        (function () {
+            //angular.module('ascApp').controller('LoginCtrl', LoginCtrl);
+            app.controller('LoginCtrl', LoginCtrl);
+            LoginCtrl.$inject = ['adalAuthenticationService'];
+
+            function LoginCtrl(adalAuthenticationService) {
+                var vm = this;
+                vm.login = login;
+
+
+
+
+                function login() {
+                    console.log('**inside login', adalAuthenticationService);
+                    adalAuthenticationService.login();
+
+                }
+
+            }
+
+        })();
+    </script>
+*@
+
+    <script type="text/javascript">
+        var appInsights=window.appInsights||function(config){
+            function r(config){t[config]=function(){var i=arguments;t.queue.push(function(){t[config].apply(t,i)})}}var t={config:config},u=document,e=window,o="script",s=u.createElement(o),i,f;for(s.src=config.url||"//az416426.vo.msecnd.net/scripts/a/ai.0.js",u.getElementsByTagName(o)[0].parentNode.appendChild(s),t.cookie=u.cookie,t.queue=[],i=["Event","Exception","Metric","PageView","Trace"];i.length;)r("track"+i.pop());return r("setAuthenticatedUserContext"),r("clearAuthenticatedUserContext"),config.disableExceptionTracking||(i="onerror",r("_"+i),f=e[i],e[i]=function(config,r,u,e,o){var s=f&&f(config,r,u,e,o);return s!==!0&&t["_"+i](config,r,u,e,o),s}),t
+            }({ instrumentationKey:"@System.Configuration.ConfigurationManager.AppSettings["iKey"]" });
+
+        window.appInsights = appInsights;
+        appInsights.trackPageView();
+    </script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+﻿<div>
+    <h1>Steps to Manually Deactivate Tenant</h1>
+    <ol>
+        <li>
+            Please read all the steps in the deactivation sequence.
+            Once you press "Done", you will be <strong>logged out</strong> and no longer able to access this screen.
+        </li>
+        <li>
+            Navigate to the <a href="https://manage.windowsazure.com/">Classic Azure Management portal</a> and click on Active Directory.
+        </li>
+        <li>
+            Select the directory containing the service catalog application.
+        </li>
+        <li>
+            Click on "Applications" then select the service catalog you would like to deactivate.
+            <div>
+                <img src="/Content/images/applications-manage-screenshot.png" alt="Manage Applications Screenshot Example" />
+            </div>
+        </li>
+        <li>
+            Select "Manage Access" on the bottom of the window.
+        </li>
+        <li>
+            <div>Finally, click on "Remove access" to remove the catalog.</div>
+            <div>
+                <img src="/Content/images/remove-access-button-screenshot.png" alt="Remove Access Screenshot Example"/>
+            </div>
+        </li>
+        <li>
+            Click the button below to finish the deactivation sequence:
+            <div>
+                <button class="btn btn-danger" ng-click="vm.removeTenant()">Done</button>
+            </div>
+        </li>
+    </ol>
+</div>

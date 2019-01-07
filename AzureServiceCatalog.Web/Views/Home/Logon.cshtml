@@ -1,0 +1,78 @@
+﻿@{
+    Layout = null;
+}
+
+@{
+    ViewBag.Title = "Login";
+}
+
+<link rel="stylesheet" href="~/Content/bootstrap-united/css/bootstrap.united.min.css" />
+<link rel="stylesheet" href="~/Content/main.css" />
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+@Scripts.Render("~/bundles/modernizr")
+
+
+<div class="container success">
+    <div class="jumbotron">
+        <h2>Azure Service Catalog</h2>
+    </div>
+        <div class="row">
+            <div class="col-md-6">
+                <img src="~/Content/images/microsoft-azure-logo-370x275.jpg" />
+            </div>
+            <div class="col-md-6">
+                <div class="panel ">
+                    <div>
+                        <div class="caption">
+                            <div id="org">
+                                <h3>Sign-in to connect your Azure Subscription</h3>
+                                <a href='@Url.Action("SignIn", "Account")'><img src="~/Content/Images/org.png" style="height:65px;width:350px;" class="img-thumbnail" /></a>
+                            </div>
+                            <span id="back" style="display:none; cursor:pointer" class="glyphicon glyphicon-arrow-left"></span>
+
+                            <h3>Manage your Azure Subscription</h3>
+                            <div id="msa" style="cursor:pointer"><img src="~/Content/Images/msa.png" style="height:64px;width:350px" class="img-thumbnail" /></div>
+                            @using (Html.BeginForm("SignIn", "Account", new { isMSA = true }, FormMethod.Get))
+                            {
+                                <div id="msadir" style="display: none">
+                                    <div class="input-group" style="width:350px">
+                                        <input name="directoryName" type="text" class="form-control" placeholder="Directory Name e.g. contoso.com" aria-describedby="basic-addon2">
+                                        <input name="isMSA" type="hidden" value="true" />
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default" type="submit">Go</button>
+                                        </span>
+                                    </div>
+                                    <a style="font-size:smaller; cursor:pointer" data-toggle="modal" data-target=".bs-example-modal-lg">Help me find my directory name</a>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                  
+                </div>
+            </div>
+        </div>
+   </div>
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class=" modal-dialog modal-lg">
+        <div class="modal-content">
+            <img src="~/Content/Images/directory.png" />
+        </div>
+    </div>
+</div>
+        <script>
+            $(document).ready(
+            function () {
+                $("#msa").click(function () {
+                    $("#org").hide();
+                    $("#back").show();
+                    $("#msadir").show("slow");
+                });
+                $("#back").click(function () {
+                    $("#back").hide();
+                    $("#msadir").hide();
+                    $("#org").show("slow");
+                });
+            });
+        </script>

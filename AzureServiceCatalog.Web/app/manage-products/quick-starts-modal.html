@@ -1,0 +1,12 @@
+﻿<div class="modal-header">
+    <h2>Select Quick Start Templates</h2>
+</div>
+
+<div class="modal-body">
+    <div ui-grid="vm.gridOptions" ui-grid-selection></div>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="vm.importTemplates()">Import Templates</button>
+    <button class="btn btn-default" ng-click="vm.cancel()" ng-show="vm.properties.cancelVisible">Cancel</button>
+</div>
