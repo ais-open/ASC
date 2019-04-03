@@ -12,10 +12,6 @@
         vm.adminGroups = [];
         vm.filterGroups = filterGroups;
         vm.organization = initialData;
-        vm.adminGroupChange = adminGroupChange;
-        vm.createProductGroupChange = createProductGroupChange;
-        vm.adminGroupDetail = [];
-        vm.createProductGroupDetail = [];
         vm.save = save;
 
         activate();
@@ -33,23 +29,7 @@
             }
         }
 
-        function adminGroupChange(item) {
-            vm.adminGroupDetail = item.name;
-        }
-
-        function createProductGroupChange(item) {
-            vm.createProductGroupDetail = item.name;
-        }
-
         function save() {
-            if (vm.adminGroupDetail.length !== 0) {
-                vm.organization.adminGroupName = vm.adminGroupDetail;
-            }
-
-            if (vm.createProductGroupDetail.length !== 0) {
-                vm.organization.createProductGroupName = vm.createProductGroupDetail;
-            }
-
             ascApi.saveOrganization(vm.organization).then(function (data) {
                 toastr.success('The Organization AD Groups were saved successfully.', 'Save Successful');
             });

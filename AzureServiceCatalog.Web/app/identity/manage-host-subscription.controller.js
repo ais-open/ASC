@@ -8,11 +8,10 @@
     function ManageHostSubscriptionCtrl(initialData, ascApi, toastr) {
         /* jshint validthis: true */
         var vm = this;
-        vm.divRGVisible = false;
+
         vm.save = save;
         vm.hostSubscriptionChanged = hostSubscriptionChanged;
         vm.subscriptions = initialData;
-        vm.toggleDivRGVisible = toggleDivRGVisible;
 
         activate();
 
@@ -34,21 +33,11 @@
                     toastr.error(error, 'Error');
                 }
             );
-            toggleDivRGVisible(vm.selectedHost.isConnected);
-        }
-
-        function toggleDivRGVisible(isConnected) {
-            vm.divRGVisible = !isConnected;
         }
 
         function save() {
             _.forEach(vm.subscriptions, function (item) {
                 item.isConnected = (vm.selectedHost === item);
-                if (vm.selectedHost === item) {
-                    item.isConnected = true;
-                } else {
-                    item.isConnected = false;
-                }
             });
 
             var subscriptionsResource = {

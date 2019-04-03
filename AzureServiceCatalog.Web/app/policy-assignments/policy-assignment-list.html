@@ -30,9 +30,10 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="item in vm.policyAssignments | orderBy: 'name'">
+                <tr ng-repeat="item in vm.policyAssignments | orderBy: 'name'"
+                    ui-sref="edit-policy-assignment({ subscriptionId: vm.selectedSubscription.rowKey, id: item.name })">
                     <td>
-                        {{vm.getPolicyDefName(item)}}
+                        {{vm.getPolicyDefName(item.properties.policyDefinitionId)}}
                     </td>
                 </tr>
             </tbody>

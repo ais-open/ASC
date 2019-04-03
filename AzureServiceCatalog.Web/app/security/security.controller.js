@@ -9,29 +9,18 @@
     function SecurityCtrl(initialData, ascApi, toastr) {
         /* jshint validthis: true */
         var vm = this;
-        vm.adGroups = [];
+        vm.adGroups = initialData.adGroups;
         vm.save = save;
         vm.selectedGroups = [];
         vm.subscriptionChanged = subscriptionChanged;
         vm.subscriptions = initialData.subscriptions;
         vm.createCustomRole = createCustomRole;
-        vm.filterGroups = filterGroups;
 
         activate();
 
         ////////////////
 
-        function activate() {
-            vm.adGroups = initialData.adGroups;
-        }
-
-        function filterGroups(filter, groupType) {
-            if (filter) {
-                ascApi.getOrganizationGroups(filter).then(function (data) {
-                    vm[groupType] = data;
-                });
-            }
-        }
+        function activate() {}
 
         function createCustomRole() {
             ascApi.createCustomRole(vm.selectedSubscription.id).then(function (data) {

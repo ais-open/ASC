@@ -10,7 +10,6 @@
         var vm = this;
         vm.policies = [];
         vm.selectedSubscription = null;
-        vm.getPolicyDefName = getPolicyDefName;
         vm.subscriptions = initialData;
         vm.subscriptionChanged = subscriptionChanged;
 
@@ -21,18 +20,6 @@
                 vm.selectedSubscription = vm.subscriptions[0];
                 subscriptionChanged();
             }
-        }
-
-        function getPolicyDefName(policy) {
-            var name = "";
-            if (policy.properties["displayName"] === undefined) {
-                name = policy.name;
-            }
-            else {
-                name = policy.properties["displayName"];
-            }
-
-            return name;
         }
 
         function subscriptionChanged() {

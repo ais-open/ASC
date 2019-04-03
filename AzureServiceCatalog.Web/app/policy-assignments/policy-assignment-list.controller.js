@@ -23,18 +23,9 @@
             }
         }
 
-        function getPolicyDefName(policy) {
-            var name = "";
-            if (policy.properties["displayName"] === undefined) {
-                var policyDefId = policy.properties["policyDefinitionId"];
-                var lastSlash = policyDefId.lastIndexOf('/');
-                name = policyDefId.substring(lastSlash + 1);
-            }
-            else {
-                name = policy.properties["displayName"];
-            }
-
-            return name;
+        function getPolicyDefName(policyDefId) {
+            var lastSlash = policyDefId.lastIndexOf('/');
+            return policyDefId.substring(lastSlash + 1);
         }
 
         function subscriptionChanged() {
