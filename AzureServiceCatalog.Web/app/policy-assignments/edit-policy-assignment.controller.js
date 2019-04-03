@@ -14,6 +14,7 @@
         vm.policies = initialData.policies;
         vm.policyAssignments = initialData.policyAssignments;
         vm.saveAll = saveAll;
+        vm.getPolicyDefName = getPolicyDefName;
         vm.subscription = initialData.subscription;
 
         activate();
@@ -25,6 +26,18 @@
 
         function getPolicyAssignmentName(policy) {
             return _.kebabCase(vm.subscription.displayName + '-' + policy.name);
+        }
+
+        function getPolicyDefName(policy) {
+            var name = "";
+            if (policy.properties["displayName"] === undefined) {
+                name = policy.name;
+            }
+            else {
+                name = policy.properties["displayName"];
+            }
+
+            return name;
         }
 
         function populateAssignmentsLookup() {

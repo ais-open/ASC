@@ -25,6 +25,7 @@
     <NuGetPackageImportStamp>a65ea2cc</NuGetPackageImportStamp>
     <UseGlobalApplicationHostFile />
     <TargetFrameworkProfile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -2692,13 +2693,8 @@
     <Content Include="lib\angular-ui-tree\CHANGELOG.md" />
     <Content Include="lib\angular-ui-tree\LICENSE" />
     <Content Include="lib\angular-ui-tree\README.md" />
-    <None Include="Properties\PublishProfiles\ASCDev - FTP.pubxml" />
-    <None Include="Properties\PublishProfiles\ASCDev - Web Deploy.pubxml" />
-    <None Include="Properties\PublishProfiles\ASCProd - FTP.pubxml" />
-    <None Include="Properties\PublishProfiles\ASCProd - Web Deploy.pubxml" />
-    <None Include="Properties\PublishProfiles\azure-service-catalog.pubxml" />
-    <None Include="Properties\PublishProfiles\azureservicecatalog - FTP.pubxml" />
-    <None Include="Properties\PublishProfiles\azureservicecatalog - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\testascui - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\testascui - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />

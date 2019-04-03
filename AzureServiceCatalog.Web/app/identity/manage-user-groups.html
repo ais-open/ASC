@@ -13,7 +13,8 @@
                 <tr>
                     <td>Users in this group can create products in the catalog</td>
                     <td class="col-md-4">
-                        <ui-select class="overFlow" ng-model="vm.organization.createProductGroup" theme="bootstrap" required>
+                        <ul>{{vm.organization.createProductGroupName}}</ul>
+                        <ui-select class="overFlow" ng-model="vm.organization.createProductGroup" theme="bootstrap" on-select="vm.createProductGroupChange($select.selected)" required>
                             <ui-select-match placeholder="Select Group...">
                                 {{$select.selected.name | characters: 30}}
                             </ui-select-match>
@@ -27,7 +28,8 @@
                 <tr>
                     <td>Users in this group are adminstrators for the catalog.</td>
                     <td class="col-md-4">
-                        <ui-select class="overFlow" ng-model="vm.organization.adminGroup" theme="bootstrap" required>
+                        <ul>{{vm.organization.adminGroupName}}</ul>
+                        <ui-select class="overFlow" ng-model="vm.organization.adminGroup" theme="bootstrap" on-select="vm.adminGroupChange($select.selected)" required>
                             <ui-select-match placeholder="Select Group...">
                                 {{$select.selected.name | characters: 30}}
                             </ui-select-match>

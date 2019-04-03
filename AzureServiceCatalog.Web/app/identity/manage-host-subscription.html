@@ -27,7 +27,7 @@
         </tbody>
     </table>
 
-    <div>
+    <div ng-show="vm.divRGVisible">
         <hr />
         <uib-alert type="info">
             Please specify the Resource Group that will contain this new Storage Account:
@@ -39,5 +39,5 @@
                                  suppress-save-new="true"></resource-group-selector>
     </div>
 
-    <button class="btn btn-success pull-right" ng-click="vm.save()">Save</button>
+    <button ng-show="vm.divRGVisible" class="btn btn-success pull-right" ng-click="vm.save()">Save</button>
 </div>
