@@ -1,4 +1,7 @@
 ﻿using AzureServiceCatalog.Web.Models;
+using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -15,6 +18,22 @@ namespace AzureServiceCatalog.Web.Controllers
             var tenantId = ClaimsPrincipal.Current.TenantId();
             var organization = await this.coreRepository.GetOrganization(tenantId);
             organization.OrganizationADGroups = AzureADGraphApiUtil.GetAllGroupsForOrganization(tenantId);
+
+            try
+            {
+                if (organization.AdminGroupName == null || organization.CreateProductGroupName == null)
+                {
+                    organization.AdminGroupName = organization.OrganizationADGroups.Where(x => x.Id == organization.AdminGroup).SingleOrDefault()?.Name;
+
+                    organization.CreateProductGroupName = organization.OrganizationADGroups.Where(x => x.Id == organization.CreateProductGroup).SingleOrDefault()?.Name;
+                }
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError(ex.Message);
+                Trace.TraceError($"AdminGroupName or CreateProductGroupName not found in the organisation : { organization.Id}");
+            }
+
             return organization;
         }
 

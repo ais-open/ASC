@@ -28,7 +28,7 @@
             <tbody>
                 <tr class="selectable" ng-repeat="item in vm.policies | orderBy: 'name'" ui-sref="edit-policy({ subscriptionId: vm.selectedSubscription.rowKey, id: item.policy.name })">
                     <td class="col-md-3">
-                        <a class="btn btn-link">{{item.policy.name}}</a>
+                        <a class="btn btn-link">{{vm.getPolicyDefName(item.policy)}}</a>
                     </td>
                     <td class="col-md-9 middle-align">{{item.policy.properties.description}}</td>
                 </tr>

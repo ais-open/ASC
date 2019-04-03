@@ -30,7 +30,8 @@
                 <ui-select-match placeholder="Select Group(s)...">
                     {{$item.name | characters: 30}}
                 </ui-select-match>
-                <ui-select-choices repeat="group in vm.adGroups | filter: {name: $select.search}">
+                <ui-select-choices repeat="group in vm.adGroups| orderBy: 'name' | filter: {name: $select.search}"
+                                   refresh="vm.filterGroups($select.search, 'adGroups')">
                     <span class="exactFit" ng-bind-html="group.name | highlight:$select.search"></span>
                     <small>
                         ({{group.description}})

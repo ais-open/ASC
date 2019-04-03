@@ -15,7 +15,7 @@
                 <td>
                     <toggle-switch ng-model="vm.assignments[pol.policy.id]" on-label="Yes" off-label="No"><toggle-switch>
                 </td>
-                <td>{{pol.policy.name}}</td>
+                <td>{{vm.getPolicyDefName(pol.policy)}}</td>
             </tr>
         </tbody>
     </table>

@@ -32,6 +32,7 @@ namespace AzureServiceCatalog.Web.Controllers
             var allItems = new JArray();
             while (nextLink != null)
             {
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
                 var response = await httpClient.GetAsync(new Uri(nextLink.LinkUrl));
                 var responseContent = await response.Content.ReadAsStringAsync();
                 data = JObject.Parse(responseContent);
