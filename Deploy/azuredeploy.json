@@ -47,7 +47,7 @@
     "storageAccountName": {
       "type": "string",
       "minLength": 1,
-      "defaultValue": "test"
+      "defaultValue": "test",
       "metadata": {
         "description": "Storage Account name."
       }
