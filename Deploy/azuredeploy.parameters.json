@@ -9,10 +9,10 @@
       "value": "Standard"
     }, 
     "applicationId": {
-      "value": null
+      "value": "GEN-UNIQUE"
     },
     "appPassword": {
-      "value": null
+      "value": "GEN-PASSWORD"
     },
     "newOrExisting": {
       "value": "new"
@@ -21,7 +21,7 @@
       "value": "asc"		
     },
     "sendGridApiKey": {
-      "value": null
+      "value": "GEN-PASSWORD"
     },
     "notificationFromEmailAddress": {
       "value": "Jagrati.Modi@appliedis.com"
