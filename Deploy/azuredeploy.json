@@ -103,7 +103,7 @@
     },
     "packageUri": {
       "type": "string",
-      "defaultValue": "https://github.com/jagratimodi/ASC/raw/asc-portal-deploy/Builds/ascpackage.zip",
+      "defaultValue": "https://github.com/AppliedIS/ASC/raw/asc-jagrati/Builds/ascpackage.zip",
       "metadata": {
         "description": "Package URL where build is present."
       }
