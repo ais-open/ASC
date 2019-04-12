@@ -4,6 +4,7 @@
   "parameters": {
     "appName": {
       "type": "string",
+      "defaultValue": "testascservicecatalog",
       "metadata": {
         "description": "Name of azure web app"
       }
@@ -46,6 +47,7 @@
     "storageAccountName": {
       "type": "string",
       "minLength": 1,
+      "defaultValue": "test"
       "metadata": {
         "description": "Storage Account name."
       }
