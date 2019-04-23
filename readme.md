@@ -22,9 +22,4 @@ AIS Service Catalog is a product that creates a catalog of technologies pre-appr
     a. Create a new SendGrid account   
     b. After the SendGrid account is created, go to Management portal (<https://app.sendgrid.com/)>   
     c. Go to Settings -> API Keys, and Create an API Key   
-    d. Note down the API Key. This will go in the appSettings of the Azure webapp   
-
-## Deploying Service Catalog
-
-1. It is preferred to setup Azure DevOps pipeline to build and deploy
-2. You can also use the Visual Studio to setup the **Publish Profile**  
+    d. Note down the API Key. This will go in the appSettings of the Azure webapp 
