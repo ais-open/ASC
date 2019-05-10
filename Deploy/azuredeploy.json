@@ -196,7 +196,8 @@
           "dependsOn":[  
             "[resourceId('Microsoft.Web/Sites', parameters('appName'))]",
             "[resourceId('Microsoft.Storage/storageAccounts', variables('updatedStorageAccountName'))]",
-            "[concat('Microsoft.Web/sites/', parameters('appName'), '/Extensions/MSDeploy')]"
+            "[concat('Microsoft.Web/sites/', parameters('appName'), '/Extensions/MSDeploy')]",
+            "Microsoft.ApplicationInsights.AzureWebSites"
           ],
           "properties":{  
             "AdminEmailAddress":"Admin email address",
@@ -217,11 +218,10 @@
           "name":"Microsoft.ApplicationInsights.AzureWebSites",
           "type":"siteextensions",
           "dependsOn":[  
-            "[resourceId('Microsoft.Web/Sites', parameters('appName'))]"
+            "[resourceId('Microsoft.Web/Sites', parameters('appName'))]",
+            "[concat('Microsoft.Web/sites/', parameters('appName'), '/Extensions/MSDeploy')]"
           ],
-          "properties":{  
-
-          }
+          "properties":{}
         }
       ]
     }
