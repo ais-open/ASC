@@ -22,6 +22,7 @@
             getOrganization: getOrganization,
             getOrganizationByDomain: getOrganizationByDomain,
             getOrganizationGroups: getOrganizationGroups,
+            getAssignedBlueprints: getAssignedBlueprints,
             getPolicies: getPolicies,
             getPolicy: getPolicy,
             getPolicyAssignments: getPolicyAssignments,
@@ -146,6 +147,10 @@
                 return httpGet('/api/identity/organization-groups?filter=' + filter);
             }
             return httpGet('/api/identity/organization-groups');
+        }
+
+        function getAssignedBlueprints(subscriptionId) {
+            return httpGet('/api/blueprintAssignments?subscriptionId=' + subscriptionId);
         }
 
         function getPolicies(subscriptionId) {
@@ -318,6 +323,7 @@
                 }
                 //headers: requestConfig.headers
             }).then(function (response) {
+                console.log(response);
                 if (!suppressSpinner) {
                     appSpinner.hideSpinner();
                 }

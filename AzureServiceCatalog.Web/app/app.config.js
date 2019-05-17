@@ -212,6 +212,19 @@
                     }]
                 }
             })
+            .state('manage-assigned-blueprint-list', {
+                url: '/blueprint/assigned-blueprint-list',
+                templateUrl: 'app/blueprint/assigned-blueprint-list.html',
+                controller: 'AssignedBlueprintListCtrl',
+                controllerAs: 'vm',
+                requireADLogin: true,
+                createPermissionRequired: true,
+                resolve: {
+                    initialData: ['ascApi', function (ascApi) {
+                        return ascApi.getEnrolledSubscriptions();
+                    }]
+                }
+            }) 
             .state('manage-policy-list', {
                 url: '/manage-policy-list',
                 templateUrl: 'app/policy/policy-list.html',

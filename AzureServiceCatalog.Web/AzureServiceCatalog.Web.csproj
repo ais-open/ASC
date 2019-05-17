@@ -18,13 +18,14 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort>44302</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication />
-    <IISExpressWindowsAuthentication />
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
     <TypeScriptToolsVersion>1.7</TypeScriptToolsVersion>
     <NuGetPackageImportStamp>a65ea2cc</NuGetPackageImportStamp>
     <UseGlobalApplicationHostFile />
     <TargetFrameworkProfile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -285,6 +286,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\AssignedBlueprintController.cs" />
     <Compile Include="Controllers\AuditLogsController.cs" />
     <Compile Include="Controllers\FeedbackController.cs" />
     <Compile Include="Controllers\PoliciesController.cs" />
@@ -315,6 +317,7 @@
     <Compile Include="Models\AuthType.cs" />
     <Compile Include="Models\Billing\ChartData.cs" />
     <Compile Include="Models\Billing\DataAggregationType.cs" />
+    <Compile Include="Models\BlueprintsClient.cs" />
     <Compile Include="Models\ContributorGroup.cs" />
     <Compile Include="Models\FeedbackViewModel.cs" />
     <Compile Include="Models\LinkHeaderParser.cs" />
@@ -336,6 +339,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Content Include=".jshintrc" />
+    <Content Include="app\blueprint\assigned-blueprint-list.html" />
+    <Content Include="app\blueprint\assigned-blueprint-list.controller.js" />
     <Content Include="app\deployments\deployment.controller.js" />
     <Content Include="app\deployments\deployment.html" />
     <Content Include="app\deployments\deployments.controller.js" />

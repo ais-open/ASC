@@ -26,6 +26,7 @@
         { state: 'manage-host-subscription', title: 'Manage Host Subscription' },
         { state: 'manage-enrolled-subscriptions', title: 'Manage Enrolled Subscriptions' },
         { state: 'manage-user-groups', title: 'Manage User Groups' },
+        { state: 'manage-assigned-blueprint-list', title: 'Manage Assigned Blueprint List'},
         { state: 'manage-policy-list', title: 'Manage Policy List',
             descendants: [{ state: 'edit-policy', title: 'Policy' }]
         },

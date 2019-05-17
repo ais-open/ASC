@@ -1,0 +1,39 @@
+﻿<div>
+    <h1>
+        Assigned Blueprint List
+    </h1>
+    <div class="row padded-row comment-text">
+        <div class="col-md-3">
+            <ui-select name="subscription" class="overFlow" ng-model="vm.selectedSubscription" theme="bootstrap" on-select="vm.subscriptionChanged()" required>
+                <ui-select-match placeholder="Select Subscription...">
+                    {{$select.selected.displayName | characters: 30}}
+                </ui-select-match>
+                <ui-select-choices repeat="sub in vm.subscriptions | filter: {displayName: $select.search}">
+                    <span class="exactFit" ng-bind-html="sub.displayName | highlight:$select.search"></span>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+    </div>
+    <div>
+        <table class="table table-striped table-hover table-condensed table-fixed-layout middle-align">
+            <thead>
+                <tr>
+                    <th class="col-md-3">Assignment Name</th>
+                    <th class="col-md-3">Blueprint</th>
+                    <th class="col-md-3">Version</th>
+                    <th class="col-md-3">Provisioning State</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="selectable" ng-repeat="item in vm.assignedBlueprints | orderBy: 'name'">
+                    <td class="col-md-3">
+                        <a class="btn btn-link">{{item.name}}</a>
+                    </td>
+                    <td class="col-md-3 middle-align">{{vm.getBlueprintName(item)}}</td>
+                    <td class="col-md-3 middle-align">{{vm.getBlueprintVersion(item)}}</td>
+                    <td class="col-md-3 middle-align">{{item.properties.provisioningState}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
