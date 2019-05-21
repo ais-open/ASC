@@ -288,6 +288,7 @@
   <ItemGroup>
     <Compile Include="Controllers\AssignedBlueprintController.cs" />
     <Compile Include="Controllers\AuditLogsController.cs" />
+    <Compile Include="Controllers\BlueprintDefinitionController.cs" />
     <Compile Include="Controllers\FeedbackController.cs" />
     <Compile Include="Controllers\PoliciesController.cs" />
     <Compile Include="Controllers\PolicyAssignmentsController.cs" />
@@ -339,8 +340,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Content Include=".jshintrc" />
+    <Content Include="app\blueprint\blueprint-definition-list.controller.js" />
     <Content Include="app\blueprint\assigned-blueprint-list.html" />
     <Content Include="app\blueprint\assigned-blueprint-list.controller.js" />
+    <Content Include="app\blueprint\blueprint-definition-list.html" />
     <Content Include="app\deployments\deployment.controller.js" />
     <Content Include="app\deployments\deployment.html" />
     <Content Include="app\deployments\deployments.controller.js" />

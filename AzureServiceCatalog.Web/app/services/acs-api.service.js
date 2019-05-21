@@ -22,6 +22,7 @@
             getOrganization: getOrganization,
             getOrganizationByDomain: getOrganizationByDomain,
             getOrganizationGroups: getOrganizationGroups,
+            getBlueprintDefinitions: getBlueprintDefinitions,
             getAssignedBlueprints: getAssignedBlueprints,
             getPolicies: getPolicies,
             getPolicy: getPolicy,
@@ -147,6 +148,10 @@
                 return httpGet('/api/identity/organization-groups?filter=' + filter);
             }
             return httpGet('/api/identity/organization-groups');
+        }
+
+        function getBlueprintDefinitions(subscriptionId) {
+            return httpGet('/api/blueprintDefinitions?subscriptionId=' + subscriptionId);
         }
 
         function getAssignedBlueprints(subscriptionId) {
