@@ -23,6 +23,7 @@
             getOrganizationByDomain: getOrganizationByDomain,
             getOrganizationGroups: getOrganizationGroups,
             getBlueprintDefinitions: getBlueprintDefinitions,
+            getBlueprintVersions: getBlueprintVersions,
             getAssignedBlueprints: getAssignedBlueprints,
             getPolicies: getPolicies,
             getPolicy: getPolicy,
@@ -152,6 +153,11 @@
 
         function getBlueprintDefinitions(subscriptionId) {
             return httpGet('/api/blueprintDefinitions?subscriptionId=' + subscriptionId);
+        }
+
+        function getBlueprintVersions(subscriptionId, blueprintName) {
+            console.log(blueprintName);
+            return httpGet('/api/show-blueprint-versions/' + blueprintName + '?subscriptionId=' + subscriptionId);
         }
 
         function getAssignedBlueprints(subscriptionId) {

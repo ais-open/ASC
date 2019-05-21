@@ -224,7 +224,21 @@
                         return ascApi.getEnrolledSubscriptions();
                     }]
                 }
-            }) 
+            })
+            .state('show-blueprint-versions', {
+                url: '/show-blueprint-versions/:subscriptionId/:id',
+                templateUrl: 'app/blueprint/show-blueprint-versions.html',
+                controller: 'ShowBlueprintVersionsCtrl',
+                controllerAs: 'vm',
+                adminPermissionRequired: true,
+                resolve: {
+                    initialData: ['$stateParams', 'ascApi', function ($stateParams, ascApi) {
+                        if ($stateParams.id) {
+                            return ascApi.getBlueprintVersions($stateParams.subscriptionId, $stateParams.id);
+                        }
+                    }]
+                }
+            })
             .state('manage-assigned-blueprint-list', {
                 url: '/blueprint/assigned-blueprint-list',
                 templateUrl: 'app/blueprint/assigned-blueprint-list.html',

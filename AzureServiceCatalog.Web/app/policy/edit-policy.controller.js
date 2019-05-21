@@ -25,6 +25,7 @@
         activate();
 
         function activate() {
+            console.log(initialData);
             if (initialData) {
                 vm.policy = initialData.policy;
                 vm.lookupPath = initialData.lookupPath;
