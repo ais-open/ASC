@@ -157,17 +157,20 @@
         }
 
         function getBlueprintVersions(subscriptionId, blueprintName) {
-            console.log(blueprintName);
             return httpGet('/api/show-blueprint-versions/' + blueprintName + '?subscriptionId=' + subscriptionId);
         }
 
         function getBlueprintVersion(subscriptionId, blueprintName, versionName) {
             console.log(blueprintName);
-            return httpGet('/api/get-blueprint-version/' + blueprintName + '?subscriptionId=' + subscriptionId);
+            return httpGet('/api/get-blueprint-version/' + blueprintName + '?subscriptionId=' + subscriptionId + '&versionName=' + versionName);
         }
 
         function getAssignedBlueprints(subscriptionId) {
             return httpGet('/api/blueprintAssignments?subscriptionId=' + subscriptionId);
+        }
+
+        function assignBlueprint(subscriptionId, assignmentName, blueprintAssignment) {
+            return httpPut('/api/assign-blueprint/' + assignmentName + '?subscriptionId=' + subscriptionId, blueprintAssignment);
         }
 
         function getPolicies(subscriptionId) {
@@ -340,7 +343,6 @@
                 }
                 //headers: requestConfig.headers
             }).then(function (response) {
-                console.log(response);
                 if (!suppressSpinner) {
                     appSpinner.hideSpinner();
                 }

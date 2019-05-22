@@ -247,10 +247,7 @@
                 adminPermissionRequired: true,
                 resolve: {
                     initialData: ['$stateParams', 'ascApi', function ($stateParams, ascApi) {
-                        console.log('state');
-                        console.log($stateParams);
                         if ($stateParams.selectedVersion) {
-                            console.log('inside get version');
                             return ascApi.getBlueprintVersion($stateParams.subscriptionId, $stateParams.blueprintName, $stateParams.selectedVersion);
                         }
                     }]

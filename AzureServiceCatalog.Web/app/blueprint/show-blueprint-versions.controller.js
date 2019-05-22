@@ -21,8 +21,6 @@
 
         function activate() {
             if (initialData) {
-                console.log('show versions');
-                console.log(initialData);
                 vm.blueprintVersions = initialData.value;
                 var versionNames = [];
                 if (vm.blueprintVersions && vm.blueprintVersions.length > 0) {
@@ -31,12 +29,9 @@
                     var tempArr = vm.blueprintVersions[0].id.split('/');
                     var subscriptionsIndex = tempArr.indexOf('subscriptions');
                     vm.subscriptionId = tempArr[subscriptionsIndex + 1];
-                    console.log(vm.blueprintVersions);
                     vm.blueprintVersions.forEach(function (item) {
-                        console.log(item)
                         versionNames.push(item.name);
                     });
-                    console.log(versionNames);
                     vm.versionNames = versionNames;
                     vm.selectedVersion = vm.versionNames[vm.versionNames.length - 1];
                 } else {

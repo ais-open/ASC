@@ -17,7 +17,6 @@
         activate();
 
         function activate() {
-            console.log('in activate');
             if (vm.subscriptions && vm.subscriptions.length > 0) {
                 vm.selectedSubscription = vm.subscriptions[0];
                 subscriptionChanged();
@@ -38,7 +37,6 @@
 
         function subscriptionChanged() {
             ascApi.getBlueprintDefinitions(vm.selectedSubscription.rowKey).then(function (data) {
-                console.log(data);
                 vm.blueprintDefinitions = data.value;
             });
         }

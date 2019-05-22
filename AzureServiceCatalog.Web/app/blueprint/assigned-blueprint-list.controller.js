@@ -18,7 +18,6 @@
         activate();
 
         function activate() {
-            console.log('in activate');
             if (vm.subscriptions && vm.subscriptions.length > 0) {
                 vm.selectedSubscription = vm.subscriptions[0];
                 subscriptionChanged();
@@ -29,9 +28,7 @@
             var blueprintName = "";
             if (assignedBlueprint.properties["blueprintId"] !== undefined) {
                 var tempArr = assignedBlueprint.properties["blueprintId"].split('/');
-                console.log(tempArr);
                 var bluePrintsIndex = tempArr.indexOf('blueprints');
-                console.log(bluePrintsIndex);
                 blueprintName = tempArr[bluePrintsIndex+1];
             }
             return blueprintName;
@@ -41,9 +38,7 @@
             var version = "";
             if (assignedBlueprint.properties["blueprintId"] !== undefined) {
                 var tempArr = assignedBlueprint.properties["blueprintId"].split('/');
-                console.log(tempArr);
                 var versionsIndex = tempArr.indexOf('versions');
-                console.log(versionsIndex);
                 version = tempArr[versionsIndex + 1];
             }
             return version;
@@ -51,7 +46,6 @@
 
         function subscriptionChanged() {
             ascApi.getAssignedBlueprints(vm.selectedSubscription.rowKey).then(function (data) {
-                console.log(data);
                 vm.assignedBlueprints = data.value;
             });
         }

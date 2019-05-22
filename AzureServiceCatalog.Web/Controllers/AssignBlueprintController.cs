@@ -1,39 +1,27 @@
-﻿using System;
+﻿using AzureServiceCatalog.Web.Models;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace AzureServiceCatalog.Web.Controllers
 {
+    [RoutePrefix("api/assign-blueprint")]
     public class AssignBlueprintController : ApiController
     {
-        // GET api/<controller>
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
+        private BlueprintsClient client = new BlueprintsClient();
 
-        // GET api/<controller>/5
-        public object GetBlueprintVersions(object blueprintVersions)
+        [Route("{assignmentName}")]
+        public async Task<HttpResponseMessage> Put(string subscriptionId, string assignmentName, [FromBody]object blueprintAssignment)
         {
-            return blueprintVersions;
-        }
-
-        // POST api/<controller>
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/<controller>/5
-        public void Delete(int id)
-        {
+            dynamic requestBody = blueprintAssignment;
+            var azureResponse = await this.client.AssignBlueprint(subscriptionId, assignmentName, requestBody);
+            var response = this.Request.CreateResponse(HttpStatusCode.OK);
+            response.Content = azureResponse.ToStringContent();
+            return response;
         }
     }
 }
