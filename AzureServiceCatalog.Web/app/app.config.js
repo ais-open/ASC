@@ -239,16 +239,19 @@
                     }]
                 }
             })
-            .state('assign-blueprint', {
-                url: '/assign-blueprint/:subscriptionId/:assignmentName',
+            .state('get-blueprint-version', {
+                url: '/get-blueprint-version/:subscriptionId/:blueprintName/:selectedVersion',
                 templateUrl: 'app/blueprint/assign-blueprint.html',
                 controller: 'AssignBlueprintCtrl',
                 controllerAs: 'vm',
                 adminPermissionRequired: true,
                 resolve: {
                     initialData: ['$stateParams', 'ascApi', function ($stateParams, ascApi) {
-                        if ($stateParams.id) {
-                            return ascApi.assignBlueprint($stateParams.subscriptionId, $stateParams.assignmentName, $stateParams.blueprintAssignment);
+                        console.log('state');
+                        console.log($stateParams);
+                        if ($stateParams.selectedVersion) {
+                            console.log('inside get version');
+                            return ascApi.getBlueprintVersion($stateParams.subscriptionId, $stateParams.blueprintName, $stateParams.selectedVersion);
                         }
                     }]
                 }

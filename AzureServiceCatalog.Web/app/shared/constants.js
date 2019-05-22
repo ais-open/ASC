@@ -27,9 +27,13 @@
         { state: 'manage-enrolled-subscriptions', title: 'Manage Enrolled Subscriptions' },
         { state: 'manage-user-groups', title: 'Manage User Groups' },
         { state: 'manage-blueprint-definition-list', title: 'Manage Blueprint Definition List',
-            descendants: [{ state: 'show-blueprint-versions', title: 'Blueprint Details' }]
+            descendants: [
+                {
+                    state: 'show-blueprint-versions', title: 'Blueprint Details',
+                    descendants: [{ state: 'get-blueprint-version', title: 'Assign Blueprint' },]
+                }
+            ]
         },
-        { state: 'assign-blueprint', title: 'Assign Blueprint' },
         { state: 'manage-assigned-blueprint-list', title: 'Manage Assigned Blueprint List'},
         { state: 'manage-policy-list', title: 'Manage Policy List',
             descendants: [{ state: 'edit-policy', title: 'Policy' }]

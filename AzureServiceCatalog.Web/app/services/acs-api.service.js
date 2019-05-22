@@ -24,7 +24,7 @@
             getOrganizationGroups: getOrganizationGroups,
             getBlueprintDefinitions: getBlueprintDefinitions,
             getBlueprintVersions: getBlueprintVersions,
-            assignBlueprint: assignBlueprint,
+            getBlueprintVersion: getBlueprintVersion,
             getAssignedBlueprints: getAssignedBlueprints,
             getPolicies: getPolicies,
             getPolicy: getPolicy,
@@ -161,9 +161,9 @@
             return httpGet('/api/show-blueprint-versions/' + blueprintName + '?subscriptionId=' + subscriptionId);
         }
 
-        function assignBlueprint(subscriptionId, blueprintName) {
+        function getBlueprintVersion(subscriptionId, blueprintName, versionName) {
             console.log(blueprintName);
-            return httpGet('/api/assign-blueprint/' + blueprintName + '?subscriptionId=' + subscriptionId);
+            return httpGet('/api/get-blueprint-version/' + blueprintName + '?subscriptionId=' + subscriptionId);
         }
 
         function getAssignedBlueprints(subscriptionId) {

@@ -19,11 +19,11 @@
                 </div>
                 <div class="form-group col-xs-12">
                     <label class="col-lg-2 col-xs-12 col-sm-3">Versions: </label>
-                    <select ng-model="vm.latestVersion" ng-options="v as v for v in vm.versionNames" class="form-control"></select>
+                    <select ng-model="vm.selectedVersion" ng-options="v as v for v in vm.versionNames" class="form-control"></select>
                 </div>
             </form>
 
-            <button class="btn btn-success" ui-sref="assign-blueprint({ subscriptionId: vm.selectedSubscription.rowKey})">Assign</button>
+            <button class="btn btn-success" ui-sref="get-blueprint-version({ subscriptionId: vm.subscriptionId, blueprintName: vm.blueprintName, selectedVersion: vm.selectedVersion})">Assign</button>
         </div>
     </div>
 </div>

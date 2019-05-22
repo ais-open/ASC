@@ -13,7 +13,8 @@
         activate();
 
         function activate() {
-            console.log('in activate');
+            console.log('in activate assign blueprint');
+            console.log(initialData);
 
         }
     }
