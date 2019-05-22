@@ -15,6 +15,7 @@
         vm.latestVersion = "";
         vm.selectedSubscription = null;
         vm.assign = assign;
+        vm.showDiv = true;
 
         activate();
 
@@ -33,6 +34,8 @@
                     console.log(versionNames);
                     vm.versionNames = versionNames;
                     vm.latestVersion = vm.versionNames[vm.versionNames.length - 1];
+                } else {
+                    vm.showDiv = false;
                 }
             }
         }

@@ -29,6 +29,7 @@
         { state: 'manage-blueprint-definition-list', title: 'Manage Blueprint Definition List',
             descendants: [{ state: 'show-blueprint-versions', title: 'Blueprint Details' }]
         },
+        { state: 'assign-blueprint', title: 'Assign Blueprint' },
         { state: 'manage-assigned-blueprint-list', title: 'Manage Assigned Blueprint List'},
         { state: 'manage-policy-list', title: 'Manage Policy List',
             descendants: [{ state: 'edit-policy', title: 'Policy' }]
