@@ -1,4 +1,77 @@
-﻿<div>
-    <h2>Assign Blueprint</h2>
-    <button class="btn btn-success" ng-click="vm.assign()">Assign</button>
-</div>
+﻿<form name="frmAssign" class="form-horizontal" novalidate>
+    <div>
+        <h2>Assign Blueprint</h2>
+
+        <div class="col-md-12">
+            <div name="blueprintVersionForm" class="form-inline control-columns" novalidate>
+                <div class="form-group col-xs-12">
+                    <label class="col-lg-2 col-xs-12 col-sm-3">Assignment Name: </label>
+                    <input type="text" name="blueprintAssignmentName" ng-model="vm.assignmentName" class="form-control" placeholder="Assignment Name" required disabled>
+                </div>
+                <div class="form-group col-xs-12">
+                    <label class="col-lg-2 col-xs-12 col-sm-3">Location: </label>
+                    <input type="text" name="blueprintLocation" class="form-control" placeholder="east-US" required disabled>
+                </div>
+                <div class="form-group col-xs-12">
+                    <label class="col-lg-2 col-xs-12 col-sm-3">Blueprint definition version: </label>
+                    <input type="text" name="blueprintDescriptionVersion" ng-model="vm.blueprintDefinitionVersion" class="form-control" placeholder="Blueprint definition version" required disabled>
+                </div>
+            </div>
+        </div>
+
+        <h3>Artifact parameters</h3>
+        <div class="form-horizontal">
+
+            <div class="form-group" ng-repeat="resourceGroup in vm.resourceGroups">
+                <div>
+                    <label class="col-md-2 control-label">
+                        Resource Group: Name
+                        <span ng-show="resourceGroup.info.metadata.description" class="glyphicon glyphicon-info-sign" aria-hidden="true" uib-tooltip="{{resourceGroup.info.metadata.description}}" tooltip-placement="left"></span>
+                    </label>
+
+                    <div class="col-md-3">
+                        <input class="form-control" ng-model="resourceGroup.value" ></input>
+                    </div>
+                </div>
+                <div>
+                    <label class="col-md-2 control-label">
+                        Resource Group: Location
+                        <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                    </label>
+
+                    <div class="col-md-3">
+                        <input class="form-control" ng-model="resourceGroup.value"></input>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group" ng-repeat="parameter in vm.parameters">
+                <label class="col-md-2 control-label">
+                    {{vm.lodash.startCase(parameter.name)}}
+                    <span ng-show="parameter.info.metadata.description" class="glyphicon glyphicon-info-sign" aria-hidden="true" uib-tooltip="{{parameter.info.metadata.description}}" tooltip-placement="left"></span>
+                </label>
+
+                <div class="col-md-3" ng-show="{{vm.lodash.includes(['string', 'int'], parameter.info.type) && !parameter.info.allowedValues && !parameter.info.metadata.policy}}">
+                    <input type="text" class="form-control" ng-model="parameter.value" placeholder="Enter Value" required />
+                </div>
+                <div class="col-md-3" ng-show="{{parameter.info.type === 'securestring' && !parameter.info.allowedValues}}">
+                    <input type="password" class="form-control" ng-model="parameter.value" placeholder="Enter Value" required />
+                </div>
+                <div class="col-md-3" ng-show="{{vm.lodash.includes(['string', 'int'], parameter.info.type) && parameter.info.allowedValues}}">
+                    <select class="form-control" ng-model="parameter.value" ng-options="p for p in parameter.info.allowedValues"></select>
+                </div>
+                <div class="col-md-3" ng-show="{{vm.lodash.includes(['string', 'int'], parameter.info.type) && !!parameter.info.metadata.policy}}">
+                    <select class="form-control" ng-model="parameter.value" ng-options="p for p in vm.policyLookup[parameter.info.metadata.policy]"></select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <button class="btn btn-primary">Assign</button>
+            </div>
+        </div>
+
+    </div>
+</form>
