@@ -18,7 +18,8 @@
         vm.blueprintName = initialData.properties.blueprintName;
         vm.assignmentName = 'Assignment-' + vm.blueprintName;
         vm.targetScope = initialData.properties.targetScope;
-
+        vm.lockedAssigment = 'DontLock';
+        vm.blueprintResourceNamePrefix = "";
 
 
 

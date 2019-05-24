@@ -2,49 +2,118 @@
     <div>
         <h2>Assign Blueprint</h2>
 
+
+        <h4>Basics</h4>
+
         <div class="col-md-12">
             <div name="blueprintVersionForm" class="form-inline control-columns" novalidate>
                 <div class="form-group col-xs-12">
                     <label class="col-lg-2 col-xs-12 col-sm-3">Assignment Name: </label>
-                    <input type="text" name="blueprintAssignmentName" ng-model="vm.assignmentName" class="form-control" placeholder="Assignment Name" required disabled>
+                    <input type="text" name="blueprintAssignmentName" ng-model="vm.assignmentName" class="form-control" placeholder="Assignment Name" required>
                 </div>
                 <div class="form-group col-xs-12">
                     <label class="col-lg-2 col-xs-12 col-sm-3">Location: </label>
-                    <input type="text" name="blueprintLocation" class="form-control" placeholder="east-US" required disabled>
+                    <input type="text" name="blueprintLocation" class="form-control" placeholder="east-US" required>
                 </div>
                 <div class="form-group col-xs-12">
                     <label class="col-lg-2 col-xs-12 col-sm-3">Blueprint definition version: </label>
                     <input type="text" name="blueprintDescriptionVersion" ng-model="vm.blueprintDefinitionVersion" class="form-control" placeholder="Blueprint definition version" required disabled>
                 </div>
             </div>
+            <br />
+        </div>
+
+
+        <h4>Lock Assignment</h4>
+        <div>
+            <div ng-init='vm.lockedAssigment=DontLock'>
+                <input class="col-lg-2 col-xs-12 col-sm-3" type="radio" ng-model="vm.lockedAssigment" value="DontLock">  Don't Lock <br />
+                <input class="col-lg-2 col-xs-12 col-sm-3" type="radio" ng-model="vm.lockedAssigment" value="DoNotDelete"> Do Not Delete <br />
+                <input class="col-lg-2 col-xs-12 col-sm-3" type="radio" ng-model="vm.lockedAssigment" value="ReadOnly"> Read Only <br />
+            </div>
+            <br />
+
+        </div>
+
+
+        <div>
+            <h4>Managed Identity</h4>
+            <div ng-init="identityAssigned=system">
+                <input class="col-lg-2 col-xs-12 col-sm-3" id="identityAssigned-system" type="radio" name="manageIdentity" ng-model="identityAssigned" ng-value="system"> System Assigned <br />
+                <input class="col-lg-2 col-xs-12 col-sm-3" id="identityAssigned-user" type="radio" name="manageIdentity" ng-model="identityAssigned" ng-value="user"> User Assigned <br />
+            </div>
+            <br />
+
+        </div>
+
+
+
+        <div>
+            <h3>Blueprint parameters</h3>
+            <div class="form-inline control-columns">
+                <div class="form-group col-xs-12">
+                    <label class="col-lg-2 col-xs-12 col-sm-3">Resource Name Prefix </label>
+                    <input type="text" name="blueprintResourceNamePrefix" ng-model="vm.blueprintResourceNamePrefix" class="form-control" placeholder="Set Value" required>
+                </div>
+            </div>
+            <br />
+            <br />
         </div>
 
         <h3>Artifact parameters</h3>
-        <div class="form-horizontal">
+        <br />
+        <table class="table table-condensed">
+            <thead>
+                <tr>
+                    <th>
+                        ARTIFACT / PARAMETER
+                    </th>
+                    <th>
+                        PARAMETER VALUE
+                    </th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+        </table>
 
-            <div class="form-group" ng-repeat="resourceGroup in vm.resourceGroups">
-                <div>
-                    <label class="col-md-2 control-label">
-                        Resource Group: Name
-                        <span ng-show="resourceGroup.info.metadata.description" class="glyphicon glyphicon-info-sign" aria-hidden="true" uib-tooltip="{{resourceGroup.info.metadata.description}}" tooltip-placement="left"></span>
-                    </label>
-
-                    <div class="col-md-3">
-                        <input class="form-control" ng-model="resourceGroup.value" ></input>
-                    </div>
-                </div>
-                <div>
-                    <label class="col-md-2 control-label">
-                        Resource Group: Location
-                        <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-                    </label>
-
-                    <div class="col-md-3">
+        <div>
+            <div class="col-lg-2 col-xs-12 col-sm-3">
+                <h4>{{vm.targetScope}}</h4>
+                <br />
+            </div>
+            
+            <div class="col-md-12" ng-repeat="resourceGroup in vm.resourceGroups">
+                <div class="form-inline control-columns">
+                    <div class="form-group col-xs-12">
+                        <label class="col-lg-2 col-xs-12 col-sm-3">
+                            Resource Group: Name
+                            <span ng-show="resourceGroup.info.metadata.description" class="glyphicon glyphicon-info-sign" aria-hidden="true" uib-tooltip="{{resourceGroup.info.metadata.description}}" tooltip-placement="left"></span>
+                        </label>
                         <input class="form-control" ng-model="resourceGroup.value"></input>
                     </div>
+
+                    <div class="form-group col-xs-12">
+                        <label class="col-lg-2 col-xs-12 col-sm-3">
+                            Resource Group: Location
+                            <span ng-show="resourceGroup.info.metadata.description" class="glyphicon glyphicon-info-sign" aria-hidden="true" uib-tooltip="{{resourceGroup.info.metadata.description}}" tooltip-placement="left"></span>
+                        </label>
+                        <input class="form-control" placeholder="east-US"></input>
+                    </div>
+
                 </div>
             </div>
 
+            <table class="table table-condensed">
+                <thead>
+                    <tr>
+                        <th></th>
+
+                    </tr>
+                </thead>
+            </table>
 
             <div class="form-group" ng-repeat="parameter in vm.parameters">
                 <label class="col-md-2 control-label">
