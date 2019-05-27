@@ -8,9 +8,7 @@
     function AssignBlueprintCtrl(initialData, ascApi, toastr) {
         /* jshint validthis: true */
         var vm = this;
-        vm.assignmentName = "";
         vm.blueprintVersion = null;
-
         vm.lodash = _;
         vm.parameters = [];
         vm.resourceGroups = [];
@@ -19,8 +17,7 @@
         vm.assignmentName = 'Assignment-' + vm.blueprintName;
         vm.targetScope = initialData.properties.targetScope;
         vm.location = 'eastus';
-        vm.lockedAssigment = 'DontLock';
-        vm.blueprintResourceNamePrefix = "";
+        vm.lockedAssigment = 'none';
         vm.assign = assign;
 
         activate();
@@ -59,6 +56,7 @@
         }
 
         function assign() {
+            console.log(vm.lockedAssigment);
             var blueprintAssignment = {
                 "identity": {
                     "type": "SystemAssigned"
@@ -67,7 +65,7 @@
                 "properties": {
                     "blueprintId": "/subscriptions/c4ffd701-5227-4ce4-9b22-e87c75fd788b/providers/Microsoft.Blueprint/blueprints/jagrati-devtest2/versions/1.0",
                     "locks": {
-                        "mode": "none"
+                        "mode": vm.lockedAssigment
                     }
                 }
             };
