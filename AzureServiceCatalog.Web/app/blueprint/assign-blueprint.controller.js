@@ -2,10 +2,10 @@
     'use strict';
 
     angular.module('ascApp').controller('AssignBlueprintCtrl', AssignBlueprintCtrl);
-    AssignBlueprintCtrl.$inject = ['initialData', 'ascApi', 'toastr'];
+    AssignBlueprintCtrl.$inject = ['$state', 'initialData', 'ascApi', 'toastr'];
 
     /* @ngInject */
-    function AssignBlueprintCtrl(initialData, ascApi, toastr) {
+    function AssignBlueprintCtrl($state, initialData, ascApi, toastr) {
         /* jshint validthis: true */
         var vm = this;
         vm.blueprintVersion = null;
@@ -24,6 +24,8 @@
 
         function activate() {
             vm.blueprintVersion = initialData;
+            console.log('parameters');
+            console.log(initialData.properties.parameters);
             var tempArr = vm.blueprintVersion.id.split('/');
             var subscriptionsIndex = tempArr.indexOf('subscriptions');
             vm.subscriptionId = tempArr[subscriptionsIndex + 1];
@@ -63,7 +65,7 @@
                 },
                 "location": vm.location,
                 "properties": {
-                    "blueprintId": "/subscriptions/c4ffd701-5227-4ce4-9b22-e87c75fd788b/providers/Microsoft.Blueprint/blueprints/jagrati-devtest2/versions/1.0",
+                    "blueprintId": vm.blueprintVersion.id,
                     "locks": {
                         "mode": vm.lockedAssigment
                     }
@@ -102,6 +104,7 @@
                 } else {
                     //vm.policy = data.policy;
                     toastr.success('Blueprint assigned successfully.', 'Success');
+                    $state.go('manage-assigned-blueprint-list');
                 }
             });
         }
