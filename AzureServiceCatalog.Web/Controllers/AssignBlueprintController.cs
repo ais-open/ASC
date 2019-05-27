@@ -20,7 +20,8 @@ namespace AzureServiceCatalog.Web.Controllers
             dynamic requestBody = blueprintAssignment;
             var azureResponse = await this.client.AssignBlueprint(subscriptionId, assignmentName, requestBody);
             var response = this.Request.CreateResponse(HttpStatusCode.OK);
-            response.Content = azureResponse.ToStringContent();
+            string responseBody = "{ \"blueprintAssignment\": " + azureResponse + " }";
+            response.Content = responseBody.ToStringContent();
             return response;
         }
     }

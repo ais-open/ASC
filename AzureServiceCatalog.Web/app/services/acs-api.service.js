@@ -26,6 +26,7 @@
             getBlueprintVersions: getBlueprintVersions,
             getBlueprintVersion: getBlueprintVersion,
             getAssignedBlueprints: getAssignedBlueprints,
+            assignBlueprint: assignBlueprint,
             getPolicies: getPolicies,
             getPolicy: getPolicy,
             getPolicyAssignments: getPolicyAssignments,

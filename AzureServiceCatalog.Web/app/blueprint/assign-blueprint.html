@@ -13,7 +13,7 @@
                 </div>
                 <div class="form-group col-xs-12">
                     <label class="col-lg-2 col-xs-12 col-sm-3">Location: </label>
-                    <input type="text" name="blueprintLocation" class="form-control" placeholder="east-US" required>
+                    <input type="text" name="blueprintLocation" ng-model="vm.location" class="form-control" placeholder="Location" required>
                 </div>
                 <div class="form-group col-xs-12">
                     <label class="col-lg-2 col-xs-12 col-sm-3">Blueprint definition version: </label>
@@ -33,31 +33,6 @@
             </div>
             <br />
 
-        </div>
-
-
-        <div>
-            <h4>Managed Identity</h4>
-            <div ng-init="identityAssigned=system">
-                <input class="col-lg-2 col-xs-12 col-sm-3" id="identityAssigned-system" type="radio" name="manageIdentity" ng-model="identityAssigned" ng-value="system"> System Assigned <br />
-                <input class="col-lg-2 col-xs-12 col-sm-3" id="identityAssigned-user" type="radio" name="manageIdentity" ng-model="identityAssigned" ng-value="user"> User Assigned <br />
-            </div>
-            <br />
-
-        </div>
-
-
-
-        <div>
-            <h3>Blueprint parameters</h3>
-            <div class="form-inline control-columns">
-                <div class="form-group col-xs-12">
-                    <label class="col-lg-2 col-xs-12 col-sm-3">Resource Name Prefix </label>
-                    <input type="text" name="blueprintResourceNamePrefix" ng-model="vm.blueprintResourceNamePrefix" class="form-control" placeholder="Set Value" required>
-                </div>
-            </div>
-            <br />
-            <br />
         </div>
 
         <h3>Artifact parameters</h3>
@@ -92,7 +67,7 @@
                             Resource Group: Name
                             <span ng-show="resourceGroup.info.metadata.description" class="glyphicon glyphicon-info-sign" aria-hidden="true" uib-tooltip="{{resourceGroup.info.metadata.description}}" tooltip-placement="left"></span>
                         </label>
-                        <input class="form-control" ng-model="resourceGroup.value"></input>
+                        <input class="form-control" ng-model="resourceGroup.name"></input>
                     </div>
 
                     <div class="form-group col-xs-12">
@@ -100,7 +75,7 @@
                             Resource Group: Location
                             <span ng-show="resourceGroup.info.metadata.description" class="glyphicon glyphicon-info-sign" aria-hidden="true" uib-tooltip="{{resourceGroup.info.metadata.description}}" tooltip-placement="left"></span>
                         </label>
-                        <input class="form-control" placeholder="east-US"></input>
+                        <input class="form-control" ng-model="resourceGroup.location"></input>
                     </div>
 
                 </div>
@@ -138,7 +113,7 @@
 
         <div class="row">
             <div class="col-md-3">
-                <button class="btn btn-primary">Assign</button>
+                <button class="btn btn-primary" ng-click="vm.assign()">Assign</button>
             </div>
         </div>
 
