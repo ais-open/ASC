@@ -9,6 +9,7 @@
         /* jshint validthis: true */
         var vm = this;
         vm.blueprintVersion = null;
+        vm.subscriptionId = "";
         vm.lodash = _;
         vm.parameters = [];
         vm.resourceGroups = [];
@@ -16,20 +17,22 @@
         vm.blueprintName = initialData.properties.blueprintName;
         vm.assignmentName = 'Assignment-' + vm.blueprintName;
         vm.targetScope = initialData.properties.targetScope;
-        vm.location = 'eastus';
+        vm.location = '';
         vm.lockedAssigment = 'none';
+        vm.locations = [];
+        vm.hostSubscriptionChanged = hostSubscriptionChanged;
+        vm.back = back;
         vm.assign = assign;
 
         activate();
 
         function activate() {
+            
             vm.blueprintVersion = initialData;
-            console.log('parameters');
-            console.log(initialData.properties.parameters);
             var tempArr = vm.blueprintVersion.id.split('/');
             var subscriptionsIndex = tempArr.indexOf('subscriptions');
             vm.subscriptionId = tempArr[subscriptionsIndex + 1];
-
+            hostSubscriptionChanged();
             _.forIn(initialData.properties.parameters, function (value, key) {
                 vm.parameters.push({ name: key, info: value, value: value.defaultValue });
             });
@@ -49,16 +52,22 @@
                 }
                 vm.resourceGroups.push(newRgObj);
             });
+        }
 
-            console.log('vm.resourceGroups');
-            console.log(vm.resourceGroups);
+        function hostSubscriptionChanged() {
+            ascApi.getStorageProvider(vm.subscriptionId).then(function (data) {
+                console.log('**result of getLocations', data);
+                var storageAccounts = _.find(data.resourceTypes, { resourceType: 'storageAccounts' });
+                vm.locations = storageAccounts.locations;
+                console.log(vm.locations);
+            });
+        }
 
-            console.log('vm.parameters');
-            console.log(vm.parameters);
+        function back() {
+            $state.go('show-blueprint-versions');
         }
 
         function assign() {
-            console.log(vm.lockedAssigment);
             var blueprintAssignment = {
                 "identity": {
                     "type": "SystemAssigned"
@@ -108,6 +117,7 @@
                 }
             });
         }
+
     }
 }
 )();
