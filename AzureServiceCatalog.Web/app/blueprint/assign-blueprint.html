@@ -27,9 +27,9 @@
         <h4>Lock Assignment</h4>
         <div>
             <div ng-init="vm.lockedAssigment=none">
-                <input class="col-lg-2 col-xs-12 col-sm-1" type="radio" name="LockAssignment" ng-model="vm.lockedAssigment" ng-value="none">  Don't Lock <br />
-                <input class="col-lg-2 col-xs-12 col-sm-1" type="radio" name="LockAssignment" ng-model="vm.lockedAssigment" value="allResourcesDoNotDelete"> Do Not Delete <br />
-                <input class="col-lg-2 col-xs-12 col-sm-1" type="radio" name="LockAssignment" ng-model="vm.lockedAssigment" value="allResourcesReadOnly"> Read Only <br />
+                <input class="col-lg-2 col-xs-12 col-sm-1" type="radio" ng-model="vm.lockedAssigment" ng-value="none">  Don't Lock <br />
+                <input class="col-lg-2 col-xs-12 col-sm-1" type="radio" ng-model="vm.lockedAssigment" value="allResourcesDoNotDelete"> Do Not Delete <br />
+                <input class="col-lg-2 col-xs-12 col-sm-1" type="radio" ng-model="vm.lockedAssigment" value="allResourcesReadOnly"> Read Only <br />
             </div>
             <br />
 
@@ -40,16 +40,12 @@
         <table class="table table-condensed">
             <thead>
                 <tr>
-                    <th>
+                    <th style="width: 250px;">
                         ARTIFACT / PARAMETER
                     </th>
                     <th>
                         PARAMETER VALUE
                     </th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
                 </tr>
             </thead>
         </table>

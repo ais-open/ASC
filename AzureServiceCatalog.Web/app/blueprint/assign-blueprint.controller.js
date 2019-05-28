@@ -68,6 +68,10 @@
         }
 
         function assign() {
+            if (vm.lockedAssigment === undefined) {
+                vm.lockedAssigment = 'none';
+            }
+            
             var blueprintAssignment = {
                 "identity": {
                     "type": "SystemAssigned"
