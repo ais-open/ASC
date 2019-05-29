@@ -27,7 +27,6 @@
         activate();
 
         function activate() {
-            
             vm.blueprintVersion = initialData;
             var tempArr = vm.blueprintVersion.id.split('/');
             var subscriptionsIndex = tempArr.indexOf('subscriptions');
@@ -56,10 +55,8 @@
 
         function hostSubscriptionChanged() {
             ascApi.getStorageProvider(vm.subscriptionId).then(function (data) {
-                console.log('**result of getLocations', data);
                 var storageAccounts = _.find(data.resourceTypes, { resourceType: 'storageAccounts' });
                 vm.locations = storageAccounts.locations;
-                console.log(vm.locations);
             });
         }
 
@@ -88,8 +85,14 @@
             var resourceGroups = {};
 
             _.forIn(vm.parameters, function (objValue, key) {
+                var parameterValue = objValue.value;
+                if (objValue.info.type === "array" || objValue.info.type === "object") {
+                    parameterValue = JSON.parse(parameterValue);
+                } else if (objValue.info.type === "int") {
+                    parameterValue = parseInt(parameterValue, 10);
+                }
                 parameters[`${objValue.name}`] = {
-                    "value": objValue.value
+                    "value": parameterValue
                 }
             });
             blueprintAssignment.properties['parameters'] = parameters;

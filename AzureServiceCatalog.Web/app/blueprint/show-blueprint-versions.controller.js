@@ -14,6 +14,7 @@
         vm.versionNames = [];
         vm.selectedVersion = "";
         vm.subscriptionId = "";
+        vm.onVersionChange = onVersionChange;
         vm.assign = assign;
         vm.showDiv = true;
 
@@ -25,7 +26,6 @@
                 var versionNames = [];
                 if (vm.blueprintVersions && vm.blueprintVersions.length > 0) {
                     vm.blueprintName = vm.blueprintVersions[0].properties.blueprintName;
-                    vm.blueprintDescription = vm.blueprintVersions[0].properties.description;
                     var tempArr = vm.blueprintVersions[0].id.split('/');
                     var subscriptionsIndex = tempArr.indexOf('subscriptions');
                     vm.subscriptionId = tempArr[subscriptionsIndex + 1];
@@ -34,10 +34,16 @@
                     });
                     vm.versionNames = versionNames;
                     vm.selectedVersion = vm.versionNames[vm.versionNames.length - 1];
+                    vm.blueprintDescription = vm.blueprintVersions[vm.versionNames.length - 1].properties.description;
                 } else {
                     vm.showDiv = false;
                 }
             }
+        }
+
+        function onVersionChange(evt) {
+            var selectedBlueprintVersionIndex = vm.versionNames.findIndex(i => i == vm.selectedVersion);
+            vm.blueprintDescription = vm.blueprintVersions[selectedBlueprintVersionIndex].properties.description;
         }
 
         function assign() {
