@@ -162,7 +162,6 @@
         }
 
         function getBlueprintVersion(subscriptionId, blueprintName, versionName) {
-            console.log(blueprintName);
             return httpGet('/api/get-blueprint-version/' + blueprintName + '?subscriptionId=' + subscriptionId + '&versionName=' + versionName);
         }
 
