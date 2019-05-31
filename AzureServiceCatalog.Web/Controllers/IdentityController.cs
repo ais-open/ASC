@@ -82,6 +82,7 @@ namespace AzureServiceCatalog.Web.Controllers
 
                     if (dbSubscription != null)
                     {
+                        subId = subscription.Id;
                         userDetailVM.SubscriptionIsConnected = dbSubscription.IsConnected;// true;
                         userDetailVM.IsEnrolled = dbSubscription.IsEnrolled;
                         userDetailVM.SubscriptionNeedsRepair = !AzureResourceManagerUtil.ServicePrincipalHasReadAccessToSubscription(dbSubscription.Id);
@@ -101,11 +102,6 @@ namespace AzureServiceCatalog.Web.Controllers
                                 userDetailVM.SubscriptionIsConnected = false;
                                 userDetailVM.IsEnrolled = false;
                             }
-                            subId = subscription.Id;
-                        }
-                        else
-                        {
-                            subId = subscription.Id;
                         }
                     }
                     subscriptionInfo.Subscriptions.Add(userDetailVM);
