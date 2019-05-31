@@ -1,4 +1,27 @@
-﻿<div class="product-tile-container col-lg-3 col-md-4 col-sm-6 col-xs-12 " ng-repeat="product in vm.products | orderBy: 'name'" ng-if="product.isPublished">
+﻿<div class="product-tile-container col-lg-3 col-md-4 col-sm-6 col-xs-12 " ng-repeat="blueprint in vm.blueprintDefinitions | orderBy: 'name'" ui-sref="show-blueprint-versions({ subscriptionId: vm.subscriptionId, id: blueprint.name })">
+    <div class="product-tile" >
+        <h4 class="text-primary bold-text product-header" >
+            <a ui-sref="show-blueprint-versions({ subscriptionId: vm.subscriptionId, id: blueprint.name })" title={{blueprint.name}}>
+                <img src="../../Content/images/azure-blueprint.png" ng-attr-title="{{blueprint.name}}" />
+                {{blueprint.name}}
+            </a>
+        </h4>
+        <hr />
+        <div class="caption">
+            {{blueprint.properties.description}}<br />
+
+            <span class="product-tile-included-resources bold-text text-primary">Last Modified Date:</span>
+            <span class="product-tile-included-resources">{{vm.getLastModifiedDate(blueprint)}}</span>
+            
+        </div>
+    </div>
+</div>
+<!--<div class="no-content-warning" ng-if="!vm.hasBlueprint">
+    <h1>No Blueprint is available in your subscription</h1>
+</div>-->
+
+
+<!--<div class="product-tile-container col-lg-3 col-md-4 col-sm-6 col-xs-12 " ng-repeat="product in vm.products | orderBy: 'name'" ng-if="product.isPublished">
     <div class="product-tile">
         <h4 class="text-primary bold-text product-header">
             <a ui-sref="product-details({id: product.rowKey, product: product})" title={{product.name}}>
@@ -24,4 +47,4 @@
         Please go to Manage <span class="glyphicon glyphicon-arrow-right"></span> Product Catalog and publish a new product
     </h2>
     <h2 ng-if="!shell.userDetail.canCreate">Please contact an administrator to add new products</h2>
-</div>
+</div>-->

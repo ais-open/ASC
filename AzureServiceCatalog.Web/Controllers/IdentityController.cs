@@ -14,6 +14,7 @@ namespace AzureServiceCatalog.Web.Controllers
     [RoutePrefix("api/identity")]
     public class IdentityController : ApiController
     {
+        public static string subId;
         private TableCoreRepository coreRepository = new TableCoreRepository();
         [Route("full")]
         public async Task<UserSubscriptionInfo> GetUserDetailsFull()
@@ -100,7 +101,11 @@ namespace AzureServiceCatalog.Web.Controllers
                                 userDetailVM.SubscriptionIsConnected = false;
                                 userDetailVM.IsEnrolled = false;
                             }
-                            
+                            subId = subscription.Id;
+                        }
+                        else
+                        {
+                            subId = subscription.Id;
                         }
                     }
                     subscriptionInfo.Subscriptions.Add(userDetailVM);

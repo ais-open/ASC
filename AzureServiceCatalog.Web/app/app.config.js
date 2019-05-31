@@ -42,7 +42,7 @@
                 resolve: {
                     initialData: ['identityInfo', 'ascApi', function (identityInfo, ascApi) {
                         if (identityInfo.isAuthenticated) {
-                            return ascApi.getTemplates();
+                            return ascApi.getBlueprintDefinitions(identityInfo.subscriptionId);
                         }
                     }]
                 }

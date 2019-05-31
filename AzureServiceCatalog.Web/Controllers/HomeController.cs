@@ -28,6 +28,7 @@ namespace AzureServiceCatalog.Web.Controllers
             {
                 if (!activation)
                 {
+                    var subscriptionId = IdentityController.subId;
                     var org = this.coreRepository.GetOrganizationSync(ClaimsPrincipal.Current.TenantId());
                     //If authenticated but not enrolled
                     if (org == null)
@@ -35,6 +36,7 @@ namespace AzureServiceCatalog.Web.Controllers
                         return RedirectToAction("Index", new {directoryName = directoryName, activation = true});
                     }
                     this.ViewBag.Tenant = org.VerifiedDomain;
+                    this.ViewBag.SubscriptionId = subscriptionId;
                 }
                 this.ViewBag.AuthenticatedUserName = ClaimsPrincipal.Current.Identity.Name;
             }

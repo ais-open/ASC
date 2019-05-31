@@ -17,9 +17,9 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("")]
         public async Task<HttpResponseMessage> Get(string subscriptionId)
         {
-            var policies = await this.client.GetBlueprintDefinitions(subscriptionId);
+            var blueprints = await this.client.GetBlueprintDefinitions(subscriptionId);
             var response = this.Request.CreateResponse(HttpStatusCode.OK);
-            response.Content = policies.ToStringContent();
+            response.Content = blueprints.ToStringContent();
             return response;
         }
     }
