@@ -350,6 +350,8 @@
     <Content Include="app\blueprint\blueprint-definition-list.html" />
     <Content Include="app\blueprint\show-blueprint-versions.controller.js" />
     <Content Include="app\blueprint\show-blueprint-versions.html" />
+    <Content Include="app\blueprint\update-blueprint-assignment.controller.js" />
+    <Content Include="app\blueprint\update-blueprint-assignment.html" />
     <Content Include="app\deployments\deployment.controller.js" />
     <Content Include="app\deployments\deployment.html" />
     <Content Include="app\deployments\deployments.controller.js" />

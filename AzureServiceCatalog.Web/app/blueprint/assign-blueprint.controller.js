@@ -21,12 +21,12 @@
         vm.lockedAssigment = 'none';
         vm.locations = [];
         vm.hostSubscriptionChanged = hostSubscriptionChanged;
-        vm.back = back;
         vm.assign = assign;
 
         activate();
 
         function activate() {
+            console.log(initialData);
             vm.blueprintVersion = initialData;
             var tempArr = vm.blueprintVersion.id.split('/');
             var subscriptionsIndex = tempArr.indexOf('subscriptions');
@@ -41,16 +41,21 @@
                 var newRgObj = {
                     "key": key,
                     "displayName": resourceGroupInfo.metadata.displayName,
-                    "dependsOn": resourceGroupInfo.dependsOn
+                    "dependsOn": resourceGroupInfo.dependsOn,
+                    "isLocationAvailable": false,
+                    "isNameAvailable": false
                 };
                 if (typeof resourceGroupInfo.location !== "undefined") {
                     newRgObj.location = resourceGroupInfo.location;
+                    newRgObj.isLocationAvailable = true;
                 }
                 if (typeof resourceGroupInfo.name !== "undefined") {
                     newRgObj.name = resourceGroupInfo.name;
+                    newRgObj.isNameAvailable = true;
                 }
                 vm.resourceGroups.push(newRgObj);
             });
+            console.log(vm.resourceGroups);
         }
 
         function hostSubscriptionChanged() {
@@ -58,10 +63,6 @@
                 var storageAccounts = _.find(data.resourceTypes, { resourceType: 'storageAccounts' });
                 vm.locations = storageAccounts.locations;
             });
-        }
-
-        function back() {
-            $state.go('show-blueprint-versions');
         }
 
         function assign() {

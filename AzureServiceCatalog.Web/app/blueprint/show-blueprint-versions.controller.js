@@ -41,7 +41,7 @@
             }
         }
 
-        function onVersionChange(evt) {
+        function onVersionChange() {
             var selectedBlueprintVersionIndex = vm.versionNames.findIndex(i => i == vm.selectedVersion);
             vm.blueprintDescription = vm.blueprintVersions[selectedBlueprintVersionIndex].properties.description;
         }

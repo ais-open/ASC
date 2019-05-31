@@ -25,7 +25,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="selectable" ng-repeat="item in vm.assignedBlueprints | orderBy: 'name'">
+                <tr class="selectable" ng-repeat="item in vm.assignedBlueprints | orderBy: 'name'" ui-sref="update-blueprint-assignment({ subscriptionId: vm.selectedSubscription.rowKey, assignmentName: item.name })">
                     <td class="col-md-3">
                         <a class="btn btn-link">{{item.name}}</a>
                     </td>

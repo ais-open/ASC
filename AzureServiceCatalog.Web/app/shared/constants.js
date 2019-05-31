@@ -32,7 +32,11 @@
                 { state: 'get-blueprint-version', title: 'Assign Blueprint' },
             ]
         },
-        { state: 'manage-assigned-blueprint-list', title: 'Manage Assigned Blueprint List'},
+        { state: 'manage-assigned-blueprint-list', title: 'Manage Assigned Blueprint List',
+            descendants: [
+                { state: 'update-blueprint-assignment', title: 'Update Blueprint Assignment' }
+            ]
+        },
         { state: 'manage-policy-list', title: 'Manage Policy List',
             descendants: [{ state: 'edit-policy', title: 'Policy' }]
         },

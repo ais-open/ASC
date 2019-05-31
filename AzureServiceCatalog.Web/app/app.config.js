@@ -265,7 +265,23 @@
                         return ascApi.getEnrolledSubscriptions();
                     }]
                 }
-            }) 
+            })
+            .state('update-blueprint-assignment', {
+                url: '/update-blueprint-version/:subscriptionId/:assignmentName/',
+                templateUrl: 'app/blueprint/update-blueprint-assignment.html',
+                controller: 'UpdateBlueprintAssignmentCtrl',
+                controllerAs: 'vm',
+                adminPermissionRequired: true,
+                resolve: {
+                    initialData: ['$stateParams', 'ascApi', function ($stateParams, ascApi) {
+                        console.log($stateParams);
+                        if ($stateParams.assignmentName) {
+                            console.log('in here');
+                            return ascApi.getAssignedBlueprint($stateParams.subscriptionId, $stateParams.assignmentName);
+                        }
+                    }]
+                }
+            })
             .state('manage-policy-list', {
                 url: '/manage-policy-list',
                 templateUrl: 'app/policy/policy-list.html',

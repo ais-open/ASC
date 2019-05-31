@@ -9,15 +9,15 @@
             <div name="blueprintVersionForm" class="form-inline control-columns" novalidate>
                 <div class="form-group col-xs-12">
                     <label class="col-lg-2 col-xs-12 col-sm-3">Assignment Name: </label>
-                    <input type="text" name="blueprintAssignmentName" ng-model="vm.assignmentName" class="form-control" placeholder="Assignment Name" required>
+                    <input type="text" name="blueprintAssignmentName" ng-model="vm.assignmentName" class="form-control" placeholder="Assignment Name" required disabled>
                 </div>
                 <div class="form-group col-xs-12">
                     <label class="col-lg-2 col-xs-12 col-sm-3">Location: </label>
-                    <select class="form-control" ng-model="vm.location" ng-options="l as l for l in vm.locations"></select>
+                    <input type="text" name="blueprintAssignmentLocation" ng-model="vm.location" class="form-control" placeholder="Location" required disabled> 
                 </div>
                 <div class="form-group col-xs-12">
                     <label class="col-lg-2 col-xs-12 col-sm-3">Blueprint definition version: </label>
-                    <input type="text" name="blueprintDescriptionVersion" ng-model="vm.blueprintDefinitionVersion" class="form-control" placeholder="Blueprint definition version" required disabled>
+                    <select ng-model="vm.selectedVersion" ng-options="v as v for v in vm.versionNames" ng-change="vm.onVersionChange()" class="form-control"></select>
                 </div>
             </div>
             <br />
@@ -67,7 +67,7 @@
                                 Resource Group: Name
                                 <span ng-show="resourceGroup.info.metadata.description" class="glyphicon glyphicon-info-sign" aria-hidden="true" uib-tooltip="{{resourceGroup.info.metadata.description}}" tooltip-placement="left"></span>
                             </span>
-                            <input class="form-control" ng-model="resourceGroup.name" ng-disabled="resourceGroup.isNameAvailable"/>
+                            <input class="form-control" ng-model="resourceGroup.name" />
                         </div>
 
                         <div class="form-group col-xs-12">
@@ -75,7 +75,7 @@
                                 Resource Group: Location
                                 <span ng-show="resourceGroup.info.metadata.description" class="glyphicon glyphicon-info-sign" aria-hidden="true" uib-tooltip="{{resourceGroup.info.metadata.description}}" tooltip-placement="left"></span>
                             </span>
-                            <input class="form-control" ng-model="resourceGroup.location" ng-disabled="resourceGroup.isLocationAvailable"/>
+                            <input class="form-control" ng-model="resourceGroup.location" />
                         </div>
                     </div>
                 </fieldset>
@@ -96,8 +96,8 @@
                 </div>
                 <div class="form-group col-md-12" ng-repeat="parameter in vm.parameters">
                     <span class="col-lg-4 col-xs-12 col-sm-3">
-                        {{parameter.info.metadata.displayName}}
-                        <span ng-show="parameter.info.metadata.description" class="glyphicon glyphicon-info-sign" aria-hidden="true" uib-tooltip="{{parameter.info.metadata.description}}" tooltip-placement="left"></span>
+                        {{parameter.name}}
+                        <!--<span ng-show="parameter.info.metadata.description" class="glyphicon glyphicon-info-sign" aria-hidden="true" uib-tooltip="{{parameter.info.metadata.description}}" tooltip-placement="left"></span>-->
                     </span>
 
                     <div class="col-md-3" ng-show="{{vm.lodash.includes(['string', 'int', 'array', 'object'], parameter.info.type) && parameter.info.allowedValues.length === 0}}">

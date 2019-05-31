@@ -27,6 +27,7 @@
             getBlueprintVersion: getBlueprintVersion,
             getAssignedBlueprints: getAssignedBlueprints,
             assignBlueprint: assignBlueprint,
+            getAssignedBlueprint: getAssignedBlueprint,
             getPolicies: getPolicies,
             getPolicy: getPolicy,
             getPolicyAssignments: getPolicyAssignments,
@@ -171,6 +172,11 @@
 
         function assignBlueprint(subscriptionId, assignmentName, blueprintAssignment) {
             return httpPut('/api/assign-blueprint/' + assignmentName + '?subscriptionId=' + subscriptionId, blueprintAssignment);
+        }
+
+        function getAssignedBlueprint(subscriptionId, assignmentName) {
+            console.log(assignmentName);
+            return httpGet('/api/blueprintAssignments/' + assignmentName + '?subscriptionId=' + subscriptionId);
         }
 
         function getPolicies(subscriptionId) {
