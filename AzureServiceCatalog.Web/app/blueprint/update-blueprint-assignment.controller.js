@@ -28,7 +28,6 @@
         activate();
 
         function activate() {
-            console.log(initialData);
             vm.assignedBlueprint = initialData;
             vm.assignmentName = initialData.name;
 
@@ -42,34 +41,14 @@
             var blueprintsIndex = tempArr1.indexOf('blueprints');
             vm.blueprintName = tempArr1[blueprintsIndex + 1];
 
+            //Getting selected version from blueprint id in properties
             var tempArr2 = vm.assignedBlueprint.properties.blueprintId.split('/');
             var versionsIndex = tempArr2.indexOf('versions');
             vm.selectedVersion = tempArr2[versionsIndex + 1];
-            console.log(vm.assignedBlueprint.properties.scope.indexOf('subscriptions'));
             //.targetScope = vm.assignedBlueprint.properties.scope.contains('subscriptions') ? "Subscription": "Management Group";
             vm.location = vm.assignedBlueprint.location;
             vm.lockedAssigment = vm.assignedBlueprint.properties.locks.mode;
             getBlueprintVersions();
-            //_.forIn(initialData.properties.parameters, function (value, key) {
-            //    vm.parameters.push({ name: key, info: value, value: value.defaultValue });
-            //});
-            //console.log(vm.parameters.length);
-
-            //_.forIn(initialData.properties.resourceGroups, function (value, key) {
-            //    var resourceGroupInfo = value;
-            //    var newRgObj = {
-            //        "key": key,
-            //        //"displayName": resourceGroupInfo.metadata.displayName,
-            //        //"dependsOn": resourceGroupInfo.dependsOn
-            //    };
-            //    if (typeof resourceGroupInfo.location !== "undefined") {
-            //        newRgObj.location = resourceGroupInfo.location;
-            //    }
-            //    if (typeof resourceGroupInfo.name !== "undefined") {
-            //        newRgObj.name = resourceGroupInfo.name;
-            //    }
-            //    vm.resourceGroups.push(newRgObj);
-           // });
         }
 
         function getBlueprintVersions() {
@@ -80,7 +59,6 @@
                         vm.versionNames.push(item.name);
                     });
                     var selectedBlueprintVersion = vm.blueprintVersions.find(i => i.name == vm.selectedVersion);
-                    console.log(selectedBlueprintVersion);
                     getParametersAndResourceGroups(selectedBlueprintVersion);
                 }
             });
@@ -88,7 +66,6 @@
 
         function onVersionChange() {
             var selectedBlueprintVersion = vm.blueprintVersions.find(i => i.name == vm.selectedVersion);
-            console.log(selectedBlueprintVersion);
             getParametersAndResourceGroups(selectedBlueprintVersion);
         }
 
@@ -119,20 +96,51 @@
                 resourceGroups.push(newRgObj);
             });
             vm.resourceGroups = resourceGroups;
+            //Getting version of already assigned blueprint from blueprint id in properties
+            var tempArr = vm.assignedBlueprint.properties.blueprintId.split('/');
+            var versionsIndex = tempArr.indexOf('versions');
+            var versionOfAssignedBlueprint = tempArr[versionsIndex + 1];
+
+            //Getting values of parameters and resource groups from assigned blueprint
+            if (versionOfAssignedBlueprint == selectedBlueprintVersion.name) {
+                _.forIn(vm.assignedBlueprint.properties.parameters, function (data, key) {
+                    var matchingParameterIndex = vm.parameters.findIndex(i => i.name == key);
+                    if (matchingParameterIndex >= 0) {
+                        var matchingParameter = vm.parameters[matchingParameterIndex];
+                        if (matchingParameter.value == undefined) {
+                            matchingParameter.value = data.value;
+                        }
+                        vm.parameters.splice(matchingParameterIndex, 1, matchingParameter);
+                    }
+                });
+                _.forIn(vm.assignedBlueprint.properties.resourceGroups, function (data, key) {
+                    var matchingResourceGroupIndex = vm.resourceGroups.findIndex(i => i.key == key);
+                    if (matchingResourceGroupIndex >= 0) {
+                        var matchingResourceGroup = vm.resourceGroups[matchingResourceGroupIndex];
+                        if (typeof data.name !== "undefined") {
+                            matchingResourceGroup['name'] = data.name;
+                        }
+                        if (typeof data.location !== "undefined") {
+                            matchingResourceGroup['location'] = data.location;
+                        }
+                        vm.resourceGroups.splice(matchingResourceGroupIndex, 1, matchingResourceGroup);
+                    }
+                });
+            }
         }
 
         function assign() {
             if (vm.lockedAssigment === undefined) {
                 vm.lockedAssigment = 'none';
             }
-            
+            var selectedBlueprintVersion = vm.blueprintVersions.find(i => i.name == vm.selectedVersion);
             var blueprintAssignment = {
                 "identity": {
                     "type": "SystemAssigned"
                 },
                 "location": vm.location,
                 "properties": {
-                    "blueprintId": vm.blueprintVersion.id,
+                    "blueprintId": selectedBlueprintVersion.id,
                     "locks": {
                         "mode": vm.lockedAssigment
                     }
@@ -154,7 +162,7 @@
             });
             blueprintAssignment.properties['parameters'] = parameters;
 
-            _.forIn(initialData.properties.resourceGroups, function (objValue, key) {
+            _.forIn(selectedBlueprintVersion.properties.resourceGroups, function (objValue, key) {
                 if (typeof objValue.name == "undefined" || typeof objValue.location == "undefined") {
                     resourceGroups[`${key}`] = {};
                     var matchingRg = vm.resourceGroups.find(i => i.key === key);
@@ -169,13 +177,11 @@
                 }
             });
             blueprintAssignment.properties['resourceGroups'] = resourceGroups;
-            console.log(blueprintAssignment);
             ascApi.assignBlueprint(vm.subscriptionId, vm.assignmentName, blueprintAssignment).then(function (data) {
                 if (data.error) {
                     console.log('Error while assigning blueprint!', data);
                     toastr.error('Unexpected error while assigning.', 'Error');
                 } else {
-                    //vm.policy = data.policy;
                     toastr.success('Blueprint assigned successfully.', 'Success');
                     $state.go('manage-assigned-blueprint-list');
                 }

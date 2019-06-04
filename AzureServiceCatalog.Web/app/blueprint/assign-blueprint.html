@@ -26,10 +26,10 @@
 
         <h4>Lock Assignment</h4>
         <div>
-            <div ng-init="vm.lockedAssigment=none">
-                <input class="col-lg-2 col-xs-12 col-sm-1" type="radio" ng-model="vm.lockedAssigment" ng-value="none">  Don't Lock <br />
-                <input class="col-lg-2 col-xs-12 col-sm-1" type="radio" ng-model="vm.lockedAssigment" value="allResourcesDoNotDelete"> Do Not Delete <br />
-                <input class="col-lg-2 col-xs-12 col-sm-1" type="radio" ng-model="vm.lockedAssigment" value="allResourcesReadOnly"> Read Only <br />
+            <div>
+                <input class="col-lg-2 col-xs-12 col-sm-1" name="LockAssignment" type="radio" ng-model="vm.lockedAssigment" value="none">  Don't Lock <br />
+                <input class="col-lg-2 col-xs-12 col-sm-1" name="LockAssignment" type="radio" ng-model="vm.lockedAssigment" value="allResourcesDoNotDelete"> Do Not Delete <br />
+                <input class="col-lg-2 col-xs-12 col-sm-1" name="LockAssignment" type="radio" ng-model="vm.lockedAssigment" value="allResourcesReadOnly"> Read Only <br />
             </div>
             <br />
 

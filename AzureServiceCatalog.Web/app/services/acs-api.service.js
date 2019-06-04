@@ -175,7 +175,6 @@
         }
 
         function getAssignedBlueprint(subscriptionId, assignmentName) {
-            console.log(assignmentName);
             return httpGet('/api/blueprintAssignments/' + assignmentName + '?subscriptionId=' + subscriptionId);
         }
 

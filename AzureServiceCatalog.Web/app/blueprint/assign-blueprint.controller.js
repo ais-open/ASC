@@ -26,7 +26,6 @@
         activate();
 
         function activate() {
-            console.log(initialData);
             vm.blueprintVersion = initialData;
             var tempArr = vm.blueprintVersion.id.split('/');
             var subscriptionsIndex = tempArr.indexOf('subscriptions');
@@ -55,7 +54,6 @@
                 }
                 vm.resourceGroups.push(newRgObj);
             });
-            console.log(vm.resourceGroups);
         }
 
         function hostSubscriptionChanged() {
@@ -66,10 +64,6 @@
         }
 
         function assign() {
-            if (vm.lockedAssigment === undefined) {
-                vm.lockedAssigment = 'none';
-            }
-            
             var blueprintAssignment = {
                 "identity": {
                     "type": "SystemAssigned"
@@ -113,13 +107,11 @@
                 }
             });
             blueprintAssignment.properties['resourceGroups'] = resourceGroups;
-            console.log(blueprintAssignment);
             ascApi.assignBlueprint(vm.subscriptionId, vm.assignmentName, blueprintAssignment).then(function (data) {
                 if (data.error) {
                     console.log('Error while assigning blueprint!', data);
                     toastr.error('Unexpected error while assigning.', 'Error');
                 } else {
-                    //vm.policy = data.policy;
                     toastr.success('Blueprint assigned successfully.', 'Success');
                     $state.go('manage-assigned-blueprint-list');
                 }

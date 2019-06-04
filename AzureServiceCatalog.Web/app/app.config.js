@@ -274,9 +274,7 @@
                 adminPermissionRequired: true,
                 resolve: {
                     initialData: ['$stateParams', 'ascApi', function ($stateParams, ascApi) {
-                        console.log($stateParams);
                         if ($stateParams.assignmentName) {
-                            console.log('in here');
                             return ascApi.getAssignedBlueprint($stateParams.subscriptionId, $stateParams.assignmentName);
                         }
                     }]
