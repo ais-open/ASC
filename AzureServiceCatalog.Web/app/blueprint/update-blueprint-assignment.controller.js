@@ -135,9 +135,6 @@
             }
             var selectedBlueprintVersion = vm.blueprintVersions.find(i => i.name == vm.selectedVersion);
             var blueprintAssignment = {
-                "identity": {
-                    "type": "SystemAssigned"
-                },
                 "location": vm.location,
                 "properties": {
                     "blueprintId": selectedBlueprintVersion.id,
@@ -146,6 +143,13 @@
                     }
                 }
             };
+            if (vm.assignedBlueprint.identity.type == "systemAssigned") {
+                blueprintAssignment["identity"] = {
+                    "type": vm.assignedBlueprint.identity.type,
+                    "principalId": vm.assignedBlueprint.identity.principalId,
+                    "tenantId": vm.assignedBlueprint.identity.tenantId
+                };
+            }
             var parameters = {};
             var resourceGroups = {};
 
@@ -177,6 +181,7 @@
                 }
             });
             blueprintAssignment.properties['resourceGroups'] = resourceGroups;
+            //console.log(blueprintAssignment);
             ascApi.assignBlueprint(vm.subscriptionId, vm.assignmentName, blueprintAssignment).then(function (data) {
                 if (data.error) {
                     console.log('Error while assigning blueprint!', data);
