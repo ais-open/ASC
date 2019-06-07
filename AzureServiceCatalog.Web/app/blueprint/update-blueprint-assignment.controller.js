@@ -29,6 +29,7 @@
 
         function activate() {
             vm.assignedBlueprint = initialData;
+            //console.log(initialData);
             vm.assignmentName = initialData.name;
 
             //Getting subscription id from assigned blueprint id
@@ -78,13 +79,16 @@
             vm.parameters = parameters;
             _.forIn(selectedBlueprintVersion.properties.resourceGroups, function (value, key) {
                 var resourceGroupInfo = value;
+                console.log(resourceGroupInfo);
                 var newRgObj = {
                     "key": key,
-                    //"displayName": resourceGroupInfo.metadata.displayName,
-                    //"dependsOn": resourceGroupInfo.dependsOn
+                    "dependsOn": resourceGroupInfo.dependsOn,
                     "isLocationAvailable": false,
                     "isNameAvailable": false
                 };
+                if (typeof resourceGroupInfo.metadata !== "undefined") {
+                    newRgObj.displayName = resourceGroupInfo.metadata.displayName;
+                }
                 if (typeof resourceGroupInfo.location !== "undefined") {
                     newRgObj.location = resourceGroupInfo.location;
                     newRgObj.isLocationAvailable = true;
@@ -108,7 +112,11 @@
                     if (matchingParameterIndex >= 0) {
                         var matchingParameter = vm.parameters[matchingParameterIndex];
                         if (matchingParameter.value == undefined) {
-                            matchingParameter.value = data.value;
+                            var parameterValue = data.value
+                            if (typeof parameterValue == 'object') {
+                                parameterValue = JSON.stringify(parameterValue);
+                            }
+                            matchingParameter.value = parameterValue;
                         }
                         vm.parameters.splice(matchingParameterIndex, 1, matchingParameter);
                     }
@@ -135,6 +143,9 @@
             }
             var selectedBlueprintVersion = vm.blueprintVersions.find(i => i.name == vm.selectedVersion);
             var blueprintAssignment = {
+                "identity": {
+                    "type": vm.assignedBlueprint.identity.type,
+                },
                 "location": vm.location,
                 "properties": {
                     "blueprintId": selectedBlueprintVersion.id,
@@ -143,13 +154,6 @@
                     }
                 }
             };
-            if (vm.assignedBlueprint.identity.type == "systemAssigned") {
-                blueprintAssignment["identity"] = {
-                    "type": vm.assignedBlueprint.identity.type,
-                    "principalId": vm.assignedBlueprint.identity.principalId,
-                    "tenantId": vm.assignedBlueprint.identity.tenantId
-                };
-            }
             var parameters = {};
             var resourceGroups = {};
 

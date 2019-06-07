@@ -103,6 +103,9 @@
                     <div class="col-md-3" ng-show="{{vm.lodash.includes(['string', 'int', 'array', 'object'], parameter.info.type) && parameter.info.allowedValues.length === 0}}">
                         <input type="text" class="form-control" ng-model="parameter.value" placeholder="Enter Value" required />
                     </div>
+                    <div class="col-md-3" ng-show="{{vm.lodash.includes(['string', 'int', 'array', 'object'], parameter.info.type) && !parameter.info.allowedValues}}">
+                        <input type="text" class="form-control" ng-model="parameter.value" placeholder="Enter Value" required />
+                    </div>
                     <div class="col-md-3" ng-show="{{parameter.info.type === 'secureString' && parameter.info.allowedValues.length === 0}}">
                         <input type="password" class="form-control" ng-model="parameter.value" placeholder="Enter Value" required />
                     </div>
