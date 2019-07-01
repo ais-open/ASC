@@ -1,0 +1,221 @@
+{  
+  "$schema":"https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion":"1.0.0.0",
+  "parameters":{  
+    "appName":{  
+      "type":"string",
+      "defaultValue":"testascservicecatalog",
+      "metadata":{  
+        "description":"Name of azure web app"
+      }
+    },
+    "appServiceTier":{  
+      "type":"string",
+      "allowedValues":[  
+        "Standard",
+        "Premium"
+      ],
+      "defaultValue":"Standard",
+      "metadata":{  
+        "description":"Choose either Standard or Premium Azure Web Apps pricing tiers. It defaults to Standard"
+      }
+    },
+    "appServiceWorkerSize":{  
+      "type":"string",
+      "allowedValues":[  
+        "0",
+        "1",
+        "2"
+      ],
+      "defaultValue":"0",
+      "metadata":{  
+        "description":"Worker Size( 0=Small, 1=Medium, 2=Large )"
+      }
+    },
+    "applicationId":{  
+      "type":"string",
+      "metadata":{  
+        "description":"Application Id of registered Web App"
+      }
+    },
+    "appPassword":{  
+      "type":"securestring",
+      "metadata":{  
+        "description":"Password of registered Web App"
+      }
+    },
+    "storageAccountName":{  
+      "type":"string",
+      "minLength":1,
+      "defaultValue":"test",
+      "metadata":{  
+        "description":"Storage Account name."
+      }
+    },
+    "storageAccountType":{  
+      "type":"string",
+      "allowedValues":[  
+        "Standard_LRS",
+        "Standard_GRS",
+        "Standard_RAGRS",
+        "Standard_ZRS"
+      ],
+      "defaultValue":"Standard_RAGRS",
+      "metadata":{  
+        "description":"Storage Account Type : Standard-LRS, Standard-GRS,Standard-RAGRS,Standard-ZRS"
+      }
+    },
+    "newOrExisting":{  
+      "type":"string",
+      "defaultValue":"new",
+      "allowedValues":[  
+        "new",
+        "existing"
+      ],
+      "metadata":{  
+        "description":"Storage Account already exists or not."
+      }
+    },
+    "notificationFromEmailAddress":{  
+      "type":"string",
+      "defaultValue":"Jagrati.Modi@appliedis.com",
+      "metadata":{  
+        "description":"Email address."
+      }
+    },
+    "notificationFromName":{  
+      "type":"string",
+      "defaultValue":"Service Catalog",
+      "metadata":{  
+        "description":"Notification from name."
+      }
+    },
+    "adminEmailAddress":{  
+      "type":"string",
+      "defaultValue":"Admin Email address",
+      "metadata":{  
+        "description":"Admin Email address."
+      }
+    },
+    "packageUri":{  
+      "type":"string",
+      "defaultValue":"https://github.com/AppliedIS/ASC/raw/asc-jagrati/Builds/ascpackage.zip",
+      "metadata":{  
+        "description":"Package URL where build is present."
+      }
+    }
+  },
+  "variables":{  
+    "updatedStorageAccountName":"[concat(uniquestring(resourceGroup().id), parameters('storageAccountName'))]",
+    "appServicePlanName":"[concat(parameters('appName'), 'serviceplan')]",
+    "appInsightsName":"[concat(parameters('appName'), '-appin')]"
+  },
+  "resources":[  
+    {  
+      "type":"Microsoft.Storage/storageAccounts",
+      "name":"[variables('updatedStorageAccountName')]",
+      "apiVersion":"2018-07-01",
+      "location":"[resourceGroup().location]",
+      "sku":{  
+        "name":"[parameters('storageAccountType')]"
+      },
+      "kind":"StorageV2",
+      "properties":{  
+
+      }
+    },
+    {  
+      "apiVersion":"2014-06-01",
+      "name":"[variables('appServicePlanName')]",
+      "type":"Microsoft.Web/serverFarms",
+      "location":"[resourceGroup().location]",
+      "properties":{  
+        "name":"[variables('appServicePlanName')]",
+        "appServiceTier":"[parameters('appServiceTier')]",
+        "workerSize":"[parameters('appServiceWorkerSize')]"
+      },
+      "tags":{  
+        "displayName":"AppServiceHostingPlan"
+      }
+    },
+    {  
+      "apiVersion":"2014-04-01",
+      "name":"[variables('appInsightsName')]",
+      "type":"microsoft.insights/components",
+      "location":"[resourceGroup().location]",
+      "tags":{  
+        "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/sites/', parameters('appName'))]":"Resource",
+        "displayName":"AppInsightsComponent"
+      },
+      "dependsOn":[  
+        "[concat('Microsoft.Web/sites/', parameters('appName'))]"
+      ],
+      "properties":{  
+        "applicationId":"[parameters('appName')]"
+      }
+    },
+    {  
+      "apiVersion":"2015-02-01",
+      "name":"[parameters('appName')]",
+      "type":"Microsoft.Web/Sites",
+      "location":"[resourceGroup().location]",
+      "tags":{  
+        "[concat('hidden-related:', '/subscriptions/', subscription().subscriptionId,'/resourcegroups/', resourceGroup().name, '/providers/Microsoft.Web/serverfarms/', variables('appServicePlanName'))]":"empty"
+      },
+      "dependsOn":[  
+        "[concat('Microsoft.Web/serverFarms/', variables('appServicePlanName'))]"
+      ],
+      "properties":{  
+        "name":"[parameters('appName')]",
+        "serverFarmId":"[concat('/subscriptions/', subscription().subscriptionId,'/resourcegroups/',resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', variables('appServicePlanName'))]",
+        "hostingEnvironment":""
+      },
+      "resources":[  
+        {  
+          "apiVersion":"2014-06-01",
+          "name":"MSDeploy",
+          "type":"Extensions",
+          "dependsOn":[  
+            "[concat('Microsoft.Web/Sites/', parameters('appName'))]",
+            "[concat('Microsoft.Storage/storageAccounts/', variables('updatedStorageAccountName'))]"
+          ],
+          "properties":{  
+            "packageUri":"[parameters('packageUri')]"
+          }
+        },
+        {  
+          "apiVersion":"2015-08-01",
+          "name":"appsettings",
+          "type":"config",
+          "dependsOn":[  
+            "[resourceId('Microsoft.Web/Sites', parameters('appName'))]",
+            "[resourceId('Microsoft.Storage/storageAccounts', variables('updatedStorageAccountName'))]",
+            "[concat('Microsoft.Web/sites/', parameters('appName'), '/Extensions/MSDeploy')]",
+            "Microsoft.ApplicationInsights.AzureWebSites"
+          ],
+          "properties":{  
+            "AdminEmailAddress":"Admin email address",
+            "AscAppId":"[guid(subscription().subscriptionId)]",
+            "ida:ClientID":"[parameters('applicationId')]",
+            "ida:Password":"[parameters('appPassword')]",
+            "iKey":"[reference(concat('microsoft.insights/components/', variables('appInsightsName'))).InstrumentationKey]",
+            "NotificationFromEmailAddress":"[parameters('notificationFromEmailAddress')]",
+            "NotificationFromName":"Service Catalog",
+            "StorageAccountKey":"[listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('updatedStorageAccountName')), '2015-05-01-preview').key1]",
+            "StorageAccountName":"[variables('updatedStorageAccountName')]"
+          }
+        },
+        {  
+          "apiVersion":"2015-08-01",
+          "name":"Microsoft.ApplicationInsights.AzureWebSites",
+          "type":"siteextensions",
+          "dependsOn":[  
+            "[resourceId('Microsoft.Web/Sites', parameters('appName'))]",
+            "[concat('Microsoft.Web/sites/', parameters('appName'), '/Extensions/MSDeploy')]"
+          ],
+          "properties":{}
+        }
+      ]
+    }
+  ]
+}
