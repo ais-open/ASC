@@ -1,0 +1,33 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "appName": {
+      "value": "ascsamplewebapp"
+    },
+    "appServiceTier": {
+      "value": "Standard"
+    }, 
+    "applicationId": {
+      "value": "GEN-UNIQUE"
+    },
+    "appPassword": {
+      "value": "GEN-PASSWORD"
+    },
+    "newOrExisting": {
+      "value": "new"
+    },
+    "storageAccountName": {
+      "value": "asc"		
+    },
+    "notificationFromEmailAddress": {
+      "value": "Jagrati.Modi@appliedis.com"
+    },
+    "notificationFromName": {
+      "value": "Service Catalog"
+    },
+    "adminEmailAddress": {
+      "value": "Admin Email address"
+    }
+  }
+}

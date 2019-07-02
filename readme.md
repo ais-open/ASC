@@ -8,6 +8,9 @@ AIS Service Catalog is a product that creates a catalog of technologies pre-appr
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAppliedIS%2FASC%2Fasc-jagrati%2FDeploy%2Fazuredeploy.json" target="_blank">
     <img src="http://azuredeploy.net/deploybutton.png"/>
 </a>
+<a href="https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAppliedIS%2FASC%2Fasc-jagrati%2FDeploy%2Fazuregovdeploy.json" target="_blank">
+    <img src="http://azuredeploy.net/AzureGov.png"/>
+</a>
 
 ## Provision Azure Resources
 
