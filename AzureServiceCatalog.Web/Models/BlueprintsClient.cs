@@ -47,5 +47,11 @@ namespace AzureServiceCatalog.Web.Models
             var requestUrl = $"{Config.AzureResourceManagerUrl}/subscriptions/{subscriptionId}/providers/Microsoft.Blueprint/blueprintAssignments/{assignmentName}?api-version={blueprintApiVersion}";
             return await ArmHttpClient.Put(requestUrl, blueprintAssignment);
         }
+
+        public async Task<string> GetObjectIdOfBlueprintServicePrincipal(string subscriptionId, string assignmentName)
+        {
+            var requestUrl = $"{Config.AzureResourceManagerUrl}/subscriptions/{subscriptionId}/providers/Microsoft.Blueprint/blueprintAssignments/{assignmentName}/WhoIsBlueprint?api-version={blueprintApiVersion}";
+            return await ArmHttpClient.Post(requestUrl, null);
+        }
     }
 }

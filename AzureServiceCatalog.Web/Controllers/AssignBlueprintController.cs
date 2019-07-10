@@ -20,10 +20,15 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("{assignmentName}")]
         public async Task<HttpResponseMessage> Put(string subscriptionId, string assignmentName, [FromBody]object blueprintAssignment)
         {
+            string objectId = null;
             string tenantId = ClaimsPrincipal.Current.TenantId();
-            var ClientId = ConfigurationManager.AppSettings["ida:ClientID"];
-            var objectId = AzureADGraphApiUtil.GetObjectIdOfServicePrincipalForBlueprint(tenantId, ClientId);
-
+            var azureResponseForBlueprintSP = await this.client.GetObjectIdOfBlueprintServicePrincipal(subscriptionId, assignmentName);
+            var responseForBlueprintSP = this.Request.CreateResponse(HttpStatusCode.OK);
+            if (responseForBlueprintSP.IsSuccessStatusCode)
+            {
+                dynamic data = JObject.Parse(azureResponseForBlueprintSP);
+                objectId = data.objectId;
+            }
             RbacClient rbacClient = new RbacClient();
             var json = rbacClient.GrantRoleForBlueprintAssignment(subscriptionId, "Owner", objectId);
 
