@@ -200,5 +200,27 @@ namespace AzureServiceCatalog.Web.Models
             httpClient.DefaultRequestHeaders.Add(Utils.MSClientRequestHeader, Config.AscAppId);
             return httpClient;
         }
+
+        public static string GetObjectIdOfServicePrincipalForBlueprint(string tenantId, string appId)
+        {
+            string objectId = null;
+            var requestUrl = $"https://graph.windows.net/{tenantId}/servicePrincipals?api-version=1.6&$filter=appId eq 'f71766dc-90d9-4b7d-bd9d-4499c4331c3f'";
+            var httpClient = GetAuthenticatedHttpClientForGraphApiForApp();
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
+            HttpResponseMessage response = httpClient.SendAsync(request).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = response.Content.ReadAsStringAsync().Result;
+                var servicePrincipalResult = (Json.Decode(responseContent)).value;
+                if (servicePrincipalResult != null && servicePrincipalResult.Length > 0)
+                {
+                    objectId = servicePrincipalResult[0].objectId;
+                }
+            }
+
+            return objectId;
+        }
     }
 }

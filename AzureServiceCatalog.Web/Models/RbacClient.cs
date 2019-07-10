@@ -179,5 +179,23 @@ namespace AzureServiceCatalog.Web.Models
 
             return ascRoleAssignments.ToJArray().ToString();
         }
+
+        public async Task<string> GrantRoleForBlueprintAssignment(string subscriptionId, string roleId, string objectId)
+        {
+            var newRoleAssignmentId = Guid.NewGuid().ToString();
+            var requestUrl = $"{Config.AzureResourceManagerUrl}/subscriptions/{subscriptionId}/providers/Microsoft.Authorization/roleAssignments/{newRoleAssignmentId}?api-version=2015-07-01";
+            var requestBody = new
+            {
+                properties = new
+                {
+                    roleDefinitionId = $"/subscriptions/{subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/8e3af657-a8ff-443c-a75c-2fe8c4bcb635",
+                    principalId = objectId,
+                    scope = "/subscriptions/" + subscriptionId
+                }
+            };
+            var requestJson = JsonConvert.SerializeObject(requestBody);
+            var json = await ArmHttpClient.Put(requestUrl, requestJson);
+            return json;
+        }
     }
 }
