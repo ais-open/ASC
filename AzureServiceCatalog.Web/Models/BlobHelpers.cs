@@ -20,7 +20,7 @@ namespace AzureServiceCatalog.Web.Models
 
         public static void CreateInitialTablesAndBlobContainers(string accountName, string key)
         {
-            var storageAccount = new CloudStorageAccount(new StorageCredentials(accountName, key), "core.usgovcloudapi.net", true);
+            var storageAccount = new CloudStorageAccount(new StorageCredentials(accountName, key), true);
             CreateInitialTables(storageAccount);
             CreateInitialBlobContainers(storageAccount);
         }
@@ -62,7 +62,7 @@ namespace AzureServiceCatalog.Web.Models
             var identityModels = new IdentityModels();
             var accountName = await identityModels.GetStorageName();
             var accountKey = await identityModels.GetStorageKey();
-            var storageAccount = new CloudStorageAccount(new StorageCredentials(accountName, accountKey), "core.usgovcloudapi.net", true);
+            var storageAccount = new CloudStorageAccount(new StorageCredentials(accountName, accountKey), true);
             return storageAccount.CreateCloudBlobClient();
         }
         /// <summary>

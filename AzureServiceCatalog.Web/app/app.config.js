@@ -230,7 +230,6 @@
                 templateUrl: 'app/blueprint/show-blueprint-versions.html',
                 controller: 'ShowBlueprintVersionsCtrl',
                 controllerAs: 'vm',
-                adminPermissionRequired: true,
                 resolve: {
                     initialData: ['$stateParams', 'ascApi', function ($stateParams, ascApi) {
                         if ($stateParams.id) {
@@ -244,7 +243,6 @@
                 templateUrl: 'app/blueprint/assign-blueprint.html',
                 controller: 'AssignBlueprintCtrl',
                 controllerAs: 'vm',
-                adminPermissionRequired: true,
                 resolve: {
                     initialData: ['$stateParams', 'ascApi', function ($stateParams, ascApi) {
                         if ($stateParams.selectedVersion) {
@@ -258,8 +256,6 @@
                 templateUrl: 'app/blueprint/assigned-blueprint-list.html',
                 controller: 'AssignedBlueprintListCtrl',
                 controllerAs: 'vm',
-                requireADLogin: true,
-                createPermissionRequired: true,
                 resolve: {
                     initialData: ['ascApi', function (ascApi) {
                         return ascApi.getEnrolledSubscriptions();
@@ -271,7 +267,6 @@
                 templateUrl: 'app/blueprint/update-blueprint-assignment.html',
                 controller: 'UpdateBlueprintAssignmentCtrl',
                 controllerAs: 'vm',
-                adminPermissionRequired: true,
                 resolve: {
                     initialData: ['$stateParams', 'ascApi', function ($stateParams, ascApi) {
                         if ($stateParams.assignmentName) {
