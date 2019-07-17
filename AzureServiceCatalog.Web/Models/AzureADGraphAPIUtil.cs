@@ -52,8 +52,8 @@ namespace AzureServiceCatalog.Web.Models
             {
                 requestUrl = new Uri($"{Config.GraphAPIIdentifier}{organizationId}/groups?$filter=startswith(displayName,'{filter}')&api-version=2013-04-05");
             }
-            //var httpClient = GetAuthenticatedHttpClientForGraphApiForUser();
-            var httpClient = Utils.GetAuthenticatedHttpClientForUser();
+            var httpClient = GetAuthenticatedHttpClientForGraphApiForUser();
+            //var httpClient = Utils.GetAuthenticatedHttpClientForUser();
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
             HttpResponseMessage response = httpClient.SendAsync(request).Result;
 
@@ -90,7 +90,7 @@ namespace AzureServiceCatalog.Web.Models
         public static List<ADGroup> GetUserGroups(string objectId, string organizationId)
         {
             var requestUrl = new Uri($"{Config.GraphAPIIdentifier}{organizationId}/users/{objectId}/memberOf?api-version=2013-04-05");
-            var httpClient = Utils.GetAuthenticatedHttpClientForUser();
+            var httpClient = GetAuthenticatedHttpClientForGraphApiForUser();
 
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
             HttpResponseMessage response = httpClient.SendAsync(request).Result;
