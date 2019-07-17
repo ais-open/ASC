@@ -17,9 +17,4 @@ AIS Service Catalog is a product that creates a catalog of technologies pre-appr
     b. After the app is created, copy the ApplicationID   
     c. Go to Settings -> Keys, and add a new Password, by specifying the Description and Expiration, and click Save   
     d. Make sure to copy the key value.   
-    e. The ApplicationID and the Password (key value) will go in the appSettings of the Azure webapp   
-3. SendGrid   
-    a. Create a new SendGrid account   
-    b. After the SendGrid account is created, go to Management portal (<https://app.sendgrid.com/)>   
-    c. Go to Settings -> API Keys, and Create an API Key   
-    d. Note down the API Key. This will go in the appSettings of the Azure webapp 
+    e. The ApplicationID and the Password (key value) will go in the appSettings of the Azure webapp
