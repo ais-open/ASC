@@ -72,8 +72,8 @@ namespace AzureServiceCatalog.Web.Models
             Uri requestUrl = null;
             requestUrl = new Uri($"{Config.GraphAPIIdentifier}{organizationId}/groups?$filter=displayName eq '{adGroupName}'&api-version=2013-04-05");
             
-            //var httpClient = GetAuthenticatedHttpClientForGraphApiForUser();
-            var httpClient = Utils.GetAuthenticatedHttpClientForUser();
+            var httpClient = GetAuthenticatedHttpClientForGraphApiForUser();
+            //var httpClient = Utils.GetAuthenticatedHttpClientForUser();
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
             HttpResponseMessage response = httpClient.SendAsync(request).Result;
 
@@ -107,8 +107,8 @@ namespace AzureServiceCatalog.Web.Models
         public static async Task CreateGroup(string organizationId, string adGroupName)
         {
             var requestUrl = new Uri($"{Config.GraphAPIIdentifier}{organizationId}/groups?api-version=2013-04-05");
-            var httpClient = Utils.GetAuthenticatedHttpClientForUser();
-
+            //var httpClient = Utils.GetAuthenticatedHttpClientForUser();
+            var httpClient = GetAuthenticatedHttpClientForGraphApiForUser();
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, requestUrl);
 
             var requestBody = new { displayName = adGroupName, mailNickname = adGroupName, mailEnabled = false, securityEnabled = true };
@@ -118,8 +118,8 @@ namespace AzureServiceCatalog.Web.Models
         public static async Task<bool> AddUserToGroup(string organizationId, string groupId, string userId)
         {
             var requestUrl = new Uri($"{Config.GraphAPIIdentifier}{organizationId}/groups/{groupId}/$links/members?api-version=2013-04-05");
-            var httpClient = Utils.GetAuthenticatedHttpClientForUser();
-
+            //var httpClient = Utils.GetAuthenticatedHttpClientForUser();
+            var httpClient = GetAuthenticatedHttpClientForGraphApiForUser();
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, requestUrl);
             var requestBody = new { url = $"https://graph.windows.net/{organizationId}/directoryObjects/{userId}" };
             request.Content = JsonConvert.SerializeObject(requestBody).ToStringContent();
