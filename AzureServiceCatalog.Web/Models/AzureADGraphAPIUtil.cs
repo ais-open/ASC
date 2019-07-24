@@ -26,11 +26,7 @@ namespace AzureServiceCatalog.Web.Models
             var organizaton = new Organization { Id = organizationId };
             var requestUrl = new Uri($"{Config.GraphAPIIdentifier}{organizationId}/tenantDetails?api-version={Config.GraphAPIVersion}");
             var httpClient = GetAuthenticatedHttpClientForGraphApiForUser();
-            var isRunningInAzureGov = Utils.IsRunningInAzureGov(Config.StorageAccountEndpointSuffix);
-            if (isRunningInAzureGov)
-            {
-                httpClient = GetAuthenticatedHttpClientForGraphApiForUser();
-            }
+
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
             HttpResponseMessage response = httpClient.SendAsync(request).Result;
 
@@ -59,8 +55,8 @@ namespace AzureServiceCatalog.Web.Models
             }
             //var httpClient = GetAuthenticatedHttpClientForGraphApiForUser();
             var httpClient = Utils.GetAuthenticatedHttpClientForUser();
-            var isRunningInAzureGov = Utils.IsRunningInAzureGov(Config.StorageAccountEndpointSuffix);
-            if (isRunningInAzureGov)
+            var isRunningInAzureGeneral = Config.IsRunningInAzureGeneral(Config.StorageAccountEndpointSuffix);
+            if (!isRunningInAzureGeneral)
             {
                 httpClient = GetAuthenticatedHttpClientForGraphApiForUser();
             }
@@ -84,8 +80,8 @@ namespace AzureServiceCatalog.Web.Models
             
             //var httpClient = GetAuthenticatedHttpClientForGraphApiForUser();
             var httpClient = Utils.GetAuthenticatedHttpClientForUser();
-            var isRunningInAzureGov = Utils.IsRunningInAzureGov(Config.StorageAccountEndpointSuffix);
-            if (isRunningInAzureGov)
+            var isRunningInAzureGeneral = Config.IsRunningInAzureGeneral(Config.StorageAccountEndpointSuffix);
+            if (!isRunningInAzureGeneral)
             {
                 httpClient = GetAuthenticatedHttpClientForGraphApiForUser();
             }
@@ -106,8 +102,8 @@ namespace AzureServiceCatalog.Web.Models
         {
             var requestUrl = new Uri($"{Config.GraphAPIIdentifier}{organizationId}/users/{objectId}/memberOf?api-version=2013-04-05");
             var httpClient = Utils.GetAuthenticatedHttpClientForUser();
-            var isRunningInAzureGov = Utils.IsRunningInAzureGov(Config.StorageAccountEndpointSuffix);
-            if (isRunningInAzureGov)
+            var isRunningInAzureGeneral = Config.IsRunningInAzureGeneral(Config.StorageAccountEndpointSuffix);
+            if (!isRunningInAzureGeneral)
             {
                 httpClient = GetAuthenticatedHttpClientForGraphApiForUser();
             }
@@ -127,8 +123,8 @@ namespace AzureServiceCatalog.Web.Models
         {
             var requestUrl = new Uri($"{Config.GraphAPIIdentifier}{organizationId}/groups?api-version=2013-04-05");
             var httpClient = Utils.GetAuthenticatedHttpClientForUser();
-            var isRunningInAzureGov = Utils.IsRunningInAzureGov(Config.StorageAccountEndpointSuffix);
-            if (isRunningInAzureGov)
+            var isRunningInAzureGeneral = Config.IsRunningInAzureGeneral(Config.StorageAccountEndpointSuffix);
+            if (!isRunningInAzureGeneral)
             {
                 httpClient = GetAuthenticatedHttpClientForGraphApiForUser();
             }
@@ -142,8 +138,8 @@ namespace AzureServiceCatalog.Web.Models
         {
             var requestUrl = new Uri($"{Config.GraphAPIIdentifier}{organizationId}/groups/{groupId}/$links/members?api-version=2013-04-05");
             var httpClient = Utils.GetAuthenticatedHttpClientForUser();
-            var isRunningInAzureGov = Utils.IsRunningInAzureGov(Config.StorageAccountEndpointSuffix);
-            if (isRunningInAzureGov)
+            var isRunningInAzureGeneral = Config.IsRunningInAzureGeneral(Config.StorageAccountEndpointSuffix);
+            if (!isRunningInAzureGeneral)
             {
                 httpClient = GetAuthenticatedHttpClientForGraphApiForUser();
             }

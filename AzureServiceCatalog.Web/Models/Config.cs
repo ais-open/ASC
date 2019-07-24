@@ -146,5 +146,7 @@ namespace AzureServiceCatalog.Web.Models
                 return configValue;
             }
         }
+
+        public static bool IsRunningInAzureGeneral(this string storageEndpointSuffix) => storageEndpointSuffix == "core.windows.net";
     }
 }
