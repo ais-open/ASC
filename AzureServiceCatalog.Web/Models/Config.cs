@@ -11,6 +11,7 @@ namespace AzureServiceCatalog.Web.Models
         public static readonly string ClientId = ConfigurationManager.AppSettings["ida:ClientID"];
         public static readonly string Password = ConfigurationManager.AppSettings["ida:Password"];
 
+        public static readonly string StorageAccountEndpointSuffix = ConfigurationManager.AppSettings["ida:StorageAccountEndpointSuffix"];
         public static readonly string Authority = ConfigurationManager.AppSettings["ida:Authority"];
         public static readonly string AzureResourceManagerIdentifier = ConfigurationManager.AppSettings["ida:AzureResourceManagerIdentifier"];
         public static readonly string AzureResourceManagerUrl = ConfigurationManager.AppSettings["ida:AzureResourceManagerUrl"];

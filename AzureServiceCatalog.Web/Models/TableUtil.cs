@@ -76,7 +76,7 @@ namespace AzureServiceCatalog.Web.Models
             var identityModels = new IdentityModels();
             var accountName = await identityModels.GetStorageName();
             var accountKey = await identityModels.GetStorageKey();
-            var storageAccount = new CloudStorageAccount(new StorageCredentials(accountName, accountKey), true);
+            var storageAccount = new CloudStorageAccount(new StorageCredentials(accountName, accountKey), Config.StorageAccountEndpointSuffix, true);
 
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
             return tableClient;
@@ -86,7 +86,7 @@ namespace AzureServiceCatalog.Web.Models
         {
             var accountName = ConfigurationManager.AppSettings["StorageAccountName"];
             var accountKey = ConfigurationManager.AppSettings["StorageAccountKey"];
-            var storageAccount = new CloudStorageAccount(new StorageCredentials(accountName, accountKey), true);
+            var storageAccount = new CloudStorageAccount(new StorageCredentials(accountName, accountKey), Config.StorageAccountEndpointSuffix, true);
 
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
             return tableClient;
