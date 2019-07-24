@@ -206,5 +206,7 @@ namespace AzureServiceCatalog.Web.Models
             }
             return results;
         }
+
+        public static bool IsRunningInAzureGov(this string storageEndpointSuffix) => storageEndpointSuffix == "core.usgovcloudapi.net";
     }
 }
