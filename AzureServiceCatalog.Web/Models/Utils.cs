@@ -11,6 +11,7 @@ using System.Security.Claims;
 using System.Net.Http.Headers;
 using System.Net;
 using Newtonsoft.Json.Linq;
+using AzureServiceCatalog.Models;
 
 namespace AzureServiceCatalog.Web.Models
 {

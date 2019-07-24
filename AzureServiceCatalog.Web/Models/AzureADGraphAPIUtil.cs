@@ -14,6 +14,7 @@ using System.Web.Helpers;
 using System.Diagnostics;
 using System.Text;
 using Newtonsoft.Json;
+using AzureServiceCatalog.Models;
 
 namespace AzureServiceCatalog.Web.Models
 {

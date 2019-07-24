@@ -313,7 +313,6 @@
     <Compile Include="Models\ADALTokenCache.cs" />
     <Compile Include="Models\ADGroup.cs" />
     <Compile Include="Models\ArmHttpClient.cs" />
-    <Compile Include="Models\AuthType.cs" />
     <Compile Include="Models\Billing\ChartData.cs" />
     <Compile Include="Models\Billing\DataAggregationType.cs" />
     <Compile Include="Models\ContributorGroup.cs" />
@@ -2773,6 +2772,16 @@
   <ItemGroup>
     <None Include="lib\ace-builds\demo\kitchen-sink\docs\typescript.ts" />
     <None Include="lib\angular-ui-router\api\angular-ui-router.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AzureServiceCatalog.Helpers\AzureServiceCatalog.Helpers.csproj">
+      <Project>{891242ec-33e8-4f2b-821b-7ec3869b432e}</Project>
+      <Name>AzureServiceCatalog.Helpers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AzureServiceCatalog.Models\AzureServiceCatalog.Models.csproj">
+      <Project>{aa3987af-b57e-4092-a105-20c74de63467}</Project>
+      <Name>AzureServiceCatalog.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
