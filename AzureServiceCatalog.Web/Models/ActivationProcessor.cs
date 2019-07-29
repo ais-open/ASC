@@ -65,8 +65,13 @@ namespace AzureServiceCatalog.Web.Models
             templateInit2.TemplateData = response;
             TemplateViewModel savedTemplateEntity2 = await repository.SaveTemplate(templateInit2);
 
-            var notifProcessor = new NotificationProcessor();
-            notifProcessor.SendActivationNotification(activationInfo.Organization);
+            var isRunningInAzureGeneral = Config.IsRunningInAzureGeneral(Config.StorageAccountEndpointSuffix);
+            if (isRunningInAzureGeneral)
+            {
+                var notifProcessor = new NotificationProcessor();
+                notifProcessor.SendActivationNotification(activationInfo.Organization);
+            }
+
         }
 
         public async Task SaveEnrolledSubscriptions(SubscriptionsViewModel subscriptionsVM)

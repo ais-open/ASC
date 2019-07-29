@@ -30,7 +30,7 @@ namespace AzureServiceCatalog.Web.Models
             AuthenticationResult result = authContext.AcquireToken(Config.AzureResourceManagerIdentifier, credential);
 
             var tokenCloudCredentials = new TokenCloudCredentials(subscriptionId: subscriptionId, token: result.AccessToken);
-            var client = new ResourceManagementClient(tokenCloudCredentials);
+            var client = new ResourceManagementClient(tokenCloudCredentials, new Uri(Config.AzureResourceManagerUrl));
             client.HttpClient.DefaultRequestHeaders.Add(MSClientRequestHeader, Config.AscAppId);
             return client;
         }
