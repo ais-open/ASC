@@ -1,5 +1,4 @@
-﻿using AzureServiceCatalog.Web.Models;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
+﻿using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OpenIdConnect;
@@ -11,6 +10,8 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using AzureServiceCatalog.Helpers;
+using AzureServiceCatalog.Models;
 
 namespace AzureServiceCatalog.Web
 {

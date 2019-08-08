@@ -6,8 +6,9 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Http;
-using AzureServiceCatalog.Web.Models;
 using System.Diagnostics;
+using AzureServiceCatalog.Models;
+using AzureServiceCatalog.Helpers;
 
 namespace AzureServiceCatalog.Web.Controllers
 {
@@ -27,10 +28,10 @@ namespace AzureServiceCatalog.Web.Controllers
             string tenantId = ClaimsPrincipal.Current.TenantId();
             string signedInUserUniqueId = ClaimsPrincipal.Current.SignedInUserName();
 
-            var userGroupsRoles = AzureADGraphApiUtil.GetUserGroups(signedInUserUniqueId, tenantId);
+            var userGroupsRoles = await AzureADGraphApiUtil.GetUserGroups(signedInUserUniqueId, tenantId);
             subscriptionInfo.IsGlobalAdministrator = AzureADGraphApiUtil.IsGlobalAdministrator(userGroupsRoles);
 
-            var org = GetOrganization(tenantId);
+            var org = await GetOrganization(tenantId);
             var dbOrg = await this.coreRepository.GetOrganization(tenantId);
             List<Subscription> dbSubscriptions = null;
 
@@ -39,7 +40,7 @@ namespace AzureServiceCatalog.Web.Controllers
                 org.DeployGroup = dbOrg.DeployGroup;
                 org.CreateProductGroup = dbOrg.CreateProductGroup;
                 org.AdminGroup = dbOrg.AdminGroup;
-                //var userGroups = AzureADGraphApiUtil.GetUserGroups(signedInUserUniqueId, org.Id);
+                //var userGroups = await AzureADGraphApiUtil.GetUserGroups(signedInUserUniqueId, org.Id);
                 subscriptionInfo.CanCreate = userGroupsRoles.Any(x => x.Id == dbOrg.CreateProductGroup);
                 subscriptionInfo.CanDeploy = userGroupsRoles.Any(x => x.Id == dbOrg.DeployGroup);
                 subscriptionInfo.CanAdmin = userGroupsRoles.Any(x => x.Id == dbOrg.AdminGroup);
@@ -53,9 +54,9 @@ namespace AzureServiceCatalog.Web.Controllers
 
             subscriptionInfo.Organization = org;
 
-            var orgGroups = AzureADGraphApiUtil.GetAllGroupsForOrganization(org.Id);
+            var orgGroups = await AzureADGraphApiUtil.GetAllGroupsForOrganization(org.Id);
             subscriptionInfo.OrganizationADGroups = orgGroups;
-            var subscriptions = AzureResourceManagerUtil.GetUserSubscriptions(org.Id);
+            var subscriptions = await AzureResourceManagerUtil.GetUserSubscriptions(org.Id);
             if (subscriptions != null)
             {
                 foreach (var subscription in subscriptions)
@@ -66,7 +67,7 @@ namespace AzureServiceCatalog.Web.Controllers
                     userDetailVM.CanAdmin = subscriptionInfo.CanAdmin;
                     userDetailVM.Name = subscriptionInfo.UserName;
 
-                    userDetailVM.IsAdminOfSubscription = AzureResourceManagerUtil.UserCanManageAccessForSubscription(subscription.Id);
+                    userDetailVM.IsAdminOfSubscription = await AzureResourceManagerUtil.UserCanManageAccessForSubscription(subscription.Id);
                     userDetailVM.SubscriptionName = subscription.DisplayName;
                     userDetailVM.SubscriptionId = subscription.Id;
                     userDetailVM.OrganizationId = org.Id;
@@ -83,7 +84,7 @@ namespace AzureServiceCatalog.Web.Controllers
                     {
                         userDetailVM.SubscriptionIsConnected = dbSubscription.IsConnected;// true;
                         userDetailVM.IsEnrolled = dbSubscription.IsEnrolled;
-                        userDetailVM.SubscriptionNeedsRepair = !AzureResourceManagerUtil.ServicePrincipalHasReadAccessToSubscription(dbSubscription.Id);
+                        userDetailVM.SubscriptionNeedsRepair = !await AzureResourceManagerUtil.ServicePrincipalHasReadAccessToSubscription(dbSubscription.Id);
                         if (userDetailVM.SubscriptionIsConnected)
                         {
                             string organizationId = dbSubscription.OrganizationId;
@@ -121,7 +122,7 @@ namespace AzureServiceCatalog.Web.Controllers
             var org = await this.coreRepository.GetOrganization(tenantId);
             subscriptionInfo.Organization = org;
 
-            var userGroups = AzureADGraphApiUtil.GetUserGroups(signedInUserUniqueId, org.Id);
+            var userGroups = await AzureADGraphApiUtil.GetUserGroups(signedInUserUniqueId, org.Id);
             subscriptionInfo.CanCreate = userGroups.Any(x => x.Id == org.CreateProductGroup);
             subscriptionInfo.CanDeploy = userGroups.Any(x => x.Id == org.DeployGroup);
             subscriptionInfo.CanAdmin = userGroups.Any(x => x.Id == org.AdminGroup);
@@ -130,10 +131,10 @@ namespace AzureServiceCatalog.Web.Controllers
         }
 
         [Route("organization-groups")]
-        public List<ADGroup> GetOrganizationGroups(string filter)
+        public async Task<List<ADGroup>> GetOrganizationGroups(string filter)
         {
             string tenantId = ClaimsPrincipal.Current.TenantId();
-            var orgGroups = AzureADGraphApiUtil.GetAllGroupsForOrganization(tenantId, filter);
+            var orgGroups = await AzureADGraphApiUtil.GetAllGroupsForOrganization(tenantId, filter);
             return orgGroups;
         }
 
@@ -154,10 +155,10 @@ namespace AzureServiceCatalog.Web.Controllers
 
         #region Private Methods
 
-        private static Organization GetOrganization(string orgId)
+        private static async Task<Organization> GetOrganization(string orgId)
         {
-            var organization = AzureADGraphApiUtil.GetOrganizationDetails(orgId);
-            var spid = AzureADGraphApiUtil.GetObjectIdOfServicePrincipalInOrganization(orgId, Config.ClientId);
+            var organization = await AzureADGraphApiUtil.GetOrganizationDetails(orgId);
+            var spid = await AzureADGraphApiUtil.GetObjectIdOfServicePrincipalInOrganization(orgId, Config.ClientId);
             organization.ObjectIdOfCloudSenseServicePrincipal = spid;
             return organization;
         }

@@ -1,5 +1,4 @@
-﻿using AzureServiceCatalog.Web.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -11,6 +10,8 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Controllers;
+using AzureServiceCatalog.Models;
+using AzureServiceCatalog.Helpers;
 
 namespace AzureServiceCatalog.Web
 {
@@ -43,7 +44,7 @@ namespace AzureServiceCatalog.Web
                 return; // must be part of Enrollment so Organization hasn't been established yet
             }
 
-            List<string> currentUsersGroups = Utils.GetCurrentUserGroups();
+            List<string> currentUsersGroups = await Utils.GetCurrentUserGroups();
             
             if (allowedGroups.Contains(SecurityGroupType.CanCreate) && currentUsersGroups.Contains(org.CreateProductGroup))
             {

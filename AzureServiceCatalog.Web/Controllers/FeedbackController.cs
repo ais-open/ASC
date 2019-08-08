@@ -1,5 +1,4 @@
-﻿using AzureServiceCatalog.Web.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -7,16 +6,18 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Http;
+using AzureServiceCatalog.Helpers;
+using AzureServiceCatalog.Models;
 
 namespace AzureServiceCatalog.Web.Controllers
 {
     public class FeedbackController : ApiController
     {
-        NotificationProcessor notificationProcessor = new NotificationProcessor();
+        NotificationHelper notificationHelper = new NotificationHelper();
         // POST: api/Feedback
         public IHttpActionResult Post([FromBody]FeedbackViewModel model)
         {
-            notificationProcessor.SendFeedbackNotification(model);
+            notificationHelper.SendFeedbackNotification(model);
             return Ok();
         }
 

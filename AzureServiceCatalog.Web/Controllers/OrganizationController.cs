@@ -1,11 +1,12 @@
-﻿using AzureServiceCatalog.Web.Models;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Http;
+using AzureServiceCatalog.Models;
+using AzureServiceCatalog.Helpers;
 
 namespace AzureServiceCatalog.Web.Controllers
 {
@@ -17,7 +18,7 @@ namespace AzureServiceCatalog.Web.Controllers
         {
             var tenantId = ClaimsPrincipal.Current.TenantId();
             var organization = await this.coreRepository.GetOrganization(tenantId);
-            organization.OrganizationADGroups = AzureADGraphApiUtil.GetAllGroupsForOrganization(tenantId);
+            organization.OrganizationADGroups = await AzureADGraphApiUtil.GetAllGroupsForOrganization(tenantId);
 
             try
             {

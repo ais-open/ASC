@@ -1,7 +1,8 @@
-﻿using AzureServiceCatalog.Web.Models;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using System.Web.Http;
+using AzureServiceCatalog.Models;
+using AzureServiceCatalog.Helpers;
 
 namespace AzureServiceCatalog.Web.Controllers
 {
@@ -11,8 +12,8 @@ namespace AzureServiceCatalog.Web.Controllers
         {
             try
             {
-                var processor = new ActivationProcessor();
-                await processor.SaveActivation(activationInfo);
+                var activationHelper = new ActivationHelper();
+                await activationHelper.SaveActivation(activationInfo);
                 return this.Ok();
             }
             catch (UnauthorizedAccessException authEx)

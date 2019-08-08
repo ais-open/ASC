@@ -1,10 +1,11 @@
-﻿using AzureServiceCatalog.Web.Models;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Http;
+using AzureServiceCatalog.Helpers;
+using AzureServiceCatalog.Models;
 
 namespace AzureServiceCatalog.Web.Controllers
 {
@@ -14,10 +15,10 @@ namespace AzureServiceCatalog.Web.Controllers
         private TableCoreRepository coreRepository = new TableCoreRepository();
 
         [Route("")]
-        public List<Subscription> Get()
+        public async Task<List<Subscription>> Get()
         {
             var tenantId = ClaimsPrincipal.Current.TenantId();
-            var subscriptions = AzureResourceManagerUtil.GetUserSubscriptions(tenantId);
+            var subscriptions = await AzureResourceManagerUtil.GetUserSubscriptions(tenantId);
             var dbSubscriptions = this.coreRepository.GetSubscriptionListByOrgId(tenantId);
 
             foreach (var subscription in subscriptions)
@@ -40,8 +41,8 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("")]
         public async Task<IHttpActionResult> Post(SubscriptionsViewModel subscriptionsVM)
         {
-            var activationProcessor = new ActivationProcessor();
-            await activationProcessor.SaveEnrolledSubscriptions(subscriptionsVM);
+            var activationHelper = new ActivationHelper();
+            await activationHelper.SaveEnrolledSubscriptions(subscriptionsVM);
             return this.Ok();
         }
     }

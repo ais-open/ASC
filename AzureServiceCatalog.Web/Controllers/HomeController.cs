@@ -5,7 +5,8 @@ using System.Runtime.Remoting;
 using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
-using AzureServiceCatalog.Web.Models;
+using AzureServiceCatalog.Helpers;
+using AzureServiceCatalog.Models;
 
 namespace AzureServiceCatalog.Web.Controllers
 {

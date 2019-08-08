@@ -1,6 +1,4 @@
-﻿using AzureServiceCatalog.Web.Models;
-using AzureServiceCatalog.Web.Models.Billing;
-using Microsoft.Azure.Management.Resources;
+﻿using Microsoft.Azure.Management.Resources;
 using Microsoft.Azure.Management.Resources.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -14,6 +12,10 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
+using AzureServiceCatalog.Models.Billing;
+using AzureServiceCatalog.Helpers.Billing;
+using AzureServiceCatalog.Models;
+using AzureServiceCatalog.Helpers;
 
 namespace AzureServiceCatalog.Web.Controllers
 {
@@ -147,8 +149,8 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("api/resourceGroups")]
         public async Task<IHttpActionResult> Post(ResourceGroupResource resourceGroup)
         {
-            var securityProcessor = new SecurityProcessor();
-            var userHasAccess = securityProcessor.CheckUserPermissionToSubscription(resourceGroup.SubscriptionId);
+            var securityHelper = new SecurityHelper();
+            var userHasAccess = await securityHelper.CheckUserPermissionToSubscription(resourceGroup.SubscriptionId);
             if (!userHasAccess)
             {
                 throw new HttpResponseException(HttpStatusCode.Forbidden);
@@ -158,17 +160,17 @@ namespace AzureServiceCatalog.Web.Controllers
             var rg = new ResourceGroup(resourceGroup.Location);
             var result = await client.ResourceGroups.CreateOrUpdateAsync(resourceGroup.ResourceGroupName, rg, new CancellationToken());
 
-            await securityProcessor.AddGroupsToAscContributorRole(resourceGroup.SubscriptionId, resourceGroup.ResourceGroupName, resourceGroup.ContributorGroups);
+            await securityHelper.AddGroupsToAscContributorRole(resourceGroup.SubscriptionId, resourceGroup.ResourceGroupName, resourceGroup.ContributorGroups);
 
             return this.Ok(resourceGroup);
         }
 
         [Route("api/subscriptions/enrolled")]
-        public IHttpActionResult GetEnrolledSubscriptions()
+        public async Task<IHttpActionResult> GetEnrolledSubscriptions()
         {
             var enrolledSubscriptions = this.coreRepository.GetEnrolledSubscriptionListByOrgId(ClaimsPrincipal.Current.TenantId());
 
-            var currentUsersGroups = Utils.GetCurrentUserGroups();
+            var currentUsersGroups = await Utils.GetCurrentUserGroups();
 
             var filteredSubscriptions = enrolledSubscriptions.Where(sub =>
             {

@@ -1,7 +1,7 @@
-﻿using AzureServiceCatalog.Web.Models;
-using System.Net;
+﻿using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
+using AzureServiceCatalog.Helpers;
 
 namespace AzureServiceCatalog.Web.Controllers
 {
@@ -12,8 +12,8 @@ namespace AzureServiceCatalog.Web.Controllers
 
         public async Task<IHttpActionResult> Post(AscDeployment deployment)
         {
-            var securityProcessor = new SecurityProcessor();
-            var userHasAccess = securityProcessor.CheckUserPermissionToSubscription(deployment.SubscriptionId);
+            var securityHelper = new SecurityHelper();
+            var userHasAccess = await securityHelper.CheckUserPermissionToSubscription(deployment.SubscriptionId);
             if (!userHasAccess)
             {
                 throw new HttpResponseException(HttpStatusCode.Forbidden);
@@ -21,7 +21,7 @@ namespace AzureServiceCatalog.Web.Controllers
 
             var template = await repository.GetTemplate(deployment.TemplateName);
             deployment.Template = template.TemplateData;
-            var result = await DeploymentManager.Deploy(deployment);
+            var result = await DeploymentHelper.Deploy(deployment);
             return this.Ok(result);
         }
 
@@ -30,13 +30,13 @@ namespace AzureServiceCatalog.Web.Controllers
         {
             var template = await repository.GetTemplate(deployment.TemplateName);
             deployment.Template = template.TemplateData;
-            var result = await DeploymentManager.ValidateDeployment(deployment);
+            var result = await DeploymentHelper.ValidateDeployment(deployment);
             return this.Ok(result);
         }
 
         public async Task<IHttpActionResult> Get(string resourceGroupName, string deploymentName, string subscriptionId)
         {
-            var result = await DeploymentManager.GetDeployment(resourceGroupName, deploymentName, subscriptionId);
+            var result = await DeploymentHelper.GetDeployment(resourceGroupName, deploymentName, subscriptionId);
             var response = new
             {
                 subscriptionId = subscriptionId,
@@ -49,14 +49,14 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("list")]
         public async Task<IHttpActionResult> GetDeploymentList(string resourceGroupName, string subscriptionId)
         {
-            var result = await DeploymentManager.GetDeploymentList(resourceGroupName, subscriptionId);
+            var result = await DeploymentHelper.GetDeploymentList(resourceGroupName, subscriptionId);
             return this.Ok(result);
         }
 
         [Route("status")]
         public async Task<IHttpActionResult> GetDeploymentOperations(string resourceGroupName, string deploymentName, string subscriptionId)
         {
-            var result = await DeploymentManager.GetDeploymentOperations(resourceGroupName, deploymentName, subscriptionId);
+            var result = await DeploymentHelper.GetDeploymentOperations(resourceGroupName, deploymentName, subscriptionId);
             return this.Ok(result);
         }
     }

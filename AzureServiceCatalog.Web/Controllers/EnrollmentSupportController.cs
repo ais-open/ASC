@@ -1,22 +1,23 @@
-﻿using AzureServiceCatalog.Web.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using AzureServiceCatalog.Helpers;
+using AzureServiceCatalog.Models;
 
 namespace AzureServiceCatalog.Web.Controllers
 {
     public class EnrollmentSupportController : ApiController
     {
-        NotificationProcessor notificationProcessor = new NotificationProcessor();
+        NotificationHelper notificationHelper = new NotificationHelper();
 
         [AllowAnonymous]
         public IHttpActionResult Post([FromBody]EnrollmentSupportViewModel model)
         {
-            notificationProcessor.SendSupportNotification(model);
+            notificationHelper.SendSupportNotification(model);
             return Ok();
         }
     }
