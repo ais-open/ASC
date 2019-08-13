@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Web;
 using AzureServiceCatalog.Models;
 
@@ -27,6 +28,17 @@ namespace AzureServiceCatalog.Helpers
         {
             var pair = value.Trim().Replace("\"", null).Split('=');
             return new Tuple<string, string>(pair[0], pair[1]);
+        }
+
+        public static LinkItem GetNextLink(HttpResponseHeaders headers)
+        {
+            LinkItem nextLink = null;
+            IEnumerable<string> values;
+            if (headers.TryGetValues("Link", out values))
+            {
+                nextLink = ParseLinks(values.First())?.SingleOrDefault(l => l.Rel == "next");
+            }
+            return nextLink;
         }
     }
 }

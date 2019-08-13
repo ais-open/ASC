@@ -1,9 +1,12 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using AzureServiceCatalog.Models;
 using AzureServiceCatalog.Helpers;
+using AzureServiceCatalog.Web.Models;
+using Newtonsoft.Json.Linq;
 
 namespace AzureServiceCatalog.Web.Controllers
 {
@@ -14,37 +17,93 @@ namespace AzureServiceCatalog.Web.Controllers
         private PoliciesClient client = new PoliciesClient();
 
         [Route("")]
-        public async Task<HttpResponseMessage> Get(string subscriptionId)
+        public async Task<IHttpActionResult> Get(string subscriptionId)
         {
-            var policies = await this.client.GetPolicyAssignments(subscriptionId);
-            var response = this.Request.CreateResponse(HttpStatusCode.OK);
-            response.Content = policies.ToStringContent();
-            return response;
+            try
+            {
+                var policies = await this.client.GetPolicyAssignments(subscriptionId);
+                var responseMsg = this.Request.CreateResponse(HttpStatusCode.OK);
+                responseMsg.Content = policies.ToStringContent();
+                IHttpActionResult response = ResponseMessage(responseMsg);
+                return response;
+            }
+            catch (Exception)
+            {
+                return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
+            }
+            finally
+            {
+
+            }
         }
 
         [Route("{policyAssignmentName}")]
-        public async Task<HttpResponseMessage> Get(string subscriptionId, string policyAssignmentName)
+        public async Task<IHttpActionResult> Get(string subscriptionId, string policyAssignmentName)
         {
-            var policies = await this.client.GetPolicyAssignment(subscriptionId, policyAssignmentName);
-            var response = this.Request.CreateResponse(HttpStatusCode.OK);
-            response.Content = policies.ToStringContent();
-            return response;
+            try
+            {
+                var policies = await this.client.GetPolicyAssignment(subscriptionId, policyAssignmentName);
+                var responseMsg = this.Request.CreateResponse(HttpStatusCode.OK);
+                responseMsg.Content = policies.ToStringContent();
+                IHttpActionResult response = ResponseMessage(responseMsg);
+                return response;
+            }
+            catch (Exception)
+            {
+                return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
+            }
+            finally
+            {
+
+            }
         }
 
         [Route("{policyAssignmentName}")]
-        public async Task<HttpResponseMessage> Put(string subscriptionId, string policyAssignmentName, [FromBody]object policy)
+        public async Task<IHttpActionResult> Put(string subscriptionId, string policyAssignmentName, [FromBody]object policy)
         {
-            var azureResponse = await this.client.SavePolicyAssignment(subscriptionId, policyAssignmentName, policy);
-            var response = this.Request.CreateResponse(HttpStatusCode.OK);
-            response.Content = azureResponse.ToStringContent();
-            return response;
+            try
+            {
+                if (policy == null)
+                {
+                    ErrorInformation errorInformation = new ErrorInformation();
+                    errorInformation.Code = "InvalidRequest";
+                    errorInformation.Message = "Request body is invalid.";
+                    return Content(HttpStatusCode.BadRequest, JObject.FromObject(errorInformation));
+                } else
+                {
+                    var azureResponse = await this.client.SavePolicyAssignment(subscriptionId, policyAssignmentName, policy);
+                    var responseMsg = this.Request.CreateResponse(HttpStatusCode.OK);
+                    responseMsg.Content = azureResponse.ToStringContent();
+                    IHttpActionResult response = ResponseMessage(responseMsg);
+                    return response;
+                }
+            }
+            catch (Exception)
+            {
+                return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
+            }
+            finally
+            {
+
+            }
         }
 
         [Route("{policyAssignmentName}")]
         public async Task<IHttpActionResult> Delete(string subscriptionId, string policyAssignmentName)
         {
-            await this.client.DeletePolicyAssignment(subscriptionId, policyAssignmentName);
-            return this.StatusCode(HttpStatusCode.NoContent);
+            try
+            {
+                await this.client.DeletePolicyAssignment(subscriptionId, policyAssignmentName);
+                return this.StatusCode(HttpStatusCode.NoContent);
+            }
+            catch (Exception)
+            {
+                return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
+            }
+            finally
+            {
+
+            }
         }
     }
 }

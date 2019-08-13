@@ -9,6 +9,8 @@ using System.Web.Http;
 using System.Diagnostics;
 using AzureServiceCatalog.Models;
 using AzureServiceCatalog.Helpers;
+using AzureServiceCatalog.Web.Models;
+using Newtonsoft.Json.Linq;
 
 namespace AzureServiceCatalog.Web.Controllers
 {
@@ -17,140 +19,183 @@ namespace AzureServiceCatalog.Web.Controllers
     {
         private TableCoreRepository coreRepository = new TableCoreRepository();
         [Route("full")]
-        public async Task<UserSubscriptionInfo> GetUserDetailsFull()
+        public async Task<IHttpActionResult> GetUserDetailsFull()
         {
-            var subscriptionInfo = new UserSubscriptionInfo();
-            subscriptionInfo.UserName = ClaimsPrincipal.Current.Identity.Name;
-            subscriptionInfo.FirstName = ClaimsPrincipal.Current.FirstName();
-            subscriptionInfo.LastName = ClaimsPrincipal.Current.LastName();
-            subscriptionInfo.DefaultAdGroup = Config.DefaultAdGroup;
-            subscriptionInfo.DefaultResourceGroup = Config.DefaultResourceGroup;
-            string tenantId = ClaimsPrincipal.Current.TenantId();
-            string signedInUserUniqueId = ClaimsPrincipal.Current.SignedInUserName();
-
-            var userGroupsRoles = await AzureADGraphApiUtil.GetUserGroups(signedInUserUniqueId, tenantId);
-            subscriptionInfo.IsGlobalAdministrator = AzureADGraphApiUtil.IsGlobalAdministrator(userGroupsRoles);
-
-            var org = await GetOrganization(tenantId);
-            var dbOrg = await this.coreRepository.GetOrganization(tenantId);
-            List<Subscription> dbSubscriptions = null;
-
-            if (dbOrg != null)
+            try
             {
-                org.DeployGroup = dbOrg.DeployGroup;
-                org.CreateProductGroup = dbOrg.CreateProductGroup;
-                org.AdminGroup = dbOrg.AdminGroup;
-                //var userGroups = await AzureADGraphApiUtil.GetUserGroups(signedInUserUniqueId, org.Id);
-                subscriptionInfo.CanCreate = userGroupsRoles.Any(x => x.Id == dbOrg.CreateProductGroup);
-                subscriptionInfo.CanDeploy = userGroupsRoles.Any(x => x.Id == dbOrg.DeployGroup);
-                subscriptionInfo.CanAdmin = userGroupsRoles.Any(x => x.Id == dbOrg.AdminGroup);
-                dbSubscriptions = this.coreRepository.GetSubscriptionListByOrgId(tenantId);
+                var subscriptionInfo = new UserSubscriptionInfo();
+                subscriptionInfo.UserName = ClaimsPrincipal.Current.Identity.Name;
+                subscriptionInfo.FirstName = ClaimsPrincipal.Current.FirstName();
+                subscriptionInfo.LastName = ClaimsPrincipal.Current.LastName();
+                subscriptionInfo.DefaultAdGroup = Config.DefaultAdGroup;
+                subscriptionInfo.DefaultResourceGroup = Config.DefaultResourceGroup;
+                string tenantId = ClaimsPrincipal.Current.TenantId();
+                string signedInUserUniqueId = ClaimsPrincipal.Current.SignedInUserName();
 
-                if (dbSubscriptions != null && dbSubscriptions.Count > 0)
+                var userGroupsRoles = await AzureADGraphApiUtil.GetUserGroups(signedInUserUniqueId, tenantId);
+                subscriptionInfo.IsGlobalAdministrator = AzureADGraphApiUtil.IsGlobalAdministrator(userGroupsRoles);
+
+                var org = await GetOrganization(tenantId);
+                var dbOrg = await this.coreRepository.GetOrganization(tenantId);
+                List<Subscription> dbSubscriptions = null;
+
+                if (dbOrg != null)
                 {
-                   subscriptionInfo.IsActivatedByAdmin = (dbSubscriptions.Any(x => x.IsConnected));
-                }
-            }
+                    org.DeployGroup = dbOrg.DeployGroup;
+                    org.CreateProductGroup = dbOrg.CreateProductGroup;
+                    org.AdminGroup = dbOrg.AdminGroup;
+                    //var userGroups = await AzureADGraphApiUtil.GetUserGroups(signedInUserUniqueId, org.Id);
+                    subscriptionInfo.CanCreate = userGroupsRoles.Any(x => x.Id == dbOrg.CreateProductGroup);
+                    subscriptionInfo.CanDeploy = userGroupsRoles.Any(x => x.Id == dbOrg.DeployGroup);
+                    subscriptionInfo.CanAdmin = userGroupsRoles.Any(x => x.Id == dbOrg.AdminGroup);
+                    dbSubscriptions = this.coreRepository.GetSubscriptionListByOrgId(tenantId);
 
-            subscriptionInfo.Organization = org;
-
-            var orgGroups = await AzureADGraphApiUtil.GetAllGroupsForOrganization(org.Id);
-            subscriptionInfo.OrganizationADGroups = orgGroups;
-            var subscriptions = await AzureResourceManagerUtil.GetUserSubscriptions(org.Id);
-            if (subscriptions != null)
-            {
-                foreach (var subscription in subscriptions)
-                {
-                    var userDetailVM = new UserDetailsViewModel();
-                    userDetailVM.CanCreate = subscriptionInfo.CanCreate;
-                    userDetailVM.CanDeploy = subscriptionInfo.CanDeploy;
-                    userDetailVM.CanAdmin = subscriptionInfo.CanAdmin;
-                    userDetailVM.Name = subscriptionInfo.UserName;
-
-                    userDetailVM.IsAdminOfSubscription = await AzureResourceManagerUtil.UserCanManageAccessForSubscription(subscription.Id);
-                    userDetailVM.SubscriptionName = subscription.DisplayName;
-                    userDetailVM.SubscriptionId = subscription.Id;
-                    userDetailVM.OrganizationId = org.Id;
-                    userDetailVM.ServicePrincipalId = org.ObjectIdOfCloudSenseServicePrincipal;
-                    userDetailVM.OrganizationName = org.DisplayName;
-
-                    Subscription dbSubscription = null;
                     if (dbSubscriptions != null && dbSubscriptions.Count > 0)
                     {
-                        dbSubscription = dbSubscriptions.FirstOrDefault(x => x.Id == subscription.Id) ?? null;
+                        subscriptionInfo.IsActivatedByAdmin = (dbSubscriptions.Any(x => x.IsConnected));
                     }
-
-                    if (dbSubscription != null)
-                    {
-                        userDetailVM.SubscriptionIsConnected = dbSubscription.IsConnected;// true;
-                        userDetailVM.IsEnrolled = dbSubscription.IsEnrolled;
-                        userDetailVM.SubscriptionNeedsRepair = !await AzureResourceManagerUtil.ServicePrincipalHasReadAccessToSubscription(dbSubscription.Id);
-                        if (userDetailVM.SubscriptionIsConnected)
-                        {
-                            string organizationId = dbSubscription.OrganizationId;
-                            string storageName = dbSubscription.StorageName;
-                            try
-                            {
-                                string storageKey = await AzureResourceManagerUtil.GetStorageAccountKeysArm(dbSubscription.Id, dbSubscription.StorageName);
-                                CacheDetails(userDetailVM, storageKey, storageName, organizationId, signedInUserUniqueId);
-                            }
-                            catch (Exception ex)
-                            {
-                                Trace.TraceError(ex.Message);
-                                Trace.TraceError($"Storage account: {storageName} was not found!");
-                                userDetailVM.SubscriptionIsConnected = false;
-                                userDetailVM.IsEnrolled = false;
-                            }
-                            
-                        }
-                    }
-                    subscriptionInfo.Subscriptions.Add(userDetailVM);
                 }
+
+                subscriptionInfo.Organization = org;
+
+                var orgGroups = await AzureADGraphApiUtil.GetAllGroupsForOrganization(org.Id);
+                subscriptionInfo.OrganizationADGroups = orgGroups;
+                var subscriptions = await AzureResourceManagerUtil.GetUserSubscriptions(org.Id);
+                if (subscriptions != null)
+                {
+                    foreach (var subscription in subscriptions)
+                    {
+                        var userDetailVM = new UserDetailsViewModel();
+                        userDetailVM.CanCreate = subscriptionInfo.CanCreate;
+                        userDetailVM.CanDeploy = subscriptionInfo.CanDeploy;
+                        userDetailVM.CanAdmin = subscriptionInfo.CanAdmin;
+                        userDetailVM.Name = subscriptionInfo.UserName;
+
+                        userDetailVM.IsAdminOfSubscription = await AzureResourceManagerUtil.UserCanManageAccessForSubscription(subscription.Id);
+                        userDetailVM.SubscriptionName = subscription.DisplayName;
+                        userDetailVM.SubscriptionId = subscription.Id;
+                        userDetailVM.OrganizationId = org.Id;
+                        userDetailVM.ServicePrincipalId = org.ObjectIdOfCloudSenseServicePrincipal;
+                        userDetailVM.OrganizationName = org.DisplayName;
+
+                        Subscription dbSubscription = null;
+                        if (dbSubscriptions != null && dbSubscriptions.Count > 0)
+                        {
+                            dbSubscription = dbSubscriptions.FirstOrDefault(x => x.Id == subscription.Id) ?? null;
+                        }
+
+                        if (dbSubscription != null)
+                        {
+                            userDetailVM.SubscriptionIsConnected = dbSubscription.IsConnected;// true;
+                            userDetailVM.IsEnrolled = dbSubscription.IsEnrolled;
+                            userDetailVM.SubscriptionNeedsRepair = !await AzureResourceManagerUtil.ServicePrincipalHasReadAccessToSubscription(dbSubscription.Id);
+                            if (userDetailVM.SubscriptionIsConnected)
+                            {
+                                string organizationId = dbSubscription.OrganizationId;
+                                string storageName = dbSubscription.StorageName;
+                                try
+                                {
+                                    string storageKey = await AzureResourceManagerUtil.GetStorageAccountKeysArm(dbSubscription.Id, dbSubscription.StorageName);
+                                    CacheDetails(userDetailVM, storageKey, storageName, organizationId, signedInUserUniqueId);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Trace.TraceError(ex.Message);
+                                    Trace.TraceError($"Storage account: {storageName} was not found!");
+                                    userDetailVM.SubscriptionIsConnected = false;
+                                    userDetailVM.IsEnrolled = false;
+                                }
+
+                            }
+                        }
+                        subscriptionInfo.Subscriptions.Add(userDetailVM);
+                    }
+                }
+                return this.Ok(subscriptionInfo);
             }
-            return subscriptionInfo;
+            catch (Exception)
+            {
+                return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
+            }
+            finally
+            {
+
+            }
         }
 
-
         [Route("")]
-        public async Task<UserSubscriptionInfo> GetUserDetails()
+        public async Task<IHttpActionResult> GetUserDetails()
         {
-            var subscriptionInfo = new UserSubscriptionInfo();
-            subscriptionInfo.UserName = ClaimsPrincipal.Current.Identity.Name;
-            var tenantId = ClaimsPrincipal.Current.TenantId();
-            var signedInUserUniqueId = ClaimsPrincipal.Current.SignedInUserName();
+            try
+            {
+                var subscriptionInfo = new UserSubscriptionInfo();
+                subscriptionInfo.UserName = ClaimsPrincipal.Current.Identity.Name;
+                var tenantId = ClaimsPrincipal.Current.TenantId();
+                var signedInUserUniqueId = ClaimsPrincipal.Current.SignedInUserName();
 
-            var org = await this.coreRepository.GetOrganization(tenantId);
-            subscriptionInfo.Organization = org;
+                var org = await this.coreRepository.GetOrganization(tenantId);
+                subscriptionInfo.Organization = org;
 
-            var userGroups = await AzureADGraphApiUtil.GetUserGroups(signedInUserUniqueId, org.Id);
-            subscriptionInfo.CanCreate = userGroups.Any(x => x.Id == org.CreateProductGroup);
-            subscriptionInfo.CanDeploy = userGroups.Any(x => x.Id == org.DeployGroup);
-            subscriptionInfo.CanAdmin = userGroups.Any(x => x.Id == org.AdminGroup);
+                var userGroups = await AzureADGraphApiUtil.GetUserGroups(signedInUserUniqueId, org.Id);
+                subscriptionInfo.CanCreate = userGroups.Any(x => x.Id == org.CreateProductGroup);
+                subscriptionInfo.CanDeploy = userGroups.Any(x => x.Id == org.DeployGroup);
+                subscriptionInfo.CanAdmin = userGroups.Any(x => x.Id == org.AdminGroup);
 
-            return subscriptionInfo;
+                return this.Ok(subscriptionInfo);
+            }
+            catch (Exception)
+            {
+                return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
+            }
+            finally
+            {
+
+            }
         }
 
         [Route("organization-groups")]
-        public async Task<List<ADGroup>> GetOrganizationGroups(string filter)
+        public async Task<IHttpActionResult> GetOrganizationGroups(string filter)
         {
-            string tenantId = ClaimsPrincipal.Current.TenantId();
-            var orgGroups = await AzureADGraphApiUtil.GetAllGroupsForOrganization(tenantId, filter);
-            return orgGroups;
+            try
+            {
+                string tenantId = ClaimsPrincipal.Current.TenantId();
+                var orgGroups = await AzureADGraphApiUtil.GetAllGroupsForOrganization(tenantId, filter);
+                return this.Ok(orgGroups);
+            }
+            catch (Exception)
+            {
+                return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
+            }
+            finally
+            {
+
+            }
         }
 
         [Route("asc-contributor")]
-        public async Task<HttpResponseMessage> PutAscContributorRole(string subscriptionId)
+        public async Task<IHttpActionResult> PutAscContributorRole(string subscriptionId)
         {
-            var rbacClient = new RbacClient();
-            //var json = await rbacClient.CreateAscContributorRoleOnSubscription(subscriptionId);
+            try
+            {
+                var rbacClient = new RbacClient();
+                //var json = await rbacClient.CreateAscContributorRoleOnSubscription(subscriptionId);
 
-            //dynamic role = await rbacClient.GetAscContributorRole(subscriptionId);
-            //var json = await rbacClient.DeleteCustomRoleOnSubscription(subscriptionId, (string)role.name);
-            var json = await rbacClient.GetRoleAssignmentsForAscContributor(subscriptionId);
+                //dynamic role = await rbacClient.GetAscContributorRole(subscriptionId);
+                //var json = await rbacClient.DeleteCustomRoleOnSubscription(subscriptionId, (string)role.name);
+                var json = await rbacClient.GetRoleAssignmentsForAscContributor(subscriptionId);
 
-            var response = this.Request.CreateResponse(HttpStatusCode.OK);
-            response.Content = json.ToStringContent();
-            return response;
+                var response = this.Request.CreateResponse(HttpStatusCode.OK);
+                response.Content = json.ToStringContent();
+                return this.Ok(response);
+            }
+            catch (Exception)
+            {
+                return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
+            }
+            finally
+            {
+
+            }
         }
 
         #region Private Methods

@@ -21,6 +21,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.Owin;
+using AzureServiceCatalog.Web.Models;
+using Newtonsoft.Json.Linq;
 
 namespace AzureServiceCatalog.Web.Controllers
 {
@@ -32,35 +34,55 @@ namespace AzureServiceCatalog.Web.Controllers
         // configured to return to the home page upon successful authentication
         public void SignIn(string directoryName, bool isMsa = false, bool activation = false)
         {
-            // note configuration (keys, etc…) will not necessarily understand this authority.
-            if (isMsa && !Request.IsAuthenticated)
+            try
             {
-                if (!directoryName.Contains(".")) // no domain detected so add default
+                // note configuration (keys, etc…) will not necessarily understand this authority.
+                if (isMsa && !Request.IsAuthenticated)
                 {
-                    directoryName = directoryName + msDomain;
+                    if (!directoryName.Contains(".")) // no domain detected so add default
+                    {
+                        directoryName = directoryName + msDomain;
+                    }
+
+                    HttpContext.GetOwinContext().Environment.Add("Authority", string.Format(ConfigurationManager.AppSettings["ida:Authority"] + "OAuth2/Authorize", directoryName));
+                    HttpContext.GetOwinContext().Environment.Add("DomainHint", "live.com");
                 }
 
-                HttpContext.GetOwinContext().Environment.Add("Authority", string.Format(ConfigurationManager.AppSettings["ida:Authority"] + "OAuth2/Authorize", directoryName));
-                HttpContext.GetOwinContext().Environment.Add("DomainHint", "live.com");
+                var redirectUrl = activation ? this.Url.Action("Index", "Home", new { activation = true }) : this.Url.Action("Index", "Home");
+                HttpContext.GetOwinContext().Authentication.Challenge(new AuthenticationProperties { RedirectUri = redirectUrl }, OpenIdConnectAuthenticationDefaults.AuthenticationType);
             }
-
-            var redirectUrl = activation ? this.Url.Action("Index", "Home", new { activation = true }) : this.Url.Action("Index", "Home");
-            HttpContext.GetOwinContext().Authentication.Challenge(new AuthenticationProperties { RedirectUri = redirectUrl }, OpenIdConnectAuthenticationDefaults.AuthenticationType);
-
+            finally 
+            {
+                
+            }
         }
 
         public void AppSourceActivation()
         {
-            var redirectUrl = this.Url.Action("Index", "Home", new { activation = true });
-            HttpContext.GetOwinContext().Authentication.Challenge(new AuthenticationProperties { RedirectUri = redirectUrl }, OpenIdConnectAuthenticationDefaults.AuthenticationType);
+            try
+            {
+                var redirectUrl = this.Url.Action("Index", "Home", new { activation = true });
+                HttpContext.GetOwinContext().Authentication.Challenge(new AuthenticationProperties { RedirectUri = redirectUrl }, OpenIdConnectAuthenticationDefaults.AuthenticationType);
+            }
+            finally
+            {
+                
+            }
         }
 
         // sign out triggered from the Sign Out gesture in the UI
         // after sign out, it redirects to Post_Logout_Redirect_Uri (as set in Startup.Auth.cs)
         public void SignOut()
         {
-            HttpContext.GetOwinContext().Authentication.SignOut(
-                OpenIdConnectAuthenticationDefaults.AuthenticationType, CookieAuthenticationDefaults.AuthenticationType);
+            try
+            {
+                HttpContext.GetOwinContext().Authentication.SignOut(
+    OpenIdConnectAuthenticationDefaults.AuthenticationType, CookieAuthenticationDefaults.AuthenticationType);
+            }
+            finally
+            {
+            }
+
         }
     }
 }

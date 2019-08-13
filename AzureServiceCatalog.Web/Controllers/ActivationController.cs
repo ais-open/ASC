@@ -3,6 +3,9 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using AzureServiceCatalog.Models;
 using AzureServiceCatalog.Helpers;
+using AzureServiceCatalog.Web.Models;
+using Newtonsoft.Json.Linq;
+using System.Net;
 
 namespace AzureServiceCatalog.Web.Controllers
 {
@@ -12,17 +15,30 @@ namespace AzureServiceCatalog.Web.Controllers
         {
             try
             {
-                var activationHelper = new ActivationHelper();
-                await activationHelper.SaveActivation(activationInfo);
-                return this.Ok();
+                if (activationInfo == null)
+                {
+                    ErrorInformation errorInformation = new ErrorInformation();
+                    errorInformation.Code = "InvalidRequest";
+                    errorInformation.Message = "Request body is invalid.";
+                    return Content(HttpStatusCode.BadRequest, JObject.FromObject(errorInformation));
+                } else
+                {
+                    var activationHelper = new ActivationHelper();
+                    await activationHelper.SaveActivation(activationInfo);
+                    return this.Ok();
+                }
             }
             catch (UnauthorizedAccessException authEx)
             {
                 return InternalServerError(authEx);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return InternalServerError(ex);
+                return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
+            }
+            finally
+            {
+
             }
         }
     }
