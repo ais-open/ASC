@@ -7,6 +7,8 @@ using AzureServiceCatalog.Models;
 using AzureServiceCatalog.Helpers;
 using AzureServiceCatalog.Web.Models;
 using Newtonsoft.Json.Linq;
+using System.Web;
+using System.Security.Claims;
 
 namespace AzureServiceCatalog.Web.Controllers
 {
@@ -14,53 +16,69 @@ namespace AzureServiceCatalog.Web.Controllers
     [ADGroupAuthorize(SecurityGroupType.CanCreate)]
     public class PolicyAssignmentsController : ApiController
     {
-        private PoliciesClient client = new PoliciesClient();
+        private PoliciesHelper client = new PoliciesHelper();
 
         [Route("")]
         public async Task<IHttpActionResult> Get(string subscriptionId)
         {
+            var thisOperationContext = new BaseOperationContext("PolicyAssignmentsController:Get");
+            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
+            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
+            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
             try
             {
-                var policies = await this.client.GetPolicyAssignments(subscriptionId);
+                var policies = await this.client.GetPolicyAssignments(subscriptionId, thisOperationContext);
                 var responseMsg = this.Request.CreateResponse(HttpStatusCode.OK);
                 responseMsg.Content = policies.ToStringContent();
                 IHttpActionResult response = ResponseMessage(responseMsg);
                 return response;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                TraceHelper.TraceError(thisOperationContext.OperationId, thisOperationContext.OperationName, ex);
                 return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
             }
             finally
             {
-
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
             }
         }
 
         [Route("{policyAssignmentName}")]
         public async Task<IHttpActionResult> Get(string subscriptionId, string policyAssignmentName)
         {
+            var thisOperationContext = new BaseOperationContext("PolicyAssignmentsController:Get");
+            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
+            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
+            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
             try
             {
-                var policies = await this.client.GetPolicyAssignment(subscriptionId, policyAssignmentName);
+                var policies = await this.client.GetPolicyAssignment(subscriptionId, policyAssignmentName, thisOperationContext);
                 var responseMsg = this.Request.CreateResponse(HttpStatusCode.OK);
                 responseMsg.Content = policies.ToStringContent();
                 IHttpActionResult response = ResponseMessage(responseMsg);
                 return response;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                TraceHelper.TraceError(thisOperationContext.OperationId, thisOperationContext.OperationName, ex);
                 return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
             }
             finally
             {
-
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
             }
         }
 
         [Route("{policyAssignmentName}")]
         public async Task<IHttpActionResult> Put(string subscriptionId, string policyAssignmentName, [FromBody]object policy)
         {
+            var thisOperationContext = new BaseOperationContext("PolicyAssignmentsController:Put");
+            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
+            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
+            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
             try
             {
                 if (policy == null)
@@ -71,38 +89,46 @@ namespace AzureServiceCatalog.Web.Controllers
                     return Content(HttpStatusCode.BadRequest, JObject.FromObject(errorInformation));
                 } else
                 {
-                    var azureResponse = await this.client.SavePolicyAssignment(subscriptionId, policyAssignmentName, policy);
+                    var azureResponse = await this.client.SavePolicyAssignment(subscriptionId, policyAssignmentName, policy, thisOperationContext);
                     var responseMsg = this.Request.CreateResponse(HttpStatusCode.OK);
                     responseMsg.Content = azureResponse.ToStringContent();
                     IHttpActionResult response = ResponseMessage(responseMsg);
                     return response;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                TraceHelper.TraceError(thisOperationContext.OperationId, thisOperationContext.OperationName, ex);
                 return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
             }
             finally
             {
-
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
             }
         }
 
         [Route("{policyAssignmentName}")]
         public async Task<IHttpActionResult> Delete(string subscriptionId, string policyAssignmentName)
         {
+            var thisOperationContext = new BaseOperationContext("PolicyAssignmentsController:Delete");
+            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
+            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
+            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
             try
             {
-                await this.client.DeletePolicyAssignment(subscriptionId, policyAssignmentName);
+                await this.client.DeletePolicyAssignment(subscriptionId, policyAssignmentName, thisOperationContext);
                 return this.StatusCode(HttpStatusCode.NoContent);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                TraceHelper.TraceError(thisOperationContext.OperationId, thisOperationContext.OperationName, ex);
                 return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
             }
             finally
             {
-
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
             }
         }
     }

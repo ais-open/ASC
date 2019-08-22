@@ -16,6 +16,7 @@ using AzureServiceCatalog.Models;
 using AzureServiceCatalog.Helpers;
 using AzureServiceCatalog.Web.Models;
 using System.Text;
+using System.Web;
 
 namespace AzureServiceCatalog.Web.Controllers
 {
@@ -27,115 +28,148 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("api/subscriptions/{subscriptionId}/resourceGroups")]
         public async Task<IHttpActionResult> GetResourceGroupsBySubscription(string subscriptionId)
         {
+            var thisOperationContext = new BaseOperationContext("ResourcesController:GetResourceGroupsBySubscription");
+            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
+            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
+            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
             try
             {
-                var json = await AzureResourceManagerUtil.GetUserResourceGroups(subscriptionId);
+                var json = await AzureResourceManagerHelper.GetUserResourceGroups(subscriptionId, thisOperationContext);
                 var responseMsg = this.Request.CreateResponse(HttpStatusCode.OK);
                 responseMsg.Content = json.ToStringContent();
                 IHttpActionResult response = ResponseMessage(responseMsg);
                 return response;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                TraceHelper.TraceError(thisOperationContext.OperationId, thisOperationContext.OperationName, ex);
                 return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
             }
             finally
             {
-
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
             }
         }
 
         [Route("api/subscriptions/{subscriptionId}/resourceGroupsAll")]
         public async Task<IHttpActionResult> GetAllResourceGroupsBySubscription(string subscriptionId)
         {
+            var thisOperationContext = new BaseOperationContext("ResourcesController:GetAllResourceGroupsBySubscription");
+            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
+            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
+            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
             try
             {
-                var client = Utils.GetResourceManagementClient(subscriptionId);
+                var client = Helpers.Helpers.GetResourceManagementClient(subscriptionId, thisOperationContext);
                 var list = await client.ResourceGroups.ListAsync(new ResourceGroupListParameters());
                 return this.Ok(list);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                TraceHelper.TraceError(thisOperationContext.OperationId, thisOperationContext.OperationName, ex);
                 return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
             }
             finally
             {
-
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
             }
         }
 
         [Route("api/subscriptions/{subscriptionId}/user-resource-groups")]
         public async Task<IHttpActionResult> GetAllUserResourceGroupsBySubscription(string subscriptionId)
         {
+            var thisOperationContext = new BaseOperationContext("ResourcesController:GetAllUserResourceGroupsBySubscription");
+            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
+            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
+            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
             try
             {
-                var json = await AzureResourceManagerUtil.GetUserResourceGroups(subscriptionId);
+                var json = await AzureResourceManagerHelper.GetUserResourceGroups(subscriptionId, thisOperationContext);
                 var responseMsg = this.Request.CreateResponse(HttpStatusCode.OK);
                 responseMsg.Content = json.ToStringContent();
                 IHttpActionResult response = ResponseMessage(responseMsg);
                 return response;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                TraceHelper.TraceError(thisOperationContext.OperationId, thisOperationContext.OperationName, ex);
                 return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
             }
             finally
             {
-
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
             }
         }
 
         [Route("api/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}")]
         public async Task<IHttpActionResult> GetResourceGroupResources(string resourceGroupName, string subscriptionId)
         {
+            var thisOperationContext = new BaseOperationContext("ResourcesController:GetResourceGroupResources");
+            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
+            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
+            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
             try
             {
-                var client = Utils.GetResourceManagementClient(subscriptionId);
+                var client = Helpers.Helpers.GetResourceManagementClient(subscriptionId, thisOperationContext);
                 var resourceList = await client.Resources.ListAsync(new ResourceListParameters { ResourceGroupName = resourceGroupName });
-                List<ResourceUsage> resourceUsageData = await billingHelper.GetUsage(resourceList, subscriptionId);
+                List<ResourceUsage> resourceUsageData = await billingHelper.GetUsage(resourceList, subscriptionId, thisOperationContext);
                 return this.Ok(resourceUsageData);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                TraceHelper.TraceError(thisOperationContext.OperationId, thisOperationContext.OperationName, ex);
                 return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
             }
             finally
             {
-
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
             }
         }
 
         [Route("api/subscriptions/{subscriptionId}/chartData/{resourceGroupName}")]
         public async Task<IHttpActionResult> GetChartData(string resourceGroupName, string subscriptionId)
         {
+            var thisOperationContext = new BaseOperationContext("ResourcesController:GetChartData");
+            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
+            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
+            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
             try
             {
-                var client = Utils.GetResourceManagementClient(subscriptionId);
+                var client = Helpers.Helpers.GetResourceManagementClient(subscriptionId, thisOperationContext);
                 var resourceList = await client.Resources.ListAsync(new ResourceListParameters { ResourceGroupName = resourceGroupName });
-                var chartData = await billingHelper.GetChartData(resourceList, subscriptionId);
+                var chartData = await billingHelper.GetChartData(resourceList, subscriptionId, thisOperationContext);
                 return this.Ok(chartData);
             }
             catch (Exception ex)
             {
-                Trace.TraceError(ex.Message);
+                TraceHelper.TraceError(thisOperationContext.OperationId, thisOperationContext.OperationName, ex);
                 return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
             }
             finally
             {
-
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
             }
         }
 
         [Route("api/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/full")]
         public async Task<IHttpActionResult> GetResourceGroupData(string resourceGroupName, string subscriptionId)
         {
+            var thisOperationContext = new BaseOperationContext("ResourcesController:GetResourceGroupData");
+            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
+            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
+            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
             try
             {
-                var client = Utils.GetResourceManagementClient(subscriptionId);
+                var client = Helpers.Helpers.GetResourceManagementClient(subscriptionId, thisOperationContext);
                 var resourceList = await client.Resources.ListAsync(new ResourceListParameters { ResourceGroupName = resourceGroupName });
 
-                var resourceUsageData = await billingHelper.GetUsage(resourceList, subscriptionId);
-                var chartData = await billingHelper.GetChartData(resourceList, subscriptionId);
+                var resourceUsageData = await billingHelper.GetUsage(resourceList, subscriptionId, thisOperationContext);
+                var chartData = await billingHelper.GetChartData(resourceList, subscriptionId, thisOperationContext);
 
                 var rgData = new ResourceGroupData
                 {
@@ -145,19 +179,25 @@ namespace AzureServiceCatalog.Web.Controllers
                 };
                 return this.Ok(rgData);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                TraceHelper.TraceError(thisOperationContext.OperationId, thisOperationContext.OperationName, ex);
                 return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
             }
             finally
             {
-
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
             }
         }
 
         [Route("api/resourceGroups")]
         public async Task<IHttpActionResult> Post(ResourceGroupResource resourceGroup)
         {
+            var thisOperationContext = new BaseOperationContext("ResourcesController:Post");
+            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
+            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
+            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
             try
             { 
                 if (resourceGroup == null)
@@ -169,38 +209,44 @@ namespace AzureServiceCatalog.Web.Controllers
                 } else
                 {
                     var securityHelper = new SecurityHelper();
-                    var userHasAccess = await securityHelper.CheckUserPermissionToSubscription(resourceGroup.SubscriptionId);
+                    var userHasAccess = await securityHelper.CheckUserPermissionToSubscription(resourceGroup.SubscriptionId, thisOperationContext);
                     if (!userHasAccess)
                     {
                         throw new HttpResponseException(HttpStatusCode.Forbidden);
                     }
 
-                    var client = Utils.GetResourceManagementClient(resourceGroup.SubscriptionId);
+                    var client = Helpers.Helpers.GetResourceManagementClient(resourceGroup.SubscriptionId, thisOperationContext);
                     var rg = new ResourceGroup(resourceGroup.Location);
                     var result = await client.ResourceGroups.CreateOrUpdateAsync(resourceGroup.ResourceGroupName, rg, new CancellationToken());
 
-                    await securityHelper.AddGroupsToAscContributorRole(resourceGroup.SubscriptionId, resourceGroup.ResourceGroupName, resourceGroup.ContributorGroups);
+                    await securityHelper.AddGroupsToAscContributorRole(resourceGroup.SubscriptionId, resourceGroup.ResourceGroupName, resourceGroup.ContributorGroups, thisOperationContext);
 
                     return this.Ok(resourceGroup);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                TraceHelper.TraceError(thisOperationContext.OperationId, thisOperationContext.OperationName, ex);
                 return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
             }
             finally
             {
-
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
             }
         }
 
         [Route("api/subscriptions/enrolled")]
         public async Task<IHttpActionResult> GetEnrolledSubscriptions()
         {
+            var thisOperationContext = new BaseOperationContext("ResourcesController:GetEnrolledSubscriptions");
+            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
+            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
+            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
             try
             {
-                var enrolledSubscriptions = this.coreRepository.GetEnrolledSubscriptionListByOrgId(ClaimsPrincipal.Current.TenantId());
-                var currentUsersGroups = await Utils.GetCurrentUserGroups();
+                var enrolledSubscriptions = this.coreRepository.GetEnrolledSubscriptionListByOrgId(ClaimsPrincipal.Current.TenantId(), thisOperationContext);
+                var currentUsersGroups = await Helpers.Helpers.GetCurrentUserGroups(thisOperationContext);
                 var filteredSubscriptions = enrolledSubscriptions.Where(sub =>
                 {
                     if (sub.ContributorGroups != null)
@@ -213,50 +259,64 @@ namespace AzureServiceCatalog.Web.Controllers
                 });
                 return Ok(filteredSubscriptions);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                TraceHelper.TraceError(thisOperationContext.OperationId, thisOperationContext.OperationName, ex);
                 return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
             }
             finally
             {
-
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
             }
         }
 
         [Route("api/subscriptions/all-app-enrolled")]
         public IHttpActionResult GetAllAppEnrolledSubscriptions()
         {
+            var thisOperationContext = new BaseOperationContext("ResourcesController:GetAllAppEnrolledSubscriptions");
+            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
+            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
+            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
             try
             {
-                var enrolledSubscriptions = this.coreRepository.GetEnrolledSubscriptionListByOrgId(ClaimsPrincipal.Current.TenantId());
+                var enrolledSubscriptions = this.coreRepository.GetEnrolledSubscriptionListByOrgId(ClaimsPrincipal.Current.TenantId(), thisOperationContext);
                 //var currentUsersGroups = ClaimsPrincipal.Current.Claims.Where(x => x.Type == "groups").Select(x => x.Value).ToList();
                 return Ok(enrolledSubscriptions);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                TraceHelper.TraceError(thisOperationContext.OperationId, thisOperationContext.OperationName, ex);
                 return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
             }
             finally
             {
-
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
             }
         }
 
         [Route("api/subscriptions/enrolled")]
         public IHttpActionResult GetEnrolledSubscriptions(string subscriptionId)
         {
+            var thisOperationContext = new BaseOperationContext("ResourcesController:GetEnrolledSubscriptions");
+            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
+            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
+            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
             try
             {
-                var subscription = this.coreRepository.GetSubscription(subscriptionId);
+                var subscription = this.coreRepository.GetSubscription(subscriptionId, thisOperationContext);
                 return Ok(subscription);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                TraceHelper.TraceError(thisOperationContext.OperationId, thisOperationContext.OperationName, ex);
                 return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
             }
             finally
             {
-
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
             }
         }
 

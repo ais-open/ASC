@@ -38,30 +38,39 @@ namespace AzureServiceCatalog.Web
 
         public override async Task OnAuthorizationAsync(HttpActionContext actionContext, CancellationToken cancellationToken)
         {
-            var org = await this.repository.GetOrganization(ClaimsPrincipal.Current.TenantId());
-            if (org == null)
+            var thisOperationContext = new BaseOperationContext("ADGroupAuthorizeAttribute:OnAuthorizationAsync");
+            try
             {
-                return; // must be part of Enrollment so Organization hasn't been established yet
-            }
+                var org = await this.repository.GetOrganization(ClaimsPrincipal.Current.TenantId(), thisOperationContext);
+                if (org == null)
+                {
+                    return; // must be part of Enrollment so Organization hasn't been established yet
+                }
 
-            List<string> currentUsersGroups = await Utils.GetCurrentUserGroups();
-            
-            if (allowedGroups.Contains(SecurityGroupType.CanCreate) && currentUsersGroups.Contains(org.CreateProductGroup))
-            {
-                hasAuthorization = true;
-            }
-            if (allowedGroups.Contains(SecurityGroupType.CanDepoy) && currentUsersGroups.Contains(org.DeployGroup))
-            {
-                hasAuthorization = true;
-            }
-            if (allowedGroups.Contains(SecurityGroupType.CanAdmin) && currentUsersGroups.Contains(org.AdminGroup))
-            {
-                hasAuthorization = true;
-            }
+                List<string> currentUsersGroups = await Helpers.Helpers.GetCurrentUserGroups(thisOperationContext);
 
-            if (!hasAuthorization)
+                if (allowedGroups.Contains(SecurityGroupType.CanCreate) && currentUsersGroups.Contains(org.CreateProductGroup))
+                {
+                    hasAuthorization = true;
+                }
+                if (allowedGroups.Contains(SecurityGroupType.CanDepoy) && currentUsersGroups.Contains(org.DeployGroup))
+                {
+                    hasAuthorization = true;
+                }
+                if (allowedGroups.Contains(SecurityGroupType.CanAdmin) && currentUsersGroups.Contains(org.AdminGroup))
+                {
+                    hasAuthorization = true;
+                }
+
+                if (!hasAuthorization)
+                {
+                    actionContext.Response = new HttpResponseMessage(HttpStatusCode.Forbidden);
+                }
+            }
+            finally
             {
-                actionContext.Response = new HttpResponseMessage(HttpStatusCode.Forbidden);
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
             }
         }
     }

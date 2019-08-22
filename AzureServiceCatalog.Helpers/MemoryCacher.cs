@@ -3,29 +3,57 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Caching;
 using System.Web;
+using AzureServiceCatalog.Models;
 
 namespace AzureServiceCatalog.Helpers
 {
     public static class MemoryCacher
     {
-        public static object GetValue(string key)
+        public static object GetValue(string key, BaseOperationContext parentOperationContext)
         {
-            MemoryCache memoryCache = MemoryCache.Default;
-            return memoryCache.Get(key);
-        }
-
-        public static bool Add(string key, object value, DateTimeOffset absExpiration)
-        {
-            MemoryCache memoryCache = MemoryCache.Default;
-            return memoryCache.Add(key, value, absExpiration);
-        }
-
-        public static void Delete(string key)
-        {
-            MemoryCache memoryCache = MemoryCache.Default;
-            if (memoryCache.Contains(key))
+            var thisOperationContext = new BaseOperationContext(parentOperationContext, "MemoryCacher:GetValue");
+            try
             {
-                memoryCache.Remove(key);
+                MemoryCache memoryCache = MemoryCache.Default;
+                return memoryCache.Get(key);
+            }
+            finally
+            {
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
+            }
+        }
+
+        public static bool Add(string key, object value, DateTimeOffset absExpiration, BaseOperationContext parentOperationContext)
+        {
+            var thisOperationContext = new BaseOperationContext(parentOperationContext, "MemoryCacher:Add");
+            try
+            {
+                MemoryCache memoryCache = MemoryCache.Default;
+                return memoryCache.Add(key, value, absExpiration);
+            }
+            finally
+            {
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
+            }
+        }
+
+        public static void Delete(string key, BaseOperationContext parentOperationContext)
+        {
+            var thisOperationContext = new BaseOperationContext(parentOperationContext, "MemoryCacher:Delete");
+            try
+            {
+                MemoryCache memoryCache = MemoryCache.Default;
+                if (memoryCache.Contains(key))
+                {
+                    memoryCache.Remove(key);
+                }
+            }
+            finally
+            {
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
             }
         }
     }

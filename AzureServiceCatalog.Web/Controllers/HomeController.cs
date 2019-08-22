@@ -20,6 +20,8 @@ namespace AzureServiceCatalog.Web.Controllers
         private TableCoreRepository coreRepository = new TableCoreRepository();
         public ActionResult Index(string directoryName, bool activation = false, bool activationLogin = false)
         {
+            var thisOperationContext = new BaseOperationContext("HomeController:Index");
+            thisOperationContext.IpAddress = HttpContext.Request.UserHostAddress;
             try
             {
                 this.ViewBag.AppVersion = this.GetType().Assembly.GetName().Version.ToString();
@@ -36,7 +38,7 @@ namespace AzureServiceCatalog.Web.Controllers
                 {
                     if (!activation)
                     {
-                        var org = this.coreRepository.GetOrganizationSync(ClaimsPrincipal.Current.TenantId());
+                        var org = this.coreRepository.GetOrganizationSync(ClaimsPrincipal.Current.TenantId(), thisOperationContext);
                         //If authenticated but not enrolled
                         if (org == null)
                         {
@@ -55,9 +57,9 @@ namespace AzureServiceCatalog.Web.Controllers
             }
             finally
             {
-
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
             }
-            
         }
     }
 }

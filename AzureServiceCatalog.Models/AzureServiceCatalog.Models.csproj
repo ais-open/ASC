@@ -156,7 +156,10 @@
     <Compile Include="AccountViewModels.cs" />
     <Compile Include="ActivationInfo.cs" />
     <Compile Include="ADGroup.cs" />
+    <Compile Include="AscDeployment.cs" />
     <Compile Include="AuthType.cs" />
+    <Compile Include="BaseContext.cs" />
+    <Compile Include="BaseOperationContext.cs" />
     <Compile Include="Billing\BaseCost.cs" />
     <Compile Include="Billing\BaseFilterParameters.cs" />
     <Compile Include="Billing\ChartData.cs" />

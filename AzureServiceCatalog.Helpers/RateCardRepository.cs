@@ -19,39 +19,66 @@ namespace AzureServiceCatalog.Helpers
         /// </summary>
         private const string RateCardCacheNameFormat = "RateCard_{0}";
 
-        public async Task<RateCard> GetRateCardData(string subscriptionId)
+        public async Task<RateCard> GetRateCardData(string subscriptionId, BaseOperationContext parentOperationContext)
         {
-            RateCardFilterParameters rateCardFilterParameters = RateCardFilterParameters.GetRateCardFilter();
-            rateCardFilterParameters.SubscriptionId = subscriptionId;
-
-            var rateCardData = await GetRateCardData(rateCardFilterParameters);
-            return rateCardData;
-        }
-
-        public async Task<RateCard> GetRateCardData(RateCardFilterParameters rateCardFilter)
-        {
-            string rateCardCacheName = string.Format(RateCardCacheNameFormat, rateCardFilter.OfferId);
-            RateCard rateCardData = MemoryCacher.GetValue(rateCardCacheName) as RateCard;
-            if (rateCardData == null)
+            var thisOperationContext = new BaseOperationContext(parentOperationContext, "RateCardRepository:GetRateCardData");
+            try
             {
-                var rateCardResponseData = await RequestRateCardDataFromService(rateCardFilter);
-                rateCardData = await Task.Factory.StartNew(() => JsonConvert.DeserializeObject<RateCard>(rateCardResponseData));
-                //Cache the RateCardData
-                MemoryCacher.Add(rateCardCacheName, rateCardData, DateTime.Now.AddHours(1));
-            }
+                RateCardFilterParameters rateCardFilterParameters = RateCardFilterParameters.GetRateCardFilter();
+                rateCardFilterParameters.SubscriptionId = subscriptionId;
 
-            return rateCardData;
+                var rateCardData = await GetRateCardData(rateCardFilterParameters, thisOperationContext);
+                return rateCardData;
+            }
+            finally
+            {
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
+            }
         }
 
-        private async Task<string> RequestRateCardDataFromService(RateCardFilterParameters rateCardFilter)
+        public async Task<RateCard> GetRateCardData(RateCardFilterParameters rateCardFilter, BaseOperationContext parentOperationContext)
         {
-            string rateCardUri = string.Format(rateCardApiUrlFormat,
-                rateCardFilter.SubscriptionId,
-                rateCardFilter.GetFormattedFilter());
+            var thisOperationContext = new BaseOperationContext(parentOperationContext, "RateCardRepository:GetRateCardData");
+            try
+            {
+                string rateCardCacheName = string.Format(RateCardCacheNameFormat, rateCardFilter.OfferId, thisOperationContext);
+                RateCard rateCardData = MemoryCacher.GetValue(rateCardCacheName, thisOperationContext) as RateCard;
+                if (rateCardData == null)
+                {
+                    var rateCardResponseData = await RequestRateCardDataFromService(rateCardFilter, thisOperationContext);
+                    rateCardData = await Task.Factory.StartNew(() => JsonConvert.DeserializeObject<RateCard>(rateCardResponseData));
+                    //Cache the RateCardData
+                    MemoryCacher.Add(rateCardCacheName, rateCardData, DateTime.Now.AddHours(1), thisOperationContext);
+                }
 
-            var client = Utils.GetAuthenticatedHttpClientForApp();
+                return rateCardData;
+            }
+            finally
+            {
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
+            }
+        }
 
-            return await client.GetStringAsync(rateCardUri);
+        private async Task<string> RequestRateCardDataFromService(RateCardFilterParameters rateCardFilter, BaseOperationContext parentOperationContext)
+        {
+            var thisOperationContext = new BaseOperationContext(parentOperationContext, "RateCardRepository:RequestRateCardDataFromService");
+            try
+            {
+                string rateCardUri = string.Format(rateCardApiUrlFormat,
+                    rateCardFilter.SubscriptionId,
+                    rateCardFilter.GetFormattedFilter());
+
+                var client = Helpers.GetAuthenticatedHttpClientForApp(thisOperationContext);
+
+                return await client.GetStringAsync(rateCardUri);
+            }
+            finally
+            {
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
+            }
         }
     }
 }

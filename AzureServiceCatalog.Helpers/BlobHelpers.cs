@@ -19,34 +19,52 @@ namespace AzureServiceCatalog.Helpers
     public static class BlobHelpers
     {
 
-        public static void CreateInitialTablesAndBlobContainers(string accountName, string key)
+        public static void CreateInitialTablesAndBlobContainers(string accountName, string key, BaseOperationContext parentOperationContext)
         {
-            var storageAccount = new CloudStorageAccount(new StorageCredentials(accountName, key), Config.StorageAccountEndpointSuffix, true);
-            CreateInitialTables(storageAccount);
-            CreateInitialBlobContainers(storageAccount);
+            var thisOperationContext = new BaseOperationContext(parentOperationContext, "BlobHelpers:CreateInitialTablesAndBlobContainers");
+            try
+            {
+                var storageAccount = new CloudStorageAccount(new StorageCredentials(accountName, key), Config.StorageAccountEndpointSuffix, true);
+                CreateInitialTables(storageAccount, thisOperationContext);
+                CreateInitialBlobContainers(storageAccount, thisOperationContext);
+            }
+            finally
+            {
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
+            }
         }
 
-        public static async Task<string> SaveToBlobContainer(string containerName, Stream stream, string fileExtension, string contentType, string oldBlobAbsolutePath = null)
+        public static async Task<string> SaveToBlobContainer(string containerName, Stream stream, string fileExtension, string contentType, BaseOperationContext parentOperationContext, string oldBlobAbsolutePath = null)
         {
-            CloudBlobContainer cloudBlobContainer = await GetOrCreateBlobContainer(containerName);
+            var thisOperationContext = new BaseOperationContext(parentOperationContext, "BlobHelpers:SaveToBlobContainer");
+            try
+            {
+                CloudBlobContainer cloudBlobContainer = await GetOrCreateBlobContainer(containerName, thisOperationContext);
 
-            string blockBlobReference = null;
-            if (oldBlobAbsolutePath != null)
-            {
-                blockBlobReference = oldBlobAbsolutePath.Split('/').Last();
-            }
-            if (blockBlobReference == null || blockBlobReference.Split('.').Last() != fileExtension)
-            {
-                if (blockBlobReference != null)
+                string blockBlobReference = null;
+                if (oldBlobAbsolutePath != null)
                 {
-                    cloudBlobContainer.GetBlockBlobReference(blockBlobReference).Delete();
+                    blockBlobReference = oldBlobAbsolutePath.Split('/').Last();
                 }
-                blockBlobReference = Guid.NewGuid().ToString() + "." + fileExtension;
+                if (blockBlobReference == null || blockBlobReference.Split('.').Last() != fileExtension)
+                {
+                    if (blockBlobReference != null)
+                    {
+                        cloudBlobContainer.GetBlockBlobReference(blockBlobReference).Delete();
+                    }
+                    blockBlobReference = Guid.NewGuid().ToString() + "." + fileExtension;
+                }
+                CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(blockBlobReference);
+                cloudBlockBlob.Properties.ContentType = contentType;
+                cloudBlockBlob.UploadFromStream(stream);
+                return cloudBlockBlob.Uri.AbsoluteUri;
             }
-            CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(blockBlobReference);
-            cloudBlockBlob.Properties.ContentType = contentType;
-            cloudBlockBlob.UploadFromStream(stream);
-            return cloudBlockBlob.Uri.AbsoluteUri;
+            finally
+            {
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
+            }
         }
 
         public static string RandomString(int length)
@@ -58,57 +76,94 @@ namespace AzureServiceCatalog.Helpers
         }
         #region Private Members
 
-        private static async Task<CloudBlobClient> CreateBlobClient()
+        private static async Task<CloudBlobClient> CreateBlobClient(BaseOperationContext parentOperationContext)
         {
-            var identityHelper = new IdentityHelper();
-            var accountName = await identityHelper.GetStorageName();
-            var accountKey = await identityHelper.GetStorageKey();
-            var storageAccount = new CloudStorageAccount(new StorageCredentials(accountName, accountKey), Config.StorageAccountEndpointSuffix, true);
-            return storageAccount.CreateCloudBlobClient();
+            var thisOperationContext = new BaseOperationContext(parentOperationContext, "BlobHelpers:CreateBlobClient");
+            try
+            {
+                var identityHelper = new IdentityHelper();
+                var accountName = await identityHelper.GetStorageName(thisOperationContext);
+                var accountKey = await identityHelper.GetStorageKey(thisOperationContext);
+                var storageAccount = new CloudStorageAccount(new StorageCredentials(accountName, accountKey), Config.StorageAccountEndpointSuffix, true);
+                return storageAccount.CreateCloudBlobClient();
+            }
+            finally
+            {
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
+            }
         }
+
         /// <summary>
         /// Gets a blob container from Azure Blob Storage. If one does not exist with the specified container reference, then one is created.
         /// </summary>
         /// <param name="blobContainerReferenceString">Blob container reference string.</param>
         /// <param name="accessType">Access type. If not specified, the container is made type "Blob", making all contents publicly accessible.</param>
         /// <returns>The retrieved or created CloudBlobContainer.</returns>
-        private static async Task<CloudBlobContainer> GetOrCreateBlobContainer(string blobContainerReferenceString, BlobContainerPublicAccessType accessType = BlobContainerPublicAccessType.Blob)
+        private static async Task<CloudBlobContainer> GetOrCreateBlobContainer(string blobContainerReferenceString, BaseOperationContext parentOperationContext, BlobContainerPublicAccessType accessType = BlobContainerPublicAccessType.Blob)
         {
-            var blobClient = await CreateBlobClient();
-            var blobContainer = blobClient.GetContainerReference(blobContainerReferenceString);
-            blobContainer.CreateIfNotExists(accessType);
-            return blobContainer;
-        }
-
-        private static void CreateInitialTables(CloudStorageAccount storageAccount)
-        {
-            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
-            List<string> initialTableKeys = new List<string>()
+            var thisOperationContext = new BaseOperationContext(parentOperationContext, "BlobHelpers:GetOrCreateBlobContainer");
+            try
             {
-                Tables.Products,
-                Tables.PolicyLookupPaths
-            };
-            foreach (string initialTableKey in initialTableKeys)
+                var blobClient = await CreateBlobClient(thisOperationContext);
+                var blobContainer = blobClient.GetContainerReference(blobContainerReferenceString);
+                blobContainer.CreateIfNotExists(accessType);
+                return blobContainer;
+            }
+            finally
             {
-                tableClient.GetTableReference(initialTableKey).CreateIfNotExists();
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
             }
         }
-        private static void CreateInitialBlobContainers(CloudStorageAccount storageAccount)
+
+        private static void CreateInitialTables(CloudStorageAccount storageAccount, BaseOperationContext parentOperationContext)
         {
-            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
-            List<string> initialBlobContainerKeys = new List<string>()
+            var thisOperationContext = new BaseOperationContext(parentOperationContext, "BlobHelpers:CreateInitialTables");
+            try
             {
-                BlobContainers.ProductImages
-            };
-            foreach (string initialBlobContainerKey in initialBlobContainerKeys)
-            {
-                CloudBlobContainer cloudBlobContainer = blobClient.GetContainerReference(initialBlobContainerKey);
-                cloudBlobContainer.CreateIfNotExists();
-                cloudBlobContainer.SetPermissions(
-                new BlobContainerPermissions
+                CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
+                List<string> initialTableKeys = new List<string>(){
+                    Tables.Products,
+                    Tables.PolicyLookupPaths
+                };
+                foreach (string initialTableKey in initialTableKeys)
                 {
-                    PublicAccess = BlobContainerPublicAccessType.Blob
-                });
+                    tableClient.GetTableReference(initialTableKey).CreateIfNotExists();
+                }
+            }
+            finally
+            {
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
+            }
+        }
+
+        private static void CreateInitialBlobContainers(CloudStorageAccount storageAccount, BaseOperationContext parentOperationContext)
+        {
+            var thisOperationContext = new BaseOperationContext(parentOperationContext, "BlobHelpers:CreateInitialBlobContainers");
+            try
+            {
+                CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+                List<string> initialBlobContainerKeys = new List<string>()
+                {
+                    BlobContainers.ProductImages
+                };
+                foreach (string initialBlobContainerKey in initialBlobContainerKeys)
+                {
+                    CloudBlobContainer cloudBlobContainer = blobClient.GetContainerReference(initialBlobContainerKey);
+                    cloudBlobContainer.CreateIfNotExists();
+                    cloudBlobContainer.SetPermissions(
+                    new BlobContainerPermissions
+                    {
+                        PublicAccess = BlobContainerPublicAccessType.Blob
+                    });
+                }
+            }
+            finally
+            {
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
             }
         }
 

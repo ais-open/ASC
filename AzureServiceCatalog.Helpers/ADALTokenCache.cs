@@ -15,19 +15,28 @@ namespace AzureServiceCatalog.Helpers
         PerUserTokenCache Cache;
         private TableCoreRepository coreRepository = new TableCoreRepository();
         // constructor
-        public AdalTokenCache(string user)
+        public AdalTokenCache(string user, BaseOperationContext parentOperationContext)
         {
-            // associate the cache to the current user of the web app
-            User = user;
+            var thisOperationContext = new BaseOperationContext(parentOperationContext, "AdalTokenCache:AdalTokenCache");
+            try
+            {
+                // associate the cache to the current user of the web app
+                User = user;
 
-            this.AfterAccess = AfterAccessNotification;
-            this.BeforeAccess = BeforeAccessNotification;
-            this.BeforeWrite = BeforeWriteNotification;
+                this.AfterAccess = AfterAccessNotification;
+                this.BeforeAccess = BeforeAccessNotification;
+                this.BeforeWrite = BeforeWriteNotification;
 
-            // look up the entry in the DB
-            Cache = this.coreRepository.GetPerUserTokenCacheListById(User).FirstOrDefault();
-            // place the entry in memory
-            this.Deserialize((Cache == null) ? null : Cache.cacheBits);
+                // look up the entry in the DB
+                Cache = this.coreRepository.GetPerUserTokenCacheListById(User, thisOperationContext).FirstOrDefault();
+                // place the entry in memory
+                this.Deserialize((Cache == null) ? null : Cache.cacheBits);
+            }
+            finally
+            {
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
+            }
         }
 
         // clean up the DB
@@ -41,53 +50,73 @@ namespace AzureServiceCatalog.Helpers
         // This is your chance to update the in-memory copy from the DB, if the in-memory version is stale
         void BeforeAccessNotification(TokenCacheNotificationArgs args)
         {
-            if (Cache == null)
+            var thisOperationContext = new BaseOperationContext("AdalTokenCache:BeforeAccessNotification");
+            try
             {
-                // first time access
-                Cache = this.coreRepository.GetPerUserTokenCacheListById(User).FirstOrDefault();
-            }
-            else
-            {   // retrieve last write from the DB
-                var status = from e in this.coreRepository.GetPerUserTokenCacheListById(User)
-                             select new
-                             {
-                                 LastWrite = e.LastWrite
-                             };
-                // if the in-memory copy is older than the persistent copy
-                if (status.Count() > 0 && status.First().LastWrite > Cache.LastWrite)
-                //// read from from storage, update in-memory copy
+                if (Cache == null)
                 {
-                    Cache = this.coreRepository.GetPerUserTokenCacheListById(User).FirstOrDefault();
+                    // first time access
+                    Cache = this.coreRepository.GetPerUserTokenCacheListById(User, thisOperationContext).FirstOrDefault();
                 }
+                else
+                {   // retrieve last write from the DB
+                    var status = from e in this.coreRepository.GetPerUserTokenCacheListById(User, thisOperationContext)
+                                 select new
+                                 {
+                                     LastWrite = e.LastWrite
+                                 };
+                    // if the in-memory copy is older than the persistent copy
+                    if (status.Count() > 0 && status.First().LastWrite > Cache.LastWrite)
+                    //// read from from storage, update in-memory copy
+                    {
+                        Cache = this.coreRepository.GetPerUserTokenCacheListById(User, thisOperationContext).FirstOrDefault();
+                    }
+                }
+                this.Deserialize((Cache == null) ? null : Cache.cacheBits);
             }
-            this.Deserialize((Cache == null) ? null : Cache.cacheBits);
+            finally
+            {
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
+            }
         }
+
         // Notification raised after ADAL accessed the cache.
         // If the HasStateChanged flag is set, ADAL changed the content of the cache
         void AfterAccessNotification(TokenCacheNotificationArgs args)
         {
-            // if state changed
-            if (this.HasStateChanged)
+            var thisOperationContext = new BaseOperationContext("AdalTokenCache:AfterAccessNotification");
+            try
             {
-                // check for an existing entry
-                Cache = this.coreRepository.GetPerUserTokenCacheListById(User).FirstOrDefault();
-                if (Cache == null)
+                // if state changed
+                if (this.HasStateChanged)
                 {
-                    // if no existing entry for that user, create a new one
-                    Cache = new PerUserTokenCache
+                    // check for an existing entry
+                    Cache = this.coreRepository.GetPerUserTokenCacheListById(User, thisOperationContext).FirstOrDefault();
+                    if (Cache == null)
                     {
-                        webUserUniqueId = User,
-                    };
+                        // if no existing entry for that user, create a new one
+                        Cache = new PerUserTokenCache
+                        {
+                            webUserUniqueId = User,
+                        };
+                    }
+
+                    // update the cache contents and the last write timestamp
+                    Cache.cacheBits = this.Serialize();
+                    Cache.LastWrite = DateTime.Now;
+
+                    // update the DB with modification or new entry
+                    this.coreRepository.SavePerUserTokenCaches(Cache, thisOperationContext);
+                    this.HasStateChanged = false;
                 }
-
-                // update the cache contents and the last write timestamp
-                Cache.cacheBits = this.Serialize();
-                Cache.LastWrite = DateTime.Now;
-
-                // update the DB with modification or new entry
-                this.coreRepository.SavePerUserTokenCaches(Cache);
-                this.HasStateChanged = false;
             }
+            finally
+            {
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
+            }
+            
         }
         void BeforeWriteNotification(TokenCacheNotificationArgs args)
         {

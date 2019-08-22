@@ -6,6 +6,8 @@ using AzureServiceCatalog.Helpers;
 using AzureServiceCatalog.Web.Models;
 using Newtonsoft.Json.Linq;
 using System.Net;
+using System.Web;
+using System.Security.Claims;
 
 namespace AzureServiceCatalog.Web.Controllers
 {
@@ -13,6 +15,10 @@ namespace AzureServiceCatalog.Web.Controllers
     {
         public async Task<IHttpActionResult> Post(ActivationInfo activationInfo)
         {
+            var thisOperationContext = new BaseOperationContext("ActivationController:Post");
+            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
+            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
+            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
             try
             {
                 if (activationInfo == null)
@@ -24,21 +30,25 @@ namespace AzureServiceCatalog.Web.Controllers
                 } else
                 {
                     var activationHelper = new ActivationHelper();
-                    await activationHelper.SaveActivation(activationInfo);
+                    await activationHelper.SaveActivation(activationInfo, thisOperationContext);
                     return this.Ok();
                 }
             }
             catch (UnauthorizedAccessException authEx)
             {
-                return InternalServerError(authEx);
+                TraceHelper.TraceError(thisOperationContext.OperationId, thisOperationContext.OperationName, authEx);
+                return Content(HttpStatusCode.InternalServerError, JObject.FromObject(authEx));
+
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                TraceHelper.TraceError(thisOperationContext.OperationId, thisOperationContext.OperationName, ex);
                 return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
             }
             finally
             {
-
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
             }
         }
     }

@@ -10,6 +10,8 @@ using AzureServiceCatalog.Helpers;
 using AzureServiceCatalog.Models;
 using AzureServiceCatalog.Web.Models;
 using Newtonsoft.Json.Linq;
+using System.Web;
+using System.Security.Claims;
 
 namespace AzureServiceCatalog.Web.Controllers
 {
@@ -19,41 +21,57 @@ namespace AzureServiceCatalog.Web.Controllers
 
         public async Task<IHttpActionResult> Get()
         {
+            var thisOperationContext = new BaseOperationContext("TemplatesController:Get");
+            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
+            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
+            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
             try
             {
-                var list = await repository.GetTemplates();
+                var list = await repository.GetTemplates(thisOperationContext);
                 return this.Ok(list);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                TraceHelper.TraceError(thisOperationContext.OperationId, thisOperationContext.OperationName, ex);
                 return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
             }
             finally
             {
-
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
             }
         }
 
         public async Task<IHttpActionResult> Get( string id)
         {
+            var thisOperationContext = new BaseOperationContext("TemplatesController:Get");
+            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
+            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
+            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
             try
             {
-                var item = await repository.GetTemplate(id);
+                var item = await repository.GetTemplate(id, thisOperationContext);
                 return this.Ok(item);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                TraceHelper.TraceError(thisOperationContext.OperationId, thisOperationContext.OperationName, ex);
                 return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
             }
             finally
             {
-
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
             }
         }
 
         [ADGroupAuthorize(SecurityGroupType.CanCreate)]
         public async Task<IHttpActionResult> Post(TemplateViewModel template)
         {
+            var thisOperationContext = new BaseOperationContext("TemplatesController:Post");
+            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
+            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
+            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
             try
             {
                 if (template == null)
@@ -65,35 +83,43 @@ namespace AzureServiceCatalog.Web.Controllers
                     return Content(HttpStatusCode.BadRequest, JObject.FromObject(errorInformation));
                 } else
                 {
-                    TemplateViewModel savedTemplateEntity = await repository.SaveTemplate(template);
+                    TemplateViewModel savedTemplateEntity = await repository.SaveTemplate(template, thisOperationContext);
                     return this.Ok(savedTemplateEntity);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                TraceHelper.TraceError(thisOperationContext.OperationId, thisOperationContext.OperationName, ex);
                 return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
             }
             finally
             {
-
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
             }
         }
 
         [ADGroupAuthorize(SecurityGroupType.CanCreate)]
         public async Task<IHttpActionResult> Delete(string name)
         {
+            var thisOperationContext = new BaseOperationContext("TemplatesController:Delete");
+            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
+            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
+            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
             try
             {
-                await repository.DeleteTemplate(name);
+                await repository.DeleteTemplate(name, thisOperationContext);
                 return this.StatusCode(HttpStatusCode.NoContent);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-               return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
+                TraceHelper.TraceError(thisOperationContext.OperationId, thisOperationContext.OperationName, ex);
+                return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
             }
             finally
             {
-
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
             }
         }
 
@@ -101,9 +127,13 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("api/templates/{id}/download")]
         public async Task<IHttpActionResult> Download(string id)
         {
+            var thisOperationContext = new BaseOperationContext("TemplatesController:Download");
+            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
+            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
+            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
             try
             {
-                var item = await repository.GetTemplate(id);
+                var item = await repository.GetTemplate(id, thisOperationContext);
                 var byteMemoryStream = new MemoryStream(Encoding.UTF8.GetBytes(item.TemplateData));
                 HttpResponseMessage responseMsg = new HttpResponseMessage(HttpStatusCode.OK);
                 responseMsg.Content = new StreamContent(byteMemoryStream);
@@ -115,15 +145,16 @@ namespace AzureServiceCatalog.Web.Controllers
                 IHttpActionResult response = ResponseMessage(responseMsg);
                 return response;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                TraceHelper.TraceError(thisOperationContext.OperationId, thisOperationContext.OperationName, ex);
                 return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
             }
             finally
             {
-
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
             }
         }
-
     }
 }

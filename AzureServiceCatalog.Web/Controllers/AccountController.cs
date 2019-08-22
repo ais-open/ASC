@@ -21,8 +21,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.Owin;
-using AzureServiceCatalog.Web.Models;
-using Newtonsoft.Json.Linq;
+using AzureServiceCatalog.Helpers;
+using AzureServiceCatalog.Models;
+using System.Security.Claims;
 
 namespace AzureServiceCatalog.Web.Controllers
 {
@@ -34,6 +35,8 @@ namespace AzureServiceCatalog.Web.Controllers
         // configured to return to the home page upon successful authentication
         public void SignIn(string directoryName, bool isMsa = false, bool activation = false)
         {
+            var thisOperationContext = new BaseOperationContext("AccountController:SignIn");
+            thisOperationContext.IpAddress =  HttpContext.Request.UserHostAddress;
             try
             {
                 // note configuration (keys, etc…) will not necessarily understand this authority.
@@ -53,12 +56,15 @@ namespace AzureServiceCatalog.Web.Controllers
             }
             finally 
             {
-                
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
             }
         }
 
         public void AppSourceActivation()
         {
+            var thisOperationContext = new BaseOperationContext("AccountController:AppSourceActivation");
+            thisOperationContext.IpAddress = HttpContext.Request.UserHostAddress;
             try
             {
                 var redirectUrl = this.Url.Action("Index", "Home", new { activation = true });
@@ -66,7 +72,8 @@ namespace AzureServiceCatalog.Web.Controllers
             }
             finally
             {
-                
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
             }
         }
 
@@ -74,6 +81,10 @@ namespace AzureServiceCatalog.Web.Controllers
         // after sign out, it redirects to Post_Logout_Redirect_Uri (as set in Startup.Auth.cs)
         public void SignOut()
         {
+            var thisOperationContext = new BaseOperationContext("AccountController:SignOut");
+            thisOperationContext.IpAddress = HttpContext.Request.UserHostAddress;
+            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
+            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
             try
             {
                 HttpContext.GetOwinContext().Authentication.SignOut(
@@ -81,8 +92,9 @@ namespace AzureServiceCatalog.Web.Controllers
             }
             finally
             {
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
             }
-
         }
     }
 }

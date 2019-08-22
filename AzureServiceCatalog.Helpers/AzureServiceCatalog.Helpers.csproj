@@ -155,29 +155,30 @@
   <ItemGroup>
     <Compile Include="ActivationHelper.cs" />
     <Compile Include="ADALTokenCache.cs" />
-    <Compile Include="ArmHttpClient.cs" />
-    <Compile Include="AzureADGraphAPIUtil.cs" />
-    <Compile Include="AzureResourceMangerUtil.cs" />
+    <Compile Include="ArmHttpHelper.cs" />
+    <Compile Include="AzureADGraphAPIHelper.cs" />
+    <Compile Include="AzureResourceMangerHelper.cs" />
     <Compile Include="BillingRepository.cs" />
     <Compile Include="Billing\BracketCost.cs" />
     <Compile Include="Billing\CostStrategyContext.cs" />
     <Compile Include="Billing\ScaledCost.cs" />
     <Compile Include="BlobHelpers.cs" />
+    <Compile Include="TraceHelper.cs" />
     <Compile Include="DeploymentHelper.cs" />
     <Compile Include="IdentityHelper.cs" />
     <Compile Include="LinkHeaderParser.cs" />
     <Compile Include="MemoryCacher.cs" />
     <Compile Include="NotificationHelper.cs" />
-    <Compile Include="PoliciesClient.cs" />
+    <Compile Include="PoliciesHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RateCardRepository.cs" />
-    <Compile Include="RbacClient.cs" />
+    <Compile Include="RbacHelper.cs" />
     <Compile Include="BillingHelper.cs" />
     <Compile Include="SecurityHelper.cs" />
     <Compile Include="TableCoreRepository.cs" />
     <Compile Include="TableRepository.cs" />
-    <Compile Include="TableUtil.cs" />
-    <Compile Include="Utils.cs" />
+    <Compile Include="TableHelper.cs" />
+    <Compile Include="Helpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

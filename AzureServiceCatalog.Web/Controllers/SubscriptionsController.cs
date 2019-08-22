@@ -10,6 +10,7 @@ using AzureServiceCatalog.Models;
 using AzureServiceCatalog.Web.Models;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 
 namespace AzureServiceCatalog.Web.Controllers
 {
@@ -21,11 +22,15 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("")]
         public async Task<IHttpActionResult> Get()
         {
+            var thisOperationContext = new BaseOperationContext("SubscriptionsController:Get");
+            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
+            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
+            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
             try
             {
                 var tenantId = ClaimsPrincipal.Current.TenantId();
-                var subscriptions = await AzureResourceManagerUtil.GetUserSubscriptions(tenantId);
-                var dbSubscriptions = this.coreRepository.GetSubscriptionListByOrgId(tenantId);
+                var subscriptions = await AzureResourceManagerHelper.GetUserSubscriptions(tenantId, thisOperationContext);
+                var dbSubscriptions = this.coreRepository.GetSubscriptionListByOrgId(tenantId, thisOperationContext);
 
                 foreach (var subscription in subscriptions)
                 {
@@ -42,13 +47,15 @@ namespace AzureServiceCatalog.Web.Controllers
                 }
                 return this.Ok(subscriptions);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                TraceHelper.TraceError(thisOperationContext.OperationId, thisOperationContext.OperationName, ex);
                 return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
             }
             finally
             {
-
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
             }
         }
 
@@ -56,6 +63,10 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("")]
         public async Task<IHttpActionResult> Post(SubscriptionsViewModel subscriptionsVM)
         {
+            var thisOperationContext = new BaseOperationContext("SubscriptionsController:Post");
+            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
+            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
+            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
             try
             {
                 if (subscriptionsVM == null)
@@ -67,17 +78,19 @@ namespace AzureServiceCatalog.Web.Controllers
                 } else
                 {
                     var activationHelper = new ActivationHelper();
-                    await activationHelper.SaveEnrolledSubscriptions(subscriptionsVM);
+                    await activationHelper.SaveEnrolledSubscriptions(subscriptionsVM, thisOperationContext);
                     return this.Ok();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                TraceHelper.TraceError(thisOperationContext.OperationId, thisOperationContext.OperationName, ex);
                 return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
             }
             finally
             {
-
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
             }
         }
     }

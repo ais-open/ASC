@@ -30,84 +30,34 @@ namespace AzureServiceCatalog.Helpers
         /// The ARM template data is now stored as bytes and Wintellect library is used to automatically split and join the byte array based on pre-defined number of splits.
         /// Refer <see cref="TemplateEntity"/> for implementation details
         /// </summary>
-        public async Task<List<TemplateViewModel>> GetTemplates()
+        public async Task<List<TemplateViewModel>> GetTemplates(BaseOperationContext parentOperationContext)
         {
-            var query = new TableQuery();
-            query.FilterString = new TableFilterBuilder<TemplateEntity>()
-                .And(te => te.PartitionKey, CompareOp.EQ, partitionKey);
-
-            var table = await TableUtil.GetTableReference(Tables.Products);
-            var azTable = new AzureTable(table);
-
-            var dynamicTemplateEntities = table.ExecuteQuery(query);
-            var templateList = new List<TemplateViewModel>();
-
-            foreach(var entity in dynamicTemplateEntities)
+            var thisOperationContext = new BaseOperationContext(parentOperationContext, "TableRepository:GetTemplates");
+            try
             {
-                var templateEntity = new TemplateEntity(azTable, entity);
-                templateList.Add(TemplateEntity.MapToViewModel(templateEntity));
+                var query = new TableQuery();
+                query.FilterString = new TableFilterBuilder<TemplateEntity>()
+                    .And(te => te.PartitionKey, CompareOp.EQ, partitionKey);
+
+                var table = await TableHelper.GetTableReference(Tables.Products, thisOperationContext);
+                var azTable = new AzureTable(table);
+
+                var dynamicTemplateEntities = table.ExecuteQuery(query);
+                var templateList = new List<TemplateViewModel>();
+
+                foreach (var entity in dynamicTemplateEntities)
+                {
+                    var templateEntity = new TemplateEntity(azTable, entity);
+                    templateList.Add(TemplateEntity.MapToViewModel(templateEntity));
+                }
+
+                return templateList;
             }
-
-            return templateList;
-        }
-
-        /// <summary>
-        /// This implementation uses Wintellect Azure Table library to overcome the limitation of 32KB for string attributes.
-        /// The ARM template data is now stored as bytes and Wintellect library is used to automatically split and join the byte array based on pre-defined number of splits.
-        /// Refer <see cref="TemplateEntity"/> for implementation details
-        /// </summary>
-        public async Task<TemplateViewModel> GetTemplate(string templateName)
-        {
-            var table = await TableUtil.GetTableReference(Tables.Products);
-            var azTable = new AzureTable(table);
-
-            var dynamicTemplateEntity =  await TemplateEntity.FindAsync(azTable, partitionKey, templateName);
-
-            var templateViewModel = new TemplateEntity(azTable, dynamicTemplateEntity);
-            return TemplateEntity.MapToViewModel(templateViewModel);
-        }
-
-        /// <summary>
-        /// This implementation uses Wintellect Azure Table library to overcome the limitation of 32KB for string attributes.
-        /// The ARM template data is now stored as bytes and Wintellect library is used to automatically split and join the byte array based on pre-defined number of splits.
-        /// Refer <see cref="TemplateEntity"/> for implementation details
-        /// </summary>
-        public async Task<TemplateViewModel> SaveTemplate(TemplateViewModel template)
-        {
-            template.PartitionKey = partitionKey;
-            template.ProductImagePath = await SaveProductImageAsBlob(template.ProductImage);
-            template.ProductImage = null; //Null out the base64 data
-
-            var table = await TableUtil.GetTableReference(Tables.Products);
-            var azTable = new AzureTable(table);
-
-            var templateEntity = TemplateEntity.MapFromViewModel(template, azTable);
-           
-            var tableResult = await templateEntity.InsertOrReplaceAsync();
-            var templateViewModel = TemplateEntity.MapToViewModel((TemplateEntity)tableResult.Result);
-
-            return templateViewModel;
-        }
-
-        private async Task<string> SaveProductImageAsBlob(string productImage)
-        {
-            string productImagePath = null;
-            //First save the template blob if it exists
-            if (!string.IsNullOrEmpty(productImage))
+            finally
             {
-                string base64prefix = ";base64,";
-                string base64Substring = productImage.Substring(productImage.LastIndexOf(base64prefix) + base64prefix.Length);
-                byte[] bytes = Convert.FromBase64String(base64Substring);
-                var imagePrefix = "image/";
-                int mimeTypeIndexOf = productImage.IndexOf(imagePrefix);
-                string contentType = productImage.Substring(mimeTypeIndexOf, productImage.IndexOf(base64prefix) - mimeTypeIndexOf);
-                string fileExtension = contentType.Substring(imagePrefix.Length);
-                MemoryStream ms = new MemoryStream(bytes);
-                string imageUri = await BlobHelpers.SaveToBlobContainer(BlobContainers.ProductImages, ms, fileExtension, contentType, productImagePath);
-                productImagePath = imageUri;
-            }
-            
-            return productImagePath;
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
+            }  
         }
 
         /// <summary>
@@ -115,46 +65,177 @@ namespace AzureServiceCatalog.Helpers
         /// The ARM template data is now stored as bytes and Wintellect library is used to automatically split and join the byte array based on pre-defined number of splits.
         /// Refer <see cref="TemplateEntity"/> for implementation details
         /// </summary>
-        public async Task DeleteTemplate(string rowKey)
+        public async Task<TemplateViewModel> GetTemplate(string templateName, BaseOperationContext parentOperationContext)
         {
-            var table = await TableUtil.GetTableReference(Tables.Products);
-            var azTable = new AzureTable(table);
+            var thisOperationContext = new BaseOperationContext(parentOperationContext, "TableRepository:GetTemplate");
+            try
+            {
+                var table = await TableHelper.GetTableReference(Tables.Products, thisOperationContext);
+                var azTable = new AzureTable(table);
 
-            var templateEntity = new TemplateEntity(azTable);
-            templateEntity.RowKey = rowKey;
-            templateEntity.PartitionKey = partitionKey;
-            templateEntity.ETag = "*";
+                var dynamicTemplateEntity = await TemplateEntity.FindAsync(azTable, partitionKey, templateName);
 
-            await templateEntity.DeleteAsync();
+                var templateViewModel = new TemplateEntity(azTable, dynamicTemplateEntity);
+                return TemplateEntity.MapToViewModel(templateViewModel);
+            }
+            finally
+            {
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
+            }
         }
 
-        public async Task<List<PolicyLookupPathEntity>> GetPolicyLookupPaths(string subscriptionId)
+        /// <summary>
+        /// This implementation uses Wintellect Azure Table library to overcome the limitation of 32KB for string attributes.
+        /// The ARM template data is now stored as bytes and Wintellect library is used to automatically split and join the byte array based on pre-defined number of splits.
+        /// Refer <see cref="TemplateEntity"/> for implementation details
+        /// </summary>
+        public async Task<TemplateViewModel> SaveTemplate(TemplateViewModel template, BaseOperationContext parentOperationContext)
         {
-            var table = await TableUtil.GetTableReference(Tables.PolicyLookupPaths);
-            TableQuery<PolicyLookupPathEntity> query = new TableQuery<PolicyLookupPathEntity>().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, subscriptionId));
-            var result = table.ExecuteQuery(query).ToList();
-            return result;
+            var thisOperationContext = new BaseOperationContext(parentOperationContext, "TableRepository:SaveTemplate");
+            try
+            {
+                template.PartitionKey = partitionKey;
+                template.ProductImagePath = await SaveProductImageAsBlob(template.ProductImage, parentOperationContext);
+                template.ProductImage = null; //Null out the base64 data
+
+                var table = await TableHelper.GetTableReference(Tables.Products, thisOperationContext);
+                var azTable = new AzureTable(table);
+
+                var templateEntity = TemplateEntity.MapFromViewModel(template, azTable);
+
+                var tableResult = await templateEntity.InsertOrReplaceAsync();
+                var templateViewModel = TemplateEntity.MapToViewModel((TemplateEntity)tableResult.Result);
+
+                return templateViewModel;
+            }
+            finally
+            {
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
+            }
         }
 
-        public async Task<string> GetPolicyLookupPath(string subscriptionId, string policyName)
+        private async Task<string> SaveProductImageAsBlob(string productImage, BaseOperationContext parentOperationContext)
         {
-            var table = await TableUtil.GetTableReference(Tables.PolicyLookupPaths);
-            var retrieveOperation = TableOperation.Retrieve<PolicyLookupPathEntity>(subscriptionId, policyName);
-            var tableResult = await table.ExecuteAsync(retrieveOperation);
-            return (tableResult.Result as PolicyLookupPathEntity)?.PolicyLookupPath;
+            var thisOperationContext = new BaseOperationContext(parentOperationContext, "TableRepository:SaveProductImageAsBlob");
+            try
+            {
+                string productImagePath = null;
+                //First save the template blob if it exists
+                if (!string.IsNullOrEmpty(productImage))
+                {
+                    string base64prefix = ";base64,";
+                    string base64Substring = productImage.Substring(productImage.LastIndexOf(base64prefix) + base64prefix.Length);
+                    byte[] bytes = Convert.FromBase64String(base64Substring);
+                    var imagePrefix = "image/";
+                    int mimeTypeIndexOf = productImage.IndexOf(imagePrefix);
+                    string contentType = productImage.Substring(mimeTypeIndexOf, productImage.IndexOf(base64prefix) - mimeTypeIndexOf);
+                    string fileExtension = contentType.Substring(imagePrefix.Length);
+                    MemoryStream ms = new MemoryStream(bytes);
+                    string imageUri = await BlobHelpers.SaveToBlobContainer(BlobContainers.ProductImages, ms, fileExtension, contentType, thisOperationContext, productImagePath);
+                    productImagePath = imageUri;
+                }
+
+                return productImagePath;
+            }
+            finally
+            {
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
+            }
         }
 
-        public async Task<string> SavePolicyLookupPath(string subscriptionId, string policyName, string lookupPath)
+        /// <summary>
+        /// This implementation uses Wintellect Azure Table library to overcome the limitation of 32KB for string attributes.
+        /// The ARM template data is now stored as bytes and Wintellect library is used to automatically split and join the byte array based on pre-defined number of splits.
+        /// Refer <see cref="TemplateEntity"/> for implementation details
+        /// </summary>
+        public async Task DeleteTemplate(string rowKey, BaseOperationContext parentOperationContext)
         {
-            var lookupPathEntity = new PolicyLookupPathEntity { PartitionKey = subscriptionId, RowKey = policyName, PolicyLookupPath = lookupPath };
-            var policyLookupEntity = await TableUtil.SaveTableItem(lookupPathEntity, Tables.PolicyLookupPaths);
-            return policyLookupEntity.PolicyLookupPath;
+            var thisOperationContext = new BaseOperationContext(parentOperationContext, "TableRepository:DeleteTemplate");
+            try
+            {
+                var table = await TableHelper.GetTableReference(Tables.Products, thisOperationContext);
+                var azTable = new AzureTable(table);
+
+                var templateEntity = new TemplateEntity(azTable);
+                templateEntity.RowKey = rowKey;
+                templateEntity.PartitionKey = partitionKey;
+                templateEntity.ETag = "*";
+
+                await templateEntity.DeleteAsync();
+            }
+            finally
+            {
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
+            }
         }
 
-        public async Task DeletePolicyLookupPath(string subscriptionId, string policyName)
+        public async Task<List<PolicyLookupPathEntity>> GetPolicyLookupPaths(string subscriptionId, BaseOperationContext parentOperationContext)
         {
-            var item = new PolicyLookupPathEntity { PartitionKey = subscriptionId, RowKey = policyName };
-            await TableUtil.DeleteTableItem(item, Tables.PolicyLookupPaths);
+            var thisOperationContext = new BaseOperationContext(parentOperationContext, "TableRepository:GetPolicyLookupPaths");
+            try
+            {
+                var table = await TableHelper.GetTableReference(Tables.PolicyLookupPaths, thisOperationContext);
+                TableQuery<PolicyLookupPathEntity> query = new TableQuery<PolicyLookupPathEntity>().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, subscriptionId));
+                var result = table.ExecuteQuery(query).ToList();
+                return result;
+            }
+            finally
+            {
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
+            }
+        }
+
+        public async Task<string> GetPolicyLookupPath(string subscriptionId, string policyName, BaseOperationContext parentOperationContext)
+        {
+            var thisOperationContext = new BaseOperationContext(parentOperationContext, "TableRepository:GetPolicyLookupPath");
+            try
+            {
+                var table = await TableHelper.GetTableReference(Tables.PolicyLookupPaths, thisOperationContext);
+                var retrieveOperation = TableOperation.Retrieve<PolicyLookupPathEntity>(subscriptionId, policyName);
+                var tableResult = await table.ExecuteAsync(retrieveOperation);
+                return (tableResult.Result as PolicyLookupPathEntity)?.PolicyLookupPath;
+            }
+            finally
+            {
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
+            }
+        }
+
+        public async Task<string> SavePolicyLookupPath(string subscriptionId, string policyName, string lookupPath, BaseOperationContext parentOperationContext)
+        {
+            var thisOperationContext = new BaseOperationContext(parentOperationContext, "TableRepository:SavePolicyLookupPath");
+            try
+            {
+                var lookupPathEntity = new PolicyLookupPathEntity { PartitionKey = subscriptionId, RowKey = policyName, PolicyLookupPath = lookupPath };
+                var policyLookupEntity = await TableHelper.SaveTableItem(lookupPathEntity, Tables.PolicyLookupPaths, thisOperationContext);
+                return policyLookupEntity.PolicyLookupPath;
+            }
+            finally
+            {
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
+            }
+        }
+
+        public async Task DeletePolicyLookupPath(string subscriptionId, string policyName, BaseOperationContext parentOperationContext)
+        {
+            var thisOperationContext = new BaseOperationContext(parentOperationContext, "TableRepository:DeletePolicyLookupPath");
+            try
+            {
+                var item = new PolicyLookupPathEntity { PartitionKey = subscriptionId, RowKey = policyName };
+                await TableHelper.DeleteTableItem(item, Tables.PolicyLookupPaths, thisOperationContext);
+            }
+            finally
+            {
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
+            }
         }
     }
 }

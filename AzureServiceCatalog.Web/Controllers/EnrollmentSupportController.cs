@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Claims;
+using System.Web;
 using System.Web.Http;
 using AzureServiceCatalog.Helpers;
 using AzureServiceCatalog.Models;
@@ -19,6 +21,10 @@ namespace AzureServiceCatalog.Web.Controllers
         [AllowAnonymous]
         public IHttpActionResult Post([FromBody]EnrollmentSupportViewModel model)
         {
+            var thisOperationContext = new BaseOperationContext("EnrollmentSupportController:Post");
+            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
+            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
+            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
             try
             {
                 if (model == null)
@@ -29,17 +35,19 @@ namespace AzureServiceCatalog.Web.Controllers
                     return Content(HttpStatusCode.BadRequest, JObject.FromObject(errorInformation));
                 } else
                 {
-                    notificationHelper.SendSupportNotification(model);
+                    notificationHelper.SendSupportNotification(model, thisOperationContext);
                     return Ok();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                TraceHelper.TraceError(thisOperationContext.OperationId, thisOperationContext.OperationName, ex);
                 return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
             }
             finally
             {
-
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
             }
         }
     }

@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using AzureServiceCatalog.Helpers;
 using AzureServiceCatalog.Models;
@@ -19,6 +20,10 @@ namespace AzureServiceCatalog.Web.Controllers
         // POST: api/Feedback
         public IHttpActionResult Post([FromBody]FeedbackViewModel model)
         {
+            var thisOperationContext = new BaseOperationContext("FeedbackController:Post");
+            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
+            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
+            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
             try
             {
                 ErrorInformation errorInformation = null;
@@ -31,22 +36,28 @@ namespace AzureServiceCatalog.Web.Controllers
                     return Content(HttpStatusCode.BadRequest, JObject.FromObject(errorInformation));
                 } else
                 {
-                    notificationHelper.SendFeedbackNotification(model);
+                    notificationHelper.SendFeedbackNotification(model, thisOperationContext);
                     return Ok();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                TraceHelper.TraceError(thisOperationContext.OperationId, thisOperationContext.OperationName, ex);
                 return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
             }
             finally
             {
-
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
             }
         }
 
         public IHttpActionResult Get()
         {
+            var thisOperationContext = new BaseOperationContext("FeedbackController:Get");
+            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
+            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
+            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
             try
             {
                 var fbViewModel = new FeedbackViewModel();
@@ -54,13 +65,15 @@ namespace AzureServiceCatalog.Web.Controllers
                 fbViewModel.Email = ClaimsPrincipal.Current.Upn();
                 return Ok(fbViewModel);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-               return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
+                TraceHelper.TraceError(thisOperationContext.OperationId, thisOperationContext.OperationName, ex);
+                return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
             }
             finally
             {
-
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
             }
         }
     }

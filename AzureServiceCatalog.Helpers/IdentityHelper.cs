@@ -10,47 +10,74 @@ namespace AzureServiceCatalog.Helpers
     public class IdentityHelper
     {
         private TableCoreRepository coreRepository = new TableCoreRepository();
-        public async Task<string> GetStorageName()
+        public async Task<string> GetStorageName(BaseOperationContext parentOperationContext)
         {
-            string signedInUserUniqueId = ClaimsPrincipal.Current.SignedInUserName();
-            CacheUserDetails cud = MemoryCacher.GetValue(signedInUserUniqueId) as CacheUserDetails;
-            if (cud == null)
+            var thisOperationContext = new BaseOperationContext(parentOperationContext, "IdentityHelper:GetStorageName");
+            try
             {
-                cud = await GetCurrentUserData();
-                MemoryCacher.Add(signedInUserUniqueId, cud, DateTime.Now.AddMinutes(20));
+                string signedInUserUniqueId = ClaimsPrincipal.Current.SignedInUserName();
+                CacheUserDetails cud = MemoryCacher.GetValue(signedInUserUniqueId, thisOperationContext) as CacheUserDetails;
+                if (cud == null)
+                {
+                    cud = await GetCurrentUserData(thisOperationContext);
+                    MemoryCacher.Add(signedInUserUniqueId, cud, DateTime.Now.AddMinutes(20), thisOperationContext);
+                }
+                return cud.StorageName;
             }
-            return cud.StorageName;
+            finally
+            {
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
+            }
         }
 
-        public async Task<string> GetStorageKey()
+        public async Task<string> GetStorageKey(BaseOperationContext parentOperationContext)
         {
-            string signedInUserUniqueId = ClaimsPrincipal.Current.SignedInUserName();
-            CacheUserDetails cud = MemoryCacher.GetValue(signedInUserUniqueId) as CacheUserDetails;
-            if (cud == null)
+            var thisOperationContext = new BaseOperationContext(parentOperationContext, "IdentityHelper:GetStorageName");
+            try
             {
-                cud = await GetCurrentUserData();
-                MemoryCacher.Add(signedInUserUniqueId, cud, DateTime.Now.AddMinutes(20));
+                string signedInUserUniqueId = ClaimsPrincipal.Current.SignedInUserName();
+                CacheUserDetails cud = MemoryCacher.GetValue(signedInUserUniqueId, thisOperationContext) as CacheUserDetails;
+                if (cud == null)
+                {
+                    cud = await GetCurrentUserData(thisOperationContext);
+                    MemoryCacher.Add(signedInUserUniqueId, cud, DateTime.Now.AddMinutes(20), thisOperationContext);
+                }
+                return cud.StorageKey;
             }
-            return cud.StorageKey;
+            finally
+            {
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
+            }
         }
 
-        private async Task<CacheUserDetails> GetCurrentUserData()
+        private async Task<CacheUserDetails> GetCurrentUserData(BaseOperationContext parentOperationContext)
         {
-            var cacheUserDetails = new CacheUserDetails();
-            var organizationId = ClaimsPrincipal.Current.TenantId();
-            var subscriptions = this.coreRepository.GetSubscriptionListByOrgId(organizationId);
-            var subscription = subscriptions.Where(x => x.IsConnected == true).FirstOrDefault();
-
-            if (subscription != null)
+            var thisOperationContext = new BaseOperationContext(parentOperationContext, "IdentityHelper:GetCurrentUserData");
+            try
             {
-                cacheUserDetails.SubscriptionId = subscription.Id;
-                cacheUserDetails.OrganizationId = subscription.OrganizationId;
-                cacheUserDetails.StorageName = subscription.StorageName;
-                //cacheUserDetails.StorageKey = AzureResourceManagerUtil.GetStorageAccountKeysUsingResource(subscription.Id, subscription.OrganizationId, subscription.StorageName);
-                cacheUserDetails.StorageKey = await AzureResourceManagerUtil.GetStorageAccountKeysArm(subscription.Id, subscription.StorageName);
-            }
+                var cacheUserDetails = new CacheUserDetails();
+                var organizationId = ClaimsPrincipal.Current.TenantId();
+                var subscriptions = this.coreRepository.GetSubscriptionListByOrgId(organizationId, thisOperationContext);
+                var subscription = subscriptions.Where(x => x.IsConnected == true).FirstOrDefault();
 
-            return cacheUserDetails;
+                if (subscription != null)
+                {
+                    cacheUserDetails.SubscriptionId = subscription.Id;
+                    cacheUserDetails.OrganizationId = subscription.OrganizationId;
+                    cacheUserDetails.StorageName = subscription.StorageName;
+                    //cacheUserDetails.StorageKey = AzureResourceManagerHelper.GetStorageAccountKeysUsingResource(subscription.Id, subscription.OrganizationId, subscription.StorageName);
+                    cacheUserDetails.StorageKey = await AzureResourceManagerHelper.GetStorageAccountKeysArm(subscription.Id, subscription.StorageName, thisOperationContext);
+                }
+
+                return cacheUserDetails;
+            }
+            finally
+            {
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
+            }
         }
     }
 }

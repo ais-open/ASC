@@ -9,10 +9,19 @@ namespace AzureServiceCatalog.Helpers
 {
     public static class LinkHeaderParser
     {
-        public static List<LinkItem> ParseLinks(string linkHeader)
+        public static List<LinkItem> ParseLinks(string linkHeader, BaseOperationContext parentOperationContext)
         {
-            var links = linkHeader.Split(',');
-            return links.Select(ParseLink).ToList();
+            var thisOperationContext = new BaseOperationContext(parentOperationContext, "LinkHeaderParser:ParseLinks");
+            try
+            {
+                var links = linkHeader.Split(',');
+                return links.Select(ParseLink).ToList();
+            }
+            finally
+            {
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
+            }
         }
 
         private static LinkItem ParseLink(string linkString)
@@ -30,15 +39,24 @@ namespace AzureServiceCatalog.Helpers
             return new Tuple<string, string>(pair[0], pair[1]);
         }
 
-        public static LinkItem GetNextLink(HttpResponseHeaders headers)
+        public static LinkItem GetNextLink(HttpResponseHeaders headers, BaseOperationContext parentOperationContext)
         {
-            LinkItem nextLink = null;
-            IEnumerable<string> values;
-            if (headers.TryGetValues("Link", out values))
+            var thisOperationContext = new BaseOperationContext(parentOperationContext, "LinkHeaderParser:GetNextLink");
+            try
             {
-                nextLink = ParseLinks(values.First())?.SingleOrDefault(l => l.Rel == "next");
+                LinkItem nextLink = null;
+                IEnumerable<string> values;
+                if (headers.TryGetValues("Link", out values))
+                {
+                    nextLink = ParseLinks(values.First(), thisOperationContext)?.SingleOrDefault(l => l.Rel == "next");
+                }
+                return nextLink;
             }
-            return nextLink;
+            finally
+            {
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
+            }
         }
     }
 }

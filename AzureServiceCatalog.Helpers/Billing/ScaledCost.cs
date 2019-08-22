@@ -23,7 +23,7 @@ namespace AzureServiceCatalog.Helpers.Billing
 
         private string GetHighestMeterRateKeyBasedOnQuantity()
         {
-            string keyToUse = Meter.MeterRates.Keys.Where(k => Utils.ParseInt64(k) <= BillableQuantity).OrderByDescending(k => Utils.ParseInt64(k)).FirstOrDefault();
+            string keyToUse = Meter.MeterRates.Keys.Where(k => Helpers.ParseInt64(k) <= BillableQuantity).OrderByDescending(k => Helpers.ParseInt64(k)).FirstOrDefault();
             return keyToUse;
         }
     }

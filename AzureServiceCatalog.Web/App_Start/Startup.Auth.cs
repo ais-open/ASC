@@ -104,8 +104,9 @@ namespace AzureServiceCatalog.Web
                             ClientCredential credential = new ClientCredential(Config.ClientId, Config.Password);
                             string tenantID = context.AuthenticationTicket.Identity.FindFirst("http://schemas.microsoft.com/identity/claims/tenantid").Value;
                             string signedInUserUniqueName = context.AuthenticationTicket.Identity.FindFirst(ClaimTypes.Name).Value.Split('#')[context.AuthenticationTicket.Identity.FindFirst(ClaimTypes.Name).Value.Split('#').Length - 1];
+                            var thisOperationContext = new BaseOperationContext("Startup:AuthorizationCodeReceived");
 
-                            var tokenCache = new AdalTokenCache(signedInUserUniqueName);
+                            var tokenCache = new AdalTokenCache(signedInUserUniqueName, thisOperationContext);
                             tokenCache.Clear();
 
                             AuthenticationContext authContext = new AuthenticationContext(string.Format(Config.Authority, tenantID), tokenCache);

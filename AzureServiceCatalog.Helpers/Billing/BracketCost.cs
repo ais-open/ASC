@@ -36,14 +36,14 @@ namespace AzureServiceCatalog.Helpers.Billing
             {
                 int nextIndex = keyIndex + 1;
                 string key = Meter.MeterRates.Keys.ElementAt(keyIndex);
-                double bracketStart = Utils.ParseDouble(key);
+                double bracketStart = Helpers.ParseDouble(key);
                 double bracketEnd = 0;
 
                 bool nextIndexExists = nextIndex < Meter.MeterRates.Count;
 
                 if (nextIndexExists)
                 {
-                    bracketEnd = Utils.ParseDouble(Meter.MeterRates.Keys.ElementAt(nextIndex)) - 1;
+                    bracketEnd = Helpers.ParseDouble(Meter.MeterRates.Keys.ElementAt(nextIndex)) - 1;
 
                     var bracketQuantity = bracketEnd - bracketStart;
 

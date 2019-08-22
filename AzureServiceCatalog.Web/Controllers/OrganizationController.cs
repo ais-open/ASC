@@ -9,6 +9,7 @@ using AzureServiceCatalog.Models;
 using AzureServiceCatalog.Helpers;
 using AzureServiceCatalog.Web.Models;
 using Newtonsoft.Json.Linq;
+using System.Web;
 
 namespace AzureServiceCatalog.Web.Controllers
 {
@@ -18,52 +19,67 @@ namespace AzureServiceCatalog.Web.Controllers
 
         public async Task<IHttpActionResult> Get()
         {
-            var tenantId = ClaimsPrincipal.Current.TenantId();
-            var organization = await this.coreRepository.GetOrganization(tenantId);
-            organization.OrganizationADGroups = await AzureADGraphApiUtil.GetAllGroupsForOrganization(tenantId);
+            var thisOperationContext = new BaseOperationContext("OrganizationController:Get");
+            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
+            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
+            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
             try
             {
+                var tenantId = ClaimsPrincipal.Current.TenantId();
+                var organization = await this.coreRepository.GetOrganization(tenantId, thisOperationContext);
+                organization.OrganizationADGroups = await AzureADGraphApiHelper.GetAllGroupsForOrganization(tenantId, thisOperationContext);
                 if (organization.AdminGroupName == null || organization.CreateProductGroupName == null)
                 {
                     organization.AdminGroupName = organization.OrganizationADGroups.Where(x => x.Id == organization.AdminGroup).SingleOrDefault()?.Name;
-
                     organization.CreateProductGroupName = organization.OrganizationADGroups.Where(x => x.Id == organization.CreateProductGroup).SingleOrDefault()?.Name;
                 }
                 return this.Ok(organization);
             }
             catch (Exception ex)
             {
-                Trace.TraceError(ex.Message);
-                Trace.TraceError($"AdminGroupName or CreateProductGroupName not found in the organisation : { organization.Id}");
+                //Trace.TraceError(ex.Message);
+                //Trace.TraceError($"AdminGroupName or CreateProductGroupName not found in the organisation : { organization.Id}");
+                TraceHelper.TraceError(thisOperationContext.OperationId, thisOperationContext.OperationName, ex);
                 return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
             }
             finally
             {
-
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
             }
         }
 
         [AllowAnonymous]
         public IHttpActionResult GetByVerifiedDomain(string domain)
         {
+            var thisOperationContext = new BaseOperationContext("OrganizationController:GetByVerifiedDomain");
+            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
+            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
+            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
             try
             {
-                var organization = this.coreRepository.GetOrganizationByDomain(domain.ToLower());
+                var organization = this.coreRepository.GetOrganizationByDomain(domain.ToLower(), thisOperationContext);
                 return this.Ok(organization);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                TraceHelper.TraceError(thisOperationContext.OperationId, thisOperationContext.OperationName, ex);
                 return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
             }
             finally
             {
-
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
             }
         }
 
         [ADGroupAuthorize(SecurityGroupType.CanAdmin)]
         public async Task<IHttpActionResult> Post(Organization organization)
         {
+            var thisOperationContext = new BaseOperationContext("OrganizationController:Post");
+            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
+            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
+            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
             try
             {
                 if (organization == null)
@@ -74,36 +90,44 @@ namespace AzureServiceCatalog.Web.Controllers
                     return Content(HttpStatusCode.BadRequest, JObject.FromObject(errorInformation));
                 } else
                 {
-                    await this.coreRepository.SaveOrganization(organization);
+                    await this.coreRepository.SaveOrganization(organization, thisOperationContext);
                     return this.Ok(organization);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                TraceHelper.TraceError(thisOperationContext.OperationId, thisOperationContext.OperationName, ex);
                 return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
             }
             finally
             {
-
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
             }
         }
 
         public async Task<IHttpActionResult> Delete()
         {
+            var thisOperationContext = new BaseOperationContext("OrganizationController:Delete");
+            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
+            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
+            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
             try
             {
                 var tenantId = ClaimsPrincipal.Current.TenantId();
-                var organization = await this.coreRepository.GetOrganization(tenantId);
-                await this.coreRepository.DeleteOrganization(organization);
+                var organization = await this.coreRepository.GetOrganization(tenantId, thisOperationContext);
+                await this.coreRepository.DeleteOrganization(organization, thisOperationContext);
                 return this.StatusCode(HttpStatusCode.NoContent);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                TraceHelper.TraceError(thisOperationContext.OperationId, thisOperationContext.OperationName, ex);
                 return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
             }
             finally
             {
-
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
             }
         }
     }
