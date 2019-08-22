@@ -64,7 +64,7 @@ namespace AzureServiceCatalog.Models
             {
                 {"OperationId", OperationId.ToString()},
                 {"OperationTick", Timestamp.Ticks},
-                {"TimeTaken", TimeTaken},
+                {"TimeTaken (s)", TimeTaken},
                 {"Message", Message}
             };
             return dictionary;

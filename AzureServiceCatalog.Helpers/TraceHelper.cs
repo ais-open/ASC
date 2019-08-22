@@ -33,11 +33,12 @@ namespace AzureServiceCatalog.Helpers
             var dictionary = operationContext.Export();
             //var infoLog = string.Format("[{0}] - Operation Id:{1}.\n Executed Method:{2}.\n Time Taken:{3} \n User Id:{4}.\n", operationContext.Timestamp, operationContext.OperationId, operationContext.OperationName, operationContext.TimeTaken, operationContext.UserId);
             //Trace.WriteLine(infoLog);
+            string log = "";
             foreach (KeyValuePair<string, object> item in dictionary)
             {
-                var log = string.Format("{0}:{1}", item.Key, item.Value);
-                Trace.WriteLine(log);
+                log += string.Format("{0}: {1}. ", item.Key, item.Value);
             }
+            Trace.WriteLine(log);
         }
     }
 }
