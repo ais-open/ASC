@@ -35,8 +35,10 @@ namespace AzureServiceCatalog.Web.Controllers
         // configured to return to the home page upon successful authentication
         public void SignIn(string directoryName, bool isMsa = false, bool activation = false)
         {
-            var thisOperationContext = new BaseOperationContext("AccountController:SignIn");
-            thisOperationContext.IpAddress =  HttpContext.Request.UserHostAddress;
+            var thisOperationContext = new BaseOperationContext("AccountController:SignIn")
+            {
+                IpAddress = HttpContext.Request.UserHostAddress
+            };
             try
             {
                 // note configuration (keys, etc…) will not necessarily understand this authority.
@@ -63,8 +65,10 @@ namespace AzureServiceCatalog.Web.Controllers
 
         public void AppSourceActivation()
         {
-            var thisOperationContext = new BaseOperationContext("AccountController:AppSourceActivation");
-            thisOperationContext.IpAddress = HttpContext.Request.UserHostAddress;
+            var thisOperationContext = new BaseOperationContext("AccountController:AppSourceActivation")
+            {
+                IpAddress = HttpContext.Request.UserHostAddress
+            };
             try
             {
                 var redirectUrl = this.Url.Action("Index", "Home", new { activation = true });
@@ -81,10 +85,12 @@ namespace AzureServiceCatalog.Web.Controllers
         // after sign out, it redirects to Post_Logout_Redirect_Uri (as set in Startup.Auth.cs)
         public void SignOut()
         {
-            var thisOperationContext = new BaseOperationContext("AccountController:SignOut");
-            thisOperationContext.IpAddress = HttpContext.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("AccountController:SignOut")
+            {
+                IpAddress = HttpContext.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 HttpContext.GetOwinContext().Authentication.SignOut(

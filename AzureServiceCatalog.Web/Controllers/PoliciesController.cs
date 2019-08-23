@@ -23,10 +23,12 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("")]
         public async Task<IHttpActionResult> Get(string subscriptionId)
         {
-            var thisOperationContext = new BaseOperationContext("PoliciesController:Get");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("PoliciesController:Get")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 var policies = await this.client.GetPolicies(subscriptionId, thisOperationContext);
@@ -60,10 +62,12 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("{definitionName}")]
         public async Task<IHttpActionResult> Get(string subscriptionId, string definitionName)
         {
-            var thisOperationContext = new BaseOperationContext("PoliciesController:Get");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("PoliciesController:Get")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 var policy = await this.client.GetPolicy(subscriptionId, definitionName, thisOperationContext);
@@ -90,10 +94,12 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("{definitionName}")]
         public async Task<IHttpActionResult> Put(string subscriptionId, string definitionName, [FromBody]object policyDefinition)
         {
-            var thisOperationContext = new BaseOperationContext("PoliciesController:Put");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("PoliciesController:Put")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 if (policyDefinition == null)
@@ -130,10 +136,12 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("{definitionName}")]
         public async Task<IHttpActionResult> Delete(string subscriptionId, string definitionName)
         {
-            var thisOperationContext = new BaseOperationContext("PoliciesController:Delete");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("PoliciesController:Delete")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 await this.client.DeletePolicy(subscriptionId, definitionName, thisOperationContext);

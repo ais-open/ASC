@@ -21,10 +21,12 @@ namespace AzureServiceCatalog.Web.Controllers
 
         public async Task<IHttpActionResult> Get()
         {
-            var thisOperationContext = new BaseOperationContext("TemplatesController:Get");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("TemplatesController:Get")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 var list = await repository.GetTemplates(thisOperationContext);
@@ -44,10 +46,12 @@ namespace AzureServiceCatalog.Web.Controllers
 
         public async Task<IHttpActionResult> Get( string id)
         {
-            var thisOperationContext = new BaseOperationContext("TemplatesController:Get");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("TemplatesController:Get")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 var item = await repository.GetTemplate(id, thisOperationContext);
@@ -68,10 +72,12 @@ namespace AzureServiceCatalog.Web.Controllers
         [ADGroupAuthorize(SecurityGroupType.CanCreate)]
         public async Task<IHttpActionResult> Post(TemplateViewModel template)
         {
-            var thisOperationContext = new BaseOperationContext("TemplatesController:Post");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("TemplatesController:Post")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 if (template == null)
@@ -102,10 +108,12 @@ namespace AzureServiceCatalog.Web.Controllers
         [ADGroupAuthorize(SecurityGroupType.CanCreate)]
         public async Task<IHttpActionResult> Delete(string name)
         {
-            var thisOperationContext = new BaseOperationContext("TemplatesController:Delete");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("TemplatesController:Delete")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 await repository.DeleteTemplate(name, thisOperationContext);
@@ -127,10 +135,12 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("api/templates/{id}/download")]
         public async Task<IHttpActionResult> Download(string id)
         {
-            var thisOperationContext = new BaseOperationContext("TemplatesController:Download");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("TemplatesController:Download")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 var item = await repository.GetTemplate(id, thisOperationContext);

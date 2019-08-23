@@ -21,10 +21,12 @@ namespace AzureServiceCatalog.Web.Controllers
     {
         public async Task<IHttpActionResult> Get()
         {
-            var thisOperationContext = new BaseOperationContext("QuickStartTemplatesController:Get");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("QuickStartTemplatesController:Get")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 const string memoryCacheKey = "quickStartTemplatesList";

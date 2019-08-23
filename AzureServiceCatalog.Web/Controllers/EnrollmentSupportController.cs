@@ -21,10 +21,12 @@ namespace AzureServiceCatalog.Web.Controllers
         [AllowAnonymous]
         public IHttpActionResult Post([FromBody]EnrollmentSupportViewModel model)
         {
-            var thisOperationContext = new BaseOperationContext("EnrollmentSupportController:Post");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("EnrollmentSupportController:Post")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 if (model == null)

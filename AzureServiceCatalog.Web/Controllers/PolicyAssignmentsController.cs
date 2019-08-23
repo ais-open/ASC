@@ -21,10 +21,12 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("")]
         public async Task<IHttpActionResult> Get(string subscriptionId)
         {
-            var thisOperationContext = new BaseOperationContext("PolicyAssignmentsController:Get");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("PolicyAssignmentsController:Get")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 var policies = await this.client.GetPolicyAssignments(subscriptionId, thisOperationContext);
@@ -48,10 +50,12 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("{policyAssignmentName}")]
         public async Task<IHttpActionResult> Get(string subscriptionId, string policyAssignmentName)
         {
-            var thisOperationContext = new BaseOperationContext("PolicyAssignmentsController:Get");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("PolicyAssignmentsController:Get")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 var policies = await this.client.GetPolicyAssignment(subscriptionId, policyAssignmentName, thisOperationContext);
@@ -75,10 +79,12 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("{policyAssignmentName}")]
         public async Task<IHttpActionResult> Put(string subscriptionId, string policyAssignmentName, [FromBody]object policy)
         {
-            var thisOperationContext = new BaseOperationContext("PolicyAssignmentsController:Put");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("PolicyAssignmentsController:Put")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 if (policy == null)
@@ -111,10 +117,12 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("{policyAssignmentName}")]
         public async Task<IHttpActionResult> Delete(string subscriptionId, string policyAssignmentName)
         {
-            var thisOperationContext = new BaseOperationContext("PolicyAssignmentsController:Delete");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("PolicyAssignmentsController:Delete")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 await this.client.DeletePolicyAssignment(subscriptionId, policyAssignmentName, thisOperationContext);

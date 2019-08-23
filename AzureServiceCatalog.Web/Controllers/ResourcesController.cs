@@ -28,10 +28,12 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("api/subscriptions/{subscriptionId}/resourceGroups")]
         public async Task<IHttpActionResult> GetResourceGroupsBySubscription(string subscriptionId)
         {
-            var thisOperationContext = new BaseOperationContext("ResourcesController:GetResourceGroupsBySubscription");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("ResourcesController:GetResourceGroupsBySubscription")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 var json = await AzureResourceManagerHelper.GetUserResourceGroups(subscriptionId, thisOperationContext);
@@ -55,10 +57,12 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("api/subscriptions/{subscriptionId}/resourceGroupsAll")]
         public async Task<IHttpActionResult> GetAllResourceGroupsBySubscription(string subscriptionId)
         {
-            var thisOperationContext = new BaseOperationContext("ResourcesController:GetAllResourceGroupsBySubscription");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("ResourcesController:GetAllResourceGroupsBySubscription")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 var client = Helpers.Helpers.GetResourceManagementClient(subscriptionId, thisOperationContext);
@@ -80,10 +84,12 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("api/subscriptions/{subscriptionId}/user-resource-groups")]
         public async Task<IHttpActionResult> GetAllUserResourceGroupsBySubscription(string subscriptionId)
         {
-            var thisOperationContext = new BaseOperationContext("ResourcesController:GetAllUserResourceGroupsBySubscription");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("ResourcesController:GetAllUserResourceGroupsBySubscription")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 var json = await AzureResourceManagerHelper.GetUserResourceGroups(subscriptionId, thisOperationContext);
@@ -107,10 +113,12 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("api/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}")]
         public async Task<IHttpActionResult> GetResourceGroupResources(string resourceGroupName, string subscriptionId)
         {
-            var thisOperationContext = new BaseOperationContext("ResourcesController:GetResourceGroupResources");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("ResourcesController:GetResourceGroupResources")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 var client = Helpers.Helpers.GetResourceManagementClient(subscriptionId, thisOperationContext);
@@ -133,10 +141,12 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("api/subscriptions/{subscriptionId}/chartData/{resourceGroupName}")]
         public async Task<IHttpActionResult> GetChartData(string resourceGroupName, string subscriptionId)
         {
-            var thisOperationContext = new BaseOperationContext("ResourcesController:GetChartData");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("ResourcesController:GetChartData")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 var client = Helpers.Helpers.GetResourceManagementClient(subscriptionId, thisOperationContext);
@@ -159,10 +169,12 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("api/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/full")]
         public async Task<IHttpActionResult> GetResourceGroupData(string resourceGroupName, string subscriptionId)
         {
-            var thisOperationContext = new BaseOperationContext("ResourcesController:GetResourceGroupData");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("ResourcesController:GetResourceGroupData")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 var client = Helpers.Helpers.GetResourceManagementClient(subscriptionId, thisOperationContext);
@@ -194,10 +206,12 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("api/resourceGroups")]
         public async Task<IHttpActionResult> Post(ResourceGroupResource resourceGroup)
         {
-            var thisOperationContext = new BaseOperationContext("ResourcesController:Post");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("ResourcesController:Post")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             { 
                 if (resourceGroup == null)
@@ -239,10 +253,12 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("api/subscriptions/enrolled")]
         public async Task<IHttpActionResult> GetEnrolledSubscriptions()
         {
-            var thisOperationContext = new BaseOperationContext("ResourcesController:GetEnrolledSubscriptions");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("ResourcesController:GetEnrolledSubscriptions")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 var enrolledSubscriptions = this.coreRepository.GetEnrolledSubscriptionListByOrgId(ClaimsPrincipal.Current.TenantId(), thisOperationContext);
@@ -274,10 +290,12 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("api/subscriptions/all-app-enrolled")]
         public IHttpActionResult GetAllAppEnrolledSubscriptions()
         {
-            var thisOperationContext = new BaseOperationContext("ResourcesController:GetAllAppEnrolledSubscriptions");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("ResourcesController:GetAllAppEnrolledSubscriptions")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 var enrolledSubscriptions = this.coreRepository.GetEnrolledSubscriptionListByOrgId(ClaimsPrincipal.Current.TenantId(), thisOperationContext);
@@ -299,10 +317,12 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("api/subscriptions/enrolled")]
         public IHttpActionResult GetEnrolledSubscriptions(string subscriptionId)
         {
-            var thisOperationContext = new BaseOperationContext("ResourcesController:GetEnrolledSubscriptions");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("ResourcesController:GetEnrolledSubscriptions")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 var subscription = this.coreRepository.GetSubscription(subscriptionId, thisOperationContext);

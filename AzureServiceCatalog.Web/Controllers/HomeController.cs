@@ -20,8 +20,10 @@ namespace AzureServiceCatalog.Web.Controllers
         private TableCoreRepository coreRepository = new TableCoreRepository();
         public ActionResult Index(string directoryName, bool activation = false, bool activationLogin = false)
         {
-            var thisOperationContext = new BaseOperationContext("HomeController:Index");
-            thisOperationContext.IpAddress = HttpContext.Request.UserHostAddress;
+            var thisOperationContext = new BaseOperationContext("HomeController:Index")
+            {
+                IpAddress = HttpContext.Request.UserHostAddress
+            };
             try
             {
                 this.ViewBag.AppVersion = this.GetType().Assembly.GetName().Version.ToString();
@@ -54,6 +56,11 @@ namespace AzureServiceCatalog.Web.Controllers
                 }
 
                 return View();
+            }
+            catch (Exception ex)
+            {
+                TraceHelper.TraceError(thisOperationContext.OperationId, thisOperationContext.OperationName, ex);
+                return View("Error");
             }
             finally
             {
