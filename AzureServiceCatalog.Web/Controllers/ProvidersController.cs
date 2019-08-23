@@ -21,10 +21,12 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("storage")]
         public async Task<IHttpActionResult> GetStorageProvider(string subscriptionId)
         {
-            var thisOperationContext = new BaseOperationContext("ProvidersController:GetStorageProvider");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("ProvidersController:GetStorageProvider")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 var json = await AzureResourceManagerHelper.GetStorageProvider(subscriptionId, thisOperationContext);
@@ -48,10 +50,12 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("resources")]
         public async Task<IHttpActionResult> GetResourcesProvider(string subscriptionId)
         {
-            var thisOperationContext = new BaseOperationContext("ProvidersController:GetResourcesProvider");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("ProvidersController:GetResourcesProvider")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 var json = await AzureResourceManagerHelper.GetResourcesProvider(subscriptionId, thisOperationContext);

@@ -20,10 +20,12 @@ namespace AzureServiceCatalog.Web.Controllers
         // POST: api/Feedback
         public IHttpActionResult Post([FromBody]FeedbackViewModel model)
         {
-            var thisOperationContext = new BaseOperationContext("FeedbackController:Post");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("FeedbackController:Post")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 ErrorInformation errorInformation = null;
@@ -54,10 +56,12 @@ namespace AzureServiceCatalog.Web.Controllers
 
         public IHttpActionResult Get()
         {
-            var thisOperationContext = new BaseOperationContext("FeedbackController:Get");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("FeedbackController:Get")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 var fbViewModel = new FeedbackViewModel();

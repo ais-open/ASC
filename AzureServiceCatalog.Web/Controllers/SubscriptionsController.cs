@@ -22,10 +22,12 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("")]
         public async Task<IHttpActionResult> Get()
         {
-            var thisOperationContext = new BaseOperationContext("SubscriptionsController:Get");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("SubscriptionsController:Get")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 var tenantId = ClaimsPrincipal.Current.TenantId();
@@ -63,10 +65,12 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("")]
         public async Task<IHttpActionResult> Post(SubscriptionsViewModel subscriptionsVM)
         {
-            var thisOperationContext = new BaseOperationContext("SubscriptionsController:Post");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("SubscriptionsController:Post")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 if (subscriptionsVM == null)

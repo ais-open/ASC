@@ -18,10 +18,12 @@ namespace AzureServiceCatalog.Web.Controllers
 
         public async Task<IHttpActionResult> Post(AscDeployment deployment)
         {
-            var thisOperationContext = new BaseOperationContext("DeploymentsController:Post");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("DeploymentsController:Post")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 if (deployment == null)
@@ -62,10 +64,12 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("validate")]
         public async Task<IHttpActionResult> PostValidate(AscDeployment deployment)
         {
-            var thisOperationContext = new BaseOperationContext("DeploymentsController:PostValidate");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("DeploymentsController:PostValidate")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 if (deployment == null)
@@ -96,10 +100,12 @@ namespace AzureServiceCatalog.Web.Controllers
 
         public async Task<IHttpActionResult> Get(string resourceGroupName, string deploymentName, string subscriptionId)
         {
-            var thisOperationContext = new BaseOperationContext("DeploymentsController:Get");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("DeploymentsController:Get")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 var result = await DeploymentHelper.GetDeployment(resourceGroupName, deploymentName, subscriptionId, thisOperationContext);
@@ -126,10 +132,12 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("list")]
         public async Task<IHttpActionResult> GetDeploymentList(string resourceGroupName, string subscriptionId)
         {
-            var thisOperationContext = new BaseOperationContext("DeploymentsController:GetDeploymentList");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("DeploymentsController:GetDeploymentList")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 var result = await DeploymentHelper.GetDeploymentList(resourceGroupName, subscriptionId, thisOperationContext);
@@ -150,10 +158,12 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("status")]
         public async Task<IHttpActionResult> GetDeploymentOperations(string resourceGroupName, string deploymentName, string subscriptionId)
         {
-            var thisOperationContext = new BaseOperationContext("DeploymentsController:GetDeploymentOperations");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("DeploymentsController:GetDeploymentOperations")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 var result = await DeploymentHelper.GetDeploymentOperations(resourceGroupName, deploymentName, subscriptionId, thisOperationContext);

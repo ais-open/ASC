@@ -19,10 +19,12 @@ namespace AzureServiceCatalog.Web.Controllers
 
         public async Task<IHttpActionResult> Get()
         {
-            var thisOperationContext = new BaseOperationContext("OrganizationController:Get");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("OrganizationController:Get")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 var tenantId = ClaimsPrincipal.Current.TenantId();
@@ -52,10 +54,12 @@ namespace AzureServiceCatalog.Web.Controllers
         [AllowAnonymous]
         public IHttpActionResult GetByVerifiedDomain(string domain)
         {
-            var thisOperationContext = new BaseOperationContext("OrganizationController:GetByVerifiedDomain");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("OrganizationController:GetByVerifiedDomain")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 var organization = this.coreRepository.GetOrganizationByDomain(domain.ToLower(), thisOperationContext);
@@ -76,10 +80,12 @@ namespace AzureServiceCatalog.Web.Controllers
         [ADGroupAuthorize(SecurityGroupType.CanAdmin)]
         public async Task<IHttpActionResult> Post(Organization organization)
         {
-            var thisOperationContext = new BaseOperationContext("OrganizationController:Post");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("OrganizationController:Post")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 if (organization == null)
@@ -108,10 +114,12 @@ namespace AzureServiceCatalog.Web.Controllers
 
         public async Task<IHttpActionResult> Delete()
         {
-            var thisOperationContext = new BaseOperationContext("OrganizationController:Delete");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("OrganizationController:Delete")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 var tenantId = ClaimsPrincipal.Current.TenantId();

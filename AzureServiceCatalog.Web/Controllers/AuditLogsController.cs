@@ -18,10 +18,12 @@ namespace AzureServiceCatalog.Web.Controllers
     {
         public async Task<IHttpActionResult> GetByCorrelationId(string subscriptionId, string correlationId)
         {
-            var thisOperationContext = new BaseOperationContext("AuditLogsController:GetByCorrelationId");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("AuditLogsController:GetByCorrelationId")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 var json = await AzureResourceManagerHelper.GetAuditLogs(subscriptionId, correlationId, thisOperationContext);

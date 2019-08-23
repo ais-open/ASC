@@ -22,10 +22,12 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("full")]
         public async Task<IHttpActionResult> GetUserDetailsFull()
         {
-            var thisOperationContext = new BaseOperationContext("IdentityController:GetUserDetailsFull");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("IdentityController:GetUserDetailsFull")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 var subscriptionInfo = new UserSubscriptionInfo();
@@ -133,10 +135,12 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("")]
         public async Task<IHttpActionResult> GetUserDetails()
         {
-            var thisOperationContext = new BaseOperationContext("IdentityController:GetUserDetails");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("IdentityController:GetUserDetails")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 var subscriptionInfo = new UserSubscriptionInfo();
@@ -169,10 +173,12 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("organization-groups")]
         public async Task<IHttpActionResult> GetOrganizationGroups(string filter)
         {
-            var thisOperationContext = new BaseOperationContext("IdentityController:GetOrganizationGroups");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("IdentityController:GetOrganizationGroups")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 string tenantId = ClaimsPrincipal.Current.TenantId();
@@ -194,10 +200,12 @@ namespace AzureServiceCatalog.Web.Controllers
         [Route("asc-contributor")]
         public async Task<IHttpActionResult> PutAscContributorRole(string subscriptionId)
         {
-            var thisOperationContext = new BaseOperationContext("IdentityController:PutAscContributorRole");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("IdentityController:PutAscContributorRole")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 var rbacClient = new RbacHelper();

@@ -15,10 +15,12 @@ namespace AzureServiceCatalog.Web.Controllers
     {
         public async Task<IHttpActionResult> Post(ActivationInfo activationInfo)
         {
-            var thisOperationContext = new BaseOperationContext("ActivationController:Post");
-            thisOperationContext.IpAddress = HttpContext.Current.Request.UserHostAddress;
-            thisOperationContext.UserId = ClaimsPrincipal.Current.SignedInUserName();
-            thisOperationContext.UserName = ClaimsPrincipal.Current.Identity.Name;
+            var thisOperationContext = new BaseOperationContext("ActivationController:Post")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
             try
             {
                 if (activationInfo == null)
