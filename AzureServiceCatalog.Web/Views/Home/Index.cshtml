@@ -34,7 +34,10 @@
         </div>
     </div>
 
-    <script src="~/lib/ace-builds/src-min-noconflict/ace.js"></script>
+    @Scripts.Render("~/bundles/vendorjs")
+    @Scripts.Render("~/bundles/appjavascript")
+
+    @*<script src="~/lib/ace-builds/src-min-noconflict/ace.js"></script>
 
     <!-- build:js js/lib.js -->
     <!--bower:js-->
@@ -118,7 +121,7 @@
     <script src="/app/app.config.js"></script>
     <script src="~/app/support/feedback.controller.js"></script>
     <!-- endinject -->
-    <!--endbuild-->
+    <!--endbuild-->*@
 
     <script>
         (function () {
