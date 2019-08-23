@@ -778,8 +778,6 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="gulp.config.js" />
-    <Content Include="gulpfile.js" />
     <Content Include="lib\ace-builds\ChangeLog.txt" />
     <Content Include="lib\ace-builds\demo\autocompletion.html" />
     <Content Include="lib\ace-builds\demo\autoresize.html" />
@@ -2374,7 +2372,6 @@
     <Content Include="lib\spin.js\spin.js" />
     <Content Include=".bowerrc" />
     <Content Include="bower.json" />
-    <Content Include="package.json" />
     <Content Include="Content\bootstrap-united\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap-united\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Content\bootstrap-united\fonts\glyphicons-halflings-regular.woff" />
