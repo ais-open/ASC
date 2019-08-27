@@ -1,0 +1,320 @@
+{
+ "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+ "contentVersion": "1.0.0.0",
+ "parameters": {
+  "appName": {
+   "defaultValue": "ascsamplewebapp",
+   "type": "String",
+   "metadata": {
+    "description": "Name of azure web app"
+   }
+  },
+  "appServiceTier": {
+   "defaultValue": "Standard",
+   "allowedValues": [
+    "Standard",
+    "Premium"
+   ],
+   "type": "String",
+   "metadata": {
+    "description": "Choose either Standard or Premium Azure Web Apps pricing tiers. It defaults to Standard"
+   }
+  },
+  "appServiceWorkerSize": {
+   "defaultValue": "0",
+   "allowedValues": [
+    "0",
+    "1",
+    "2"
+   ],
+   "type": "String",
+   "metadata": {
+    "description": "Worker Size( 0=Small, 1=Medium, 2=Large )"
+   }
+  },
+  "applicationId": {
+   "type": "String",
+   "metadata": {
+    "description": "Application Id of registered Web App"
+   }
+  },
+  "appPassword": {
+   "type": "SecureString",
+   "metadata": {
+    "description": "Password of registered Web App"
+   }
+  },
+  "storageAccountName": {
+   "defaultValue": "test",
+   "minLength": 1,
+   "type": "String",
+   "metadata": {
+    "description": "Storage Account name."
+   }
+  },
+  "storageAccountType": {
+   "defaultValue": "Standard_RAGRS",
+   "allowedValues": [
+    "Standard_LRS",
+    "Standard_GRS",
+    "Standard_RAGRS",
+    "Standard_ZRS"
+   ],
+   "type": "String",
+   "metadata": {
+    "description": "Storage Account Type : Standard-LRS, Standard-GRS,Standard-RAGRS,Standard-ZRS"
+   }
+  },
+  "newOrExisting": {
+   "defaultValue": "new",
+   "allowedValues": [
+    "new",
+    "existing"
+   ],
+   "type": "String",
+   "metadata": {
+    "description": "Storage Account already exists or not."
+   }
+  },
+  "diagnosticsStorageAccountName": {
+   "defaultValue": "[concat('storage', uniqueString(resourceGroup().id))]",
+   "type": "String",
+   "metadata": {
+    "description": "The name of Storage Account that stores the diagnostics logs."
+   }
+  },
+  "diagnosticsLogsLevel": {
+   "defaultValue": "Verbose",
+   "allowedValues": [
+    "Verbose",
+    "Information",
+    "Warning",
+    "Error"
+   ],
+   "type": "String",
+   "metadata": {
+    "description": "The degree of severity for diagnostics logs."
+   }
+  },
+  "diagnosticsLogsRetentionInDays": {
+   "defaultValue": 10,
+   "type": "Int",
+   "metadata": {
+    "description": "Number of days for which the diagnostics logs will be retained."
+   }
+  },
+  "smtpHost": {
+   "type": "String",
+   "metadata": {
+    "description": "SMTP Host."
+   }
+  },
+  "smtpPort": {
+   "type": "Int",
+   "metadata": {
+    "description": "SMTP Port."
+   }
+  },
+  "smtpUserName": {
+   "type": "String",
+   "metadata": {
+    "description": "SMTP Username."
+   }
+  },
+  "smtpPassword": {
+   "type": "SecureString",
+   "metadata": {
+    "description": "SMTP Password."
+   }
+  },
+  "notificationFromEmailAddress": {
+   "type": "String",
+   "metadata": {
+    "description": "Email address."
+   }
+  },
+  "notificationFromName": {
+   "defaultValue": "Service Catalog",
+   "type": "String",
+   "metadata": {
+    "description": "Notification from name."
+   }
+  },
+  "adminEmailAddress": {
+   "type": "String",
+   "metadata": {
+    "description": "Admin Email address."
+   }
+  },
+  "packageUri": {
+   "defaultValue": "https://github.com/AppliedIS/ASC/raw/asc-jagrati/Builds/ascpackage.zip",
+   "type": "String",
+   "metadata": {
+    "description": "Package URL where build is present."
+   }
+  }
+ },
+ "variables": {
+  "updatedStorageAccountName": "[concat(uniquestring(resourceGroup().id), parameters('storageAccountName'))]",
+  "appServicePlanName": "[concat(parameters('appName'), 'serviceplan')]",
+  "appInsightsName": "[concat(parameters('appName'), '-appin')]",
+  "blobContainerName": "[concat(parameters('appName'), '-logs')]",
+  "listAccountSasRequestContent": {
+   "signedServices": "bfqt",
+   "signedPermission": "rwdlacup",
+   "signedStart": "2018-10-01T00:00:00Z",
+   "signedExpiry": "2219-10-30T00:00:00Z",
+   "signedResourceTypes": "sco"
+  }
+ },
+ "resources": [
+  {
+   "type": "Microsoft.Storage/storageAccounts",
+   "apiVersion": "2018-07-01",
+   "name": "[variables('updatedStorageAccountName')]",
+   "location": "[resourceGroup().location]",
+   "sku": {
+    "name": "[parameters('storageAccountType')]"
+   },
+   "kind": "StorageV2",
+   "properties": {}
+  },
+  {
+   "type": "Microsoft.Storage/storageAccounts",
+   "apiVersion": "2018-02-01",
+   "name": "[parameters('diagnosticsStorageAccountName')]",
+   "location": "[resourceGroup().location]",
+   "sku": {
+    "name": "Standard_LRS"
+   },
+   "kind": "StorageV2",
+   "resources": [
+    {
+     "type": "blobServices/containers",
+     "apiVersion": "2018-02-01",
+     "name": "[concat('default/', variables('blobContainerName'))]",
+     "dependsOn": [
+      "[concat('Microsoft.Storage/storageAccounts/', parameters('diagnosticsStorageAccountName'))]"
+     ],
+     "properties": {
+      "publicAccess": "Blob"
+     }
+    }
+   ]
+  },
+  {
+   "type": "Microsoft.Web/serverFarms",
+   "apiVersion": "2014-06-01",
+   "name": "[variables('appServicePlanName')]",
+   "location": "[resourceGroup().location]",
+   "tags": {
+    "displayName": "AppServiceHostingPlan"
+   },
+   "properties": {
+    "name": "[variables('appServicePlanName')]",
+    "appServiceTier": "[parameters('appServiceTier')]",
+    "workerSize": "[parameters('appServiceWorkerSize')]"
+   }
+  },
+  {
+   "type": "microsoft.insights/components",
+   "apiVersion": "2014-04-01",
+   "name": "[variables('appInsightsName')]",
+   "location": "[resourceGroup().location]",
+   "dependsOn": [
+    "[concat('Microsoft.Web/sites/', parameters('appName'))]"
+   ],
+   "tags": {
+    "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/sites/', parameters('appName'))]": "Resource",
+    "displayName": "AppInsightsComponent"
+   },
+   "properties": {
+    "applicationId": "[parameters('appName')]"
+   }
+  },
+  {
+   "type": "Microsoft.Web/Sites",
+   "apiVersion": "2015-02-01",
+   "name": "[parameters('appName')]",
+   "location": "[resourceGroup().location]",
+   "dependsOn": [
+    "[concat('Microsoft.Web/serverFarms/', variables('appServicePlanName'))]"
+   ],
+   "tags": {
+    "[concat('hidden-related:', '/subscriptions/', subscription().subscriptionId,'/resourcegroups/', resourceGroup().name, '/providers/Microsoft.Web/serverfarms/', variables('appServicePlanName'))]": "empty"
+   },
+   "properties": {
+    "name": "[parameters('appName')]",
+    "serverFarmId": "[concat('/subscriptions/', subscription().subscriptionId,'/resourcegroups/',resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', variables('appServicePlanName'))]",
+    "hostingEnvironment": ""
+   },
+   "resources": [
+    {
+     "type": "Extensions",
+     "apiVersion": "2014-06-01",
+     "name": "MSDeploy",
+     "dependsOn": [
+      "[concat('Microsoft.Web/Sites/', parameters('appName'))]",
+      "[concat('Microsoft.Storage/storageAccounts/', variables('updatedStorageAccountName'))]",
+      "[concat('Microsoft.Storage/storageAccounts/', parameters('diagnosticsStorageAccountName'))]"
+     ],
+     "properties": {
+      "packageUri": "[parameters('packageUri')]"
+     }
+    },
+    {
+     "type": "config",
+     "apiVersion": "2015-08-01",
+     "name": "appsettings",
+     "dependsOn": [
+      "[resourceId('Microsoft.Web/Sites', parameters('appName'))]",
+      "[resourceId('Microsoft.Storage/storageAccounts', variables('updatedStorageAccountName'))]",
+      "[concat('Microsoft.Web/sites/', parameters('appName'), '/Extensions/MSDeploy')]",
+      "Microsoft.ApplicationInsights.AzureWebSites"
+     ],
+     "properties": {
+      "AdminEmailAddress": "Admin email address",
+      "AscAppId": "[guid(subscription().subscriptionId)]",
+      "ida:ClientID": "[parameters('applicationId')]",
+      "ida:Password": "[parameters('appPassword')]",
+      "iKey": "[reference(concat('microsoft.insights/components/', variables('appInsightsName'))).InstrumentationKey]",
+      "NotificationFromEmailAddress": "[parameters('notificationFromEmailAddress')]",
+      "NotificationFromName": "Service Catalog",
+      "StorageAccountKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('updatedStorageAccountName')), '2015-05-01-preview').key1]",
+      "StorageAccountName": "[variables('updatedStorageAccountName')]"
+     }
+    },
+    {
+     "type": "config",
+     "apiVersion": "2018-02-01",
+     "name": "logs",
+     "dependsOn": [
+      "[resourceId('Microsoft.Web/Sites', parameters('appName'))]",
+      "[resourceId('Microsoft.Storage/storageAccounts', parameters('diagnosticsStorageAccountName'))]",
+      "[concat('Microsoft.Web/sites/', parameters('appName'), '/Extensions/MSDeploy')]",
+      "Microsoft.ApplicationInsights.AzureWebSites"
+     ],
+     "properties": {
+      "applicationLogs": {
+       "azureBlobStorage": {
+        "level": "[parameters('diagnosticsLogsLevel')]",
+        "sasUrl": "[concat(reference(concat('Microsoft.Storage/storageAccounts/', parameters('diagnosticsStorageAccountName'))).primaryEndpoints.blob, variables('blobContainerName'), '?', listAccountSas(parameters('diagnosticsStorageAccountName'), '2018-02-01', variables('listAccountSasRequestContent')).accountSasToken)]",
+        "retentionInDays": "[parameters('diagnosticsLogsRetentionInDays')]"
+       }
+      }
+     }
+    },
+    {
+     "type": "siteextensions",
+     "apiVersion": "2015-08-01",
+     "name": "Microsoft.ApplicationInsights.AzureWebSites",
+     "dependsOn": [
+      "[resourceId('Microsoft.Web/Sites', parameters('appName'))]",
+      "[concat('Microsoft.Web/sites/', parameters('appName'), '/Extensions/MSDeploy')]"
+     ],
+     "properties": {}
+    }
+   ]
+  }
+ ]
+}
