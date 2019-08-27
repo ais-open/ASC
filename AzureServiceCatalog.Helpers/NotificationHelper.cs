@@ -8,13 +8,15 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using AzureServiceCatalog.Models;
+using System.Net.Mail;
+using System.Text;
 
 namespace AzureServiceCatalog.Helpers
 {
     public class NotificationHelper
     {
         private const string htmlLineBreak = "<br />";
-        public void SendFeedbackNotification(FeedbackViewModel model,BaseOperationContext parentOperationContext)
+        public void SendFeedbackNotification(FeedbackViewModel model, BaseOperationContext parentOperationContext)
         {
             var thisOperationContext = new BaseOperationContext(parentOperationContext, "NotificationHelper:SendFeedbackNotification");
             try
@@ -29,6 +31,7 @@ namespace AzureServiceCatalog.Helpers
             }
             finally
             {
+                thisOperationContext.CalculateTimeTaken();
                 TraceHelper.TraceOperation(thisOperationContext);
             }
         }
@@ -49,6 +52,7 @@ namespace AzureServiceCatalog.Helpers
             }
             finally
             {
+                thisOperationContext.CalculateTimeTaken();
                 TraceHelper.TraceOperation(thisOperationContext);
             }
         }
@@ -68,11 +72,12 @@ namespace AzureServiceCatalog.Helpers
             }
             finally
             {
+                thisOperationContext.CalculateTimeTaken();
                 TraceHelper.TraceOperation(thisOperationContext);
             }
         }
 
-        private void SendEmailNotification(string sendToEmailAddress, string subject, string message,BaseOperationContext parentOperationContext)
+        private async void SendEmailNotification(string sendToEmailAddress, string subject, string message, BaseOperationContext parentOperationContext)
         {
             var thisOperationContext = new BaseOperationContext(parentOperationContext, "NotificationHelper:SendEmailNotification");
             try
@@ -85,34 +90,36 @@ namespace AzureServiceCatalog.Helpers
                     throw new FormatException(invalidEmailMessage);
                 }
 
-                var sg = new SendGrid.SendGridAPIClient(Config.SendGridApiKey, Config.SendGridEndPoint);
-                Email from = new Email(Config.NotificationFromEmailAddress, Config.NotificationFromName);
-                Content content = new Content("text/plain", message.Replace(htmlLineBreak, Environment.NewLine));
-                Content htmlContent = new Content("text/html", message);
+                MailAddress from = new MailAddress(Config.NotificationFromEmailAddress, Config.NotificationFromName);
+                MailAddress to = new MailAddress(sendToEmailAddress);
+                MailMessage mailMessage = new MailMessage(from, to);
+                mailMessage.Subject = subject;
+                mailMessage.Body = message;
+                mailMessage.BodyEncoding = Encoding.UTF8;
+                mailMessage.IsBodyHtml = true;
 
-                var to = new Email(sendToEmailAddress);
-                var mail = new Mail(from, subject, to, content);
-                mail.AddContent(htmlContent);
-                mail.Subject = subject;
-
-                var requestBody = mail.Get();
-
-                dynamic response = sg.client.mail.send.post(requestBody: requestBody);
-
-                HttpStatusCode statusCode = response.StatusCode;
-
-                if (((int)statusCode >= 200) && ((int)statusCode <= 299))
+                SmtpClient smtpClient = new SmtpClient(Config.SmtpHost, int.Parse(Config.SmtpPort))
                 {
-                    TraceHelper.TraceInformation(thisOperationContext.OperationId, thisOperationContext.OperationName, "Email notification sent.");
-                }
-                else
-                {
-                    Trace.TraceError(string.Format("Error sending email notification. {0}, {1}", statusCode, message));
-                    throw new HttpException((int)statusCode, "Email could not be sent!");
-                }
+                    EnableSsl = true,
+                    UseDefaultCredentials = false,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    Credentials = new NetworkCredential()
+                    {
+                        UserName = Config.SmtpUserName,
+                        Password = Config.SmtpPassword
+                    }
+                };
+
+                await smtpClient.SendMailAsync(mailMessage);
+            }
+            catch (Exception ex)
+            {
+                TraceHelper.TraceError(thisOperationContext.OperationId, thisOperationContext.OperationName, ex);
+                throw new HttpException("Email could not be sent!");
             }
             finally
             {
+                thisOperationContext.CalculateTimeTaken();
                 TraceHelper.TraceOperation(thisOperationContext);
             }
         }

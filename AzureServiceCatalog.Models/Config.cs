@@ -22,6 +22,10 @@ namespace AzureServiceCatalog.Models
         public static readonly string ARMAuthorizationRoleAssignmentsAPIVersion = ConfigurationManager.AppSettings["ida:ARMAuthorizationRoleAssignmentsAPIVersion"];
         public static readonly string ARMAuthorizationRoleDefinitionsAPIVersion = ConfigurationManager.AppSettings["ida:ARMAuthorizationRoleDefinitionsAPIVersion"];
         public static readonly string AscAppId = ConfigurationManager.AppSettings["AscAppId"];
+        public static readonly string SmtpHost = ConfigurationManager.AppSettings["SmtpHost"];
+        public static readonly string SmtpPort = ConfigurationManager.AppSettings["SmtpPort"];
+        public static readonly string SmtpUserName = ConfigurationManager.AppSettings["SmtpUserName"];
+        public static readonly string SmtpPassword = ConfigurationManager.AppSettings["SmtpPassword"];
 
         /// <summary>
         /// When requesting data, use this hours offset for ReportEndTime from the current time.
@@ -58,7 +62,7 @@ namespace AzureServiceCatalog.Models
                 int count = 0;
                 string configValue = ConfigurationManager.AppSettings["TemplateDataPropertySplitCount"];
 
-                if (!int.TryParse(configValue, out count) || count == 0) 
+                if (!int.TryParse(configValue, out count) || count == 0)
                 {
                     count = 5; //default value
                 }
@@ -88,22 +92,6 @@ namespace AzureServiceCatalog.Models
             get
             {
                 return ConfigurationManager.AppSettings["AdminEmailAddress"];
-            }
-        }
-
-        public static string SendGridApiKey
-        {
-            get
-            {
-                return ConfigurationManager.AppSettings["SendGridApiKey"];
-            }
-        }
-
-        public static string SendGridEndPoint
-        {
-            get
-            {
-                return ConfigurationManager.AppSettings["SendGridEndPoint"];
             }
         }
 
