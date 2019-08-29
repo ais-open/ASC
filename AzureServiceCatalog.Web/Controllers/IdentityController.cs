@@ -36,8 +36,7 @@ namespace AzureServiceCatalog.Web.Controllers
                 subscriptionInfo.LastName = ClaimsPrincipal.Current.LastName();
                 subscriptionInfo.DefaultAdGroup = Config.DefaultAdGroup;
                 subscriptionInfo.DefaultResourceGroup = Config.DefaultResourceGroup;
-                //string tenantId = ClaimsPrincipal.Current.TenantId();
-                string tenantId = "a";
+                string tenantId = ClaimsPrincipal.Current.TenantId();
                 string signedInUserUniqueId = ClaimsPrincipal.Current.SignedInUserName();
 
                 var userGroupsRoles = await AzureADGraphApiHelper.GetUserGroups(signedInUserUniqueId, tenantId, thisOperationContext);
