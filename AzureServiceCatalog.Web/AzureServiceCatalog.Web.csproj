@@ -751,7 +751,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Web.Testing.config">
-      <DependentUpon>Web.config</DependentUpon>
+      <!--<DependentUpon>Web.config</DependentUpon>-->
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -2655,10 +2655,10 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
+      <!--<DependentUpon>Web.config</DependentUpon>-->
     </Content>
     <Content Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
+      <!--<DependentUpon>Web.config</DependentUpon>-->
     </Content>
     <Content Include="Views\Web.config">
       <SubType>Designer</SubType>
