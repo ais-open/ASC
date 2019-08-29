@@ -3,9 +3,9 @@
 
     angular.module('ascApp').factory('ascApi', ascApi);
 
-    ascApi.$inject = ['$http', '$q', '$window', 'appSpinner', 'appStorage', 'toastr', '$rootScope'];
+    ascApi.$inject = ['$http', '$q', '$window', 'appSpinner', 'appStorage', 'dialogsService', 'toastr', '$rootScope'];
 
-    function ascApi($http, $q, $window, appSpinner, appStorage, toastr, $rootScope) {
+    function ascApi($http, $q, $window, appSpinner, appStorage, dialogs, toastr, $rootScope) {
         var service = {
             createCustomRole: createCustomRole,
             createDeployment: createDeployment,
@@ -78,7 +78,7 @@
         }
 
         function deleteOrganization() {
-            return httpDelete('api/organization').then(function() {
+            return httpDelete('api/organization').then(function () {
                 //The DELETE organization controller api will remove the subscription and organization records from the core table storage
                 //as such, all information with regards to storage accounts will be lost,
                 //meaning OAuth authorized calls to the Service Catalog's API will result in multiple
@@ -249,7 +249,7 @@
             return httpPost('/api/activation', activationInfo);
         }
 
-        function saveOrganization(organization){
+        function saveOrganization(organization) {
             return httpPost('/api/organization', organization);
         }
 
@@ -323,9 +323,9 @@
                 }
                 //console.log('**response from EXECUTE', response);
                 return response.data;
-            }, function(error){
+            }, function (error) {
                 console.log('**Error making HTTP request', error);
-                handleError(error);
+                handleError(error, requestUrl);
                 if (!suppressSpinner) {
                     appSpinner.hideSpinner();
                 }
@@ -357,21 +357,13 @@
             }
         }
 
-        function handleError(error) {
-            if (!error.success) {
-                if (error.status === 401) {
-                    $window.location = $window.location.pathname;
-                } else if (error.status === 403) {
-                    toastr.error('You are not authorized to perform this action.', 'Forbidden');
-                } else if (error.status === 500) {
-                    var message = 'Server Error Occurred! ';
-                    if (error.data && error.data.exceptionMessage) {
-                        message += error.data.exceptionMessage;
-                    }
-                    toastr.error(message, 'Internal Server Error');
-                } else {
-                    toastr.error('Unexpected error during request.', 'Error');
-                }
+        function handleError(error, requestUrl) {
+            var message = "An internal server error occured while performing operation \"" + requestUrl + "\". Please retry your request."
+            if (error.status === 500) {
+                dialogs.errorDialog(message, error.data, 'Close');
+            } else {
+                message = error.data.message + "while performing operation \"" + requestUrl + "\".";
+                dialogs.errorDialog(message, error.data, 'Close');
             }
         }
 

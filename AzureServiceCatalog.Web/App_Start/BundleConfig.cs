@@ -56,6 +56,7 @@ namespace AzureServiceCatalog.Web
                     "~/app/shared/state-watcher.service.js",
                     "~/app/shared/resource-group-selector.controller.js",
                     "~/app/shared/json-modal.controller.js",
+                    "~/app/shared/error-dialog-box.controller.js",
                     "~/app/shared/edit-field-modal.controller.js",
                     "~/app/shared/constants.js",
                     "~/app/shared/confirm-modal.controller.js",
