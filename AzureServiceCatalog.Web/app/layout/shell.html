@@ -65,25 +65,25 @@
                         </li>
 
                         <li uib-dropdown ng-show="shell.isAuthenticated">
-                            <img src="https://secure.gravatar.com/avatar/d2b57db2fef2c9f0aa3b17bccb9b0f80.jpg?d=mm" style="height: 50px; padding-top: 1px" />
                             <button class="btn dropdown-toggle navbar-btn" uib-dropdown-toggle type="button" style="background-color:transparent;color:white;">
-                                {{shell.userName}}
+                                <img src="https://secure.gravatar.com/avatar/d2b57db2fef2c9f0aa3b17bccb9b0f80.jpg?d=mm" style="height: 50px; padding-top: 1px" />
                             </button>
                             <ul class="dropdown-menu" role="menu">
+                                <li> {{shell.userName}} </li>
                                 <li><a ng-href="Account/SignOut?domain={{shell.userDetail.organization.verifiedDomain}}">Logout</a>
                             </ul>
                         </li>
                     </ul>
 
                     <form class="navbar-form navbar-right" role="search" ng-show="shell.isAuthenticated && !shell.activation">
-                        <button type="submit" class="btn btn-success" uib-btn-checkbox ng-model="shell.tasksVisible">
+                        <button type="submit" class="btn btn-warning" uib-btn-checkbox ng-model="shell.tasksVisible">
                             <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
                             {{shell.tasksVisible ? 'Hide' : 'Show'}} Tasks
                         </button>
                     </form>
 
                     <div id="feedbackPost" ng-click="shell.showFeedback()">
-                       <label>Feedback</label>
+                        <label>Feedback</label>
                     </div>
                 </div>
 
@@ -103,7 +103,7 @@
         <div class="well well-sm" data-ng-include="'/app/layout/tasks-pane.html'"></div>
     </div>
 
-    
+
 
     <ol ng-show="shell.isAuthenticated && !shell.isActivation" class="breadcrumb">
         <li><a ui-sref="home">{{shell.userDetail.organization.verifiedDomain}}</a></li>

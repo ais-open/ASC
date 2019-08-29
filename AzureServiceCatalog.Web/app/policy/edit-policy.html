@@ -17,21 +17,21 @@
                 </div>
             </form>
 
-            <button class="btn btn-success" ng-click="vm.save()">Save</button>
+            <button class="btn btn-primary" ng-click="vm.save()">Save</button>
             <button class="btn btn-danger" ng-click="vm.deletePolicy()">Delete</button>
 
             <div>
                 <h4>
                     IF &nbsp;
-                    <a class="btn btn-success btn-xs" data-nodrag ng-click="vm.newOperatorSubItem(vm.root, 'not')"
+                    <a class="btn btn-warning btn-xs" data-nodrag ng-click="vm.newOperatorSubItem(vm.root, 'not')"
                        ng-show="vm.buttonVisible(vm.root)" style="margin-right: 8px;">
                         <span class="glyphicon glyphicon-plus"></span>not
                     </a>
-                    <a class="btn btn-success btn-xs" data-nodrag ng-click="vm.newOperatorSubItem(vm.root, 'allOf')"
+                    <a class="btn btn-warning btn-xs" data-nodrag ng-click="vm.newOperatorSubItem(vm.root, 'allOf')"
                        ng-show="vm.buttonVisible(vm.root)" style="margin-right: 8px;">
                         <span class="glyphicon glyphicon-plus"></span>and
                     </a>
-                    <a class="btn btn-success btn-xs" data-nodrag ng-click="vm.newOperatorSubItem(vm.root, 'anyOf')"
+                    <a class="btn btn-warning btn-xs" data-nodrag ng-click="vm.newOperatorSubItem(vm.root, 'anyOf')"
                        ng-show="vm.buttonVisible(vm.root)" style="margin-right: 8px;">
                         <span class="glyphicon glyphicon-plus"></span> or
                     </a>
@@ -106,15 +106,15 @@
                                     <span class="glyphicon glyphicon-plus"></span>Condition
                                 </a>
 
-                                <a class="pull-right btn btn-success btn-xs" data-nodrag ng-click="vm.newOperatorSubItem(this, 'anyOf')"
+                                <a class="pull-right btn btn-warning btn-xs" data-nodrag ng-click="vm.newOperatorSubItem(this, 'anyOf')"
                                    ng-show="vm.buttonVisible(this)" style="margin-right: 8px;">
                                     <span class="glyphicon glyphicon-plus"></span> or
                                 </a>
-                                <a class="pull-right btn btn-success btn-xs" data-nodrag ng-click="vm.newOperatorSubItem(this, 'allOf')"
+                                <a class="pull-right btn btn-warning btn-xs" data-nodrag ng-click="vm.newOperatorSubItem(this, 'allOf')"
                                    ng-show="vm.buttonVisible(this)" style="margin-right: 8px;">
                                     <span class="glyphicon glyphicon-plus"></span>and
                                 </a>
-                                <a class="pull-right btn btn-success btn-xs" data-nodrag ng-click="vm.newOperatorSubItem(this, 'not')"
+                                <a class="pull-right btn btn-warning btn-xs" data-nodrag ng-click="vm.newOperatorSubItem(this, 'not')"
                                    ng-show="vm.buttonVisible(this)" style="margin-right: 8px;">
                                     <span class="glyphicon glyphicon-plus"></span>not
                                 </a>

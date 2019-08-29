@@ -644,18 +644,18 @@ tr.angular-ui-tree-empty {
 }
 /*END Form Wizard*/
 #feedbackPost {
-  background-color: #DD4814;
-  height: 170px;
-  right: 0;
-  position: fixed;
-  top: 150px;
-  width: 40px;
-  border-bottom-left-radius: 10px;
-  border-top-left-radius: 10px;
+    background-color: #0077d7;
+    height: 170px;
+    right: 0;
+    position: fixed;
+    top: 150px;
+    width: 40px;
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
 }
 div#feedbackPost:hover {
-  background-position: -41px 0px;
-  background-color: #ae3910;
+    background-position: -41px 0px;
+    background-color: #104aae;
 }
 #feedbackPost label {
   display: block;
