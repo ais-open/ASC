@@ -292,6 +292,7 @@
     <Compile Include="Controllers\PolicyAssignmentsController.cs" />
     <Compile Include="Controllers\ProvidersController.cs" />
     <Compile Include="Controllers\EnrollmentSupportController.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Infrastructure\ADGroupAuthorize.cs" />
     <Compile Include="Infrastructure\AiExceptionLogger.cs" />
     <Compile Include="Infrastructure\AiHandleErrorAttribute.cs" />
