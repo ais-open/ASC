@@ -29,33 +29,26 @@ Global
 		AzureGov|Any CPU = AzureGov|Any CPU
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-		Testing|Any CPU = Testing|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{093D320C-6ED3-4E78-81FD-AB3F4D4D4B28}.AzureGov|Any CPU.ActiveCfg = AzureGov|Any CPU
 		{093D320C-6ED3-4E78-81FD-AB3F4D4D4B28}.AzureGov|Any CPU.Build.0 = AzureGov|Any CPU
-		{093D320C-6ED3-4E78-81FD-AB3F4D4D4B28}.Debug|Any CPU.ActiveCfg = Release|Any CPU
-		{093D320C-6ED3-4E78-81FD-AB3F4D4D4B28}.Debug|Any CPU.Build.0 = Release|Any CPU
+		{093D320C-6ED3-4E78-81FD-AB3F4D4D4B28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{093D320C-6ED3-4E78-81FD-AB3F4D4D4B28}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{093D320C-6ED3-4E78-81FD-AB3F4D4D4B28}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{093D320C-6ED3-4E78-81FD-AB3F4D4D4B28}.Release|Any CPU.Build.0 = Release|Any CPU
-		{093D320C-6ED3-4E78-81FD-AB3F4D4D4B28}.Testing|Any CPU.ActiveCfg = Testing|Any CPU
-		{093D320C-6ED3-4E78-81FD-AB3F4D4D4B28}.Testing|Any CPU.Build.0 = Testing|Any CPU
 		{AA3987AF-B57E-4092-A105-20C74DE63467}.AzureGov|Any CPU.ActiveCfg = Release|Any CPU
 		{AA3987AF-B57E-4092-A105-20C74DE63467}.AzureGov|Any CPU.Build.0 = Release|Any CPU
 		{AA3987AF-B57E-4092-A105-20C74DE63467}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AA3987AF-B57E-4092-A105-20C74DE63467}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA3987AF-B57E-4092-A105-20C74DE63467}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA3987AF-B57E-4092-A105-20C74DE63467}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AA3987AF-B57E-4092-A105-20C74DE63467}.Testing|Any CPU.ActiveCfg = Debug|Any CPU
-		{AA3987AF-B57E-4092-A105-20C74DE63467}.Testing|Any CPU.Build.0 = Debug|Any CPU
 		{891242EC-33E8-4F2B-821B-7EC3869B432E}.AzureGov|Any CPU.ActiveCfg = Release|Any CPU
 		{891242EC-33E8-4F2B-821B-7EC3869B432E}.AzureGov|Any CPU.Build.0 = Release|Any CPU
 		{891242EC-33E8-4F2B-821B-7EC3869B432E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{891242EC-33E8-4F2B-821B-7EC3869B432E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{891242EC-33E8-4F2B-821B-7EC3869B432E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{891242EC-33E8-4F2B-821B-7EC3869B432E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{891242EC-33E8-4F2B-821B-7EC3869B432E}.Testing|Any CPU.ActiveCfg = Debug|Any CPU
-		{891242EC-33E8-4F2B-821B-7EC3869B432E}.Testing|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
