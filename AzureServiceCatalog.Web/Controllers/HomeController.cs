@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -27,6 +28,7 @@ namespace AzureServiceCatalog.Web.Controllers
             try
             {
                 this.ViewBag.AppVersion = this.GetType().Assembly.GetName().Version.ToString();
+                this.ViewBag.WebConfigInUse = ConfigurationManager.AppSettings["WebConfigUsed"];
                 if (!activationLogin && !activation && string.IsNullOrEmpty(directoryName))
                 {
                     return View("Landing");
