@@ -749,16 +749,16 @@
     <Content Include="Views\Home\Logon.cshtml" />
     <Content Include="Views\Home\login.cshtml" />
     <Content Include="Views\Home\Landing.cshtml" />
-    <None Include="Web.AzureGov.config">
-      <DependentUpon>Web.config</DependentUpon>
-      <SubType>Designer</SubType>
-    </None>
+    <Content Include="Web.AzureGov.config">
+      <!--<DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>-->
+    </Content>
     <None Include="Web.gov.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
-    <None Include="Web.QA.config">
+    <Content Include="Web.QA.config">
       <!--<DependentUpon>Web.config</DependentUpon>-->
-    </None>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\directives\lvl-drag-drop.directive.js" />
