@@ -187,6 +187,7 @@
     <Compile Include="Billing\UsageFilterParameters.cs" />
     <Compile Include="Billing\UsagePayload.cs" />
     <Compile Include="BlobContainers.cs" />
+    <Compile Include="Blueprint.cs" />
     <Compile Include="CacheUserDetails.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="ContributorGroup.cs" />

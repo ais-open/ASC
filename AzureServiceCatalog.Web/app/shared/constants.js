@@ -3,6 +3,8 @@
 
     var siteMap = [
         { state: 'home', title: 'Home' },
+        { state: 'blueprints-home', title: 'Blueprints' },
+        { state: 'dashboard', title: 'Dashboard' },
         { state: 'product-list',  title: 'Manage Product Catalog',
             descendants: [
                 { state: 'add-product-designer', title: 'Add Product (drag/drop)' },

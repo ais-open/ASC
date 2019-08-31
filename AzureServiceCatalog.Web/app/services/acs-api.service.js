@@ -57,7 +57,8 @@
             validateDeployment: validateDeployment,
             sendFeedback: sendFeedback,
             getDefaultFeedbackInfo: getDefaultFeedbackInfo,
-            sendEnrollmentSupportRequest: sendEnrollmentSupportRequest
+            sendEnrollmentSupportRequest: sendEnrollmentSupportRequest,
+            getBlueprints: getBlueprints
 
         };
 
@@ -295,6 +296,10 @@
 
         function sendEnrollmentSupportRequest(vm) {
             return httpPost('/api/enrollmentsupport', vm);
+        }
+
+        function getBlueprints(subscriptionId) {
+            return httpGet('/api/blueprints?subscriptionId=' + subscriptionId);
         }
 
         //#region Private Methods

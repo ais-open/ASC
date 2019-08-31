@@ -25,7 +25,7 @@
 
             if (!isAuthorized) {
                 event.preventDefault();
-                $state.go('home');
+                $state.go('dashboard');
             }
             return isAuthorized;
         }

@@ -76,6 +76,7 @@ namespace AzureServiceCatalog.Web
                     "~/app/product-deployment/new-resource-group-modal.controller.js",
                     "~/app/product-deployment/new-resource-group-initial-data.service.js",
                     "~/app/resource-groups/resource-groups.controller.js",
+                    "~/app/home/blueprints-home.controller.js",
                     "~/app/home/home.controller.js",
                     "~/app/manage-products/quick-starts-modal.controller.js",
                     "~/app/manage-products/product-list.controller.js",
@@ -105,6 +106,7 @@ namespace AzureServiceCatalog.Web
                     "~/app/directives/dontPropagate.directive.js",
                     "~/app/deployments/deployments.controller.js",
                     "~/app/deployments/deployment.controller.js",
+                    "~/app/dashboard/dashboard.controller.js",
                     "~/app/app.run.js",
                     "~/app/app.config.js",
                     "~/app/support/feedback.controller.js"));

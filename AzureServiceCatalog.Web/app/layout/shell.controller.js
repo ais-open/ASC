@@ -83,7 +83,7 @@
         function stateChangeSuccess(event, toState, toParams, fromState, fromParams) {
             var current = getNavState(siteMap, toState.name);
             if (current) {
-                vm.currentNav = (current.state === 'home' ? null : current.title);
+                vm.currentNav = (current.state === 'dashboard' ? null : current.title);
                 vm.parentStates = _(getParents(current)).reverse().value();
             } else {
                 vm.currentNav = '(unknown state)';

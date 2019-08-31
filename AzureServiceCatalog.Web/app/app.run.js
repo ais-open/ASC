@@ -25,9 +25,9 @@
                 return;
             }
 
-            if (!identityInfo.directoryName && !_.includes(['activation', 'activation-login', 'home'], toState.name)) {
+            if (!identityInfo.directoryName && !_.includes(['activation', 'activation-login', 'dashboard'], toState.name)) {
                 console.log('***no directory name check!!!');
-                if (toState.name === 'home') {
+                if (toState.name === 'dashboard') {
                     return;
                 }
                 event.preventDefault();

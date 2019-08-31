@@ -7,7 +7,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" ui-sref="home" ng-class="{'cursor-default': shell.activation}">
+                <a class="navbar-brand" ui-sref="dashboard" ng-class="{'cursor-default': shell.activation}">
                     <i class="glyphicon glyphicon-home"></i>
                     <span>Service Catalog</span>
                 </a>
@@ -66,10 +66,9 @@
 
                         <li uib-dropdown ng-show="shell.isAuthenticated">
                             <button class="btn dropdown-toggle navbar-btn" uib-dropdown-toggle type="button" style="background-color:transparent;color:white;">
-                                <img src="https://secure.gravatar.com/avatar/d2b57db2fef2c9f0aa3b17bccb9b0f80.jpg?d=mm" style="height: 50px; padding-top: 1px" />
+                                <img src="https://secure.gravatar.com/avatar/d2b57db2fef2c9f0aa3b17bccb9b0f80.jpg?d=mm" title={{shell.userName}} style="height: 27px; padding-top: 1px" />
                             </button>
                             <ul class="dropdown-menu" role="menu">
-                                <li> {{shell.userName}} </li>
                                 <li><a ng-href="Account/SignOut?domain={{shell.userDetail.organization.verifiedDomain}}">Logout</a>
                             </ul>
                         </li>
@@ -106,7 +105,7 @@
 
 
     <ol ng-show="shell.isAuthenticated && !shell.isActivation" class="breadcrumb">
-        <li><a ui-sref="home">{{shell.userDetail.organization.verifiedDomain}}</a></li>
+        <li><a ui-sref="dashboard">{{shell.userDetail.organization.verifiedDomain}}</a></li>
         <li ng-repeat="parent in shell.parentStates">
             <a ui-sref="{{parent.state}}">{{parent.title}}</a>
         </li>

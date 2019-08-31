@@ -33,8 +33,36 @@
     function configStates($stateProvider, $urlRouterProvider, toastrConfig, $httpProvider, adalProvider) {
 
         $stateProvider
-            .state('home', {
+            .state('dashboard', {
                 url: '/',
+                templateUrl: '/app/dashboard/dashboard.html',
+                controller: 'DashboardCtrl',
+                controllerAs: 'vm',
+                requireADLogin: true,
+                resolve: {
+                    initialData: ['identityInfo', 'ascApi', function (identityInfo, ascApi) {
+                        if (identityInfo.isAuthenticated) {
+                            return ascApi.getTemplates();
+                        }
+                    }]
+                }
+            })
+            .state('blueprints-home', {
+                url: '/blueprints-home',
+                templateUrl: '/app/home/blueprints-home.html',
+                controller: 'BlueprintsHomeCtrl',
+                controllerAs: 'vm',
+                requireADLogin: true,
+                resolve: {
+                    initialData: ['identityInfo', 'ascApi', function (identityInfo, ascApi) {
+                        if (identityInfo.isAuthenticated) {
+                            return ascApi.getEnrolledSubscriptions();
+                        }
+                    }]
+                }
+            })
+            .state('home', {
+                url: '/home',
                 templateUrl: '/app/home/home.html',
                 controller: 'HomeCtrl',
                 controllerAs: 'vm',

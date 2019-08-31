@@ -1,0 +1,18 @@
+﻿<div class="product-tile-container col-lg-3 col-md-4 col-sm-6 col-xs-12 " ng-repeat="blueprint in vm.blueprints | orderBy: 'name'">
+    <div class="product-tile">
+        <h4 class="text-primary bold-text product-header">
+            <a ui-sref="show-blueprint-versions({ subscriptionId: vm.subscriptionId, id: blueprint.name })" title={{blueprint.name}}>
+                <img src="../../Content/images/azure-blueprint.png" ng-attr-title="{{blueprint.name}}" />
+                {{blueprint.name}}
+            </a>
+        </h4>
+        <hr />
+        <div class="caption">
+            {{blueprint.description}}<br />
+
+            <span class="product-tile-included-resources bold-text text-primary">Last Modified Date:</span>
+            <span class="product-tile-included-resources">{{vm.getLastModifiedDate(blueprint.lastModifiedDate)}}</span>
+
+        </div>
+    </div>
+</div>
