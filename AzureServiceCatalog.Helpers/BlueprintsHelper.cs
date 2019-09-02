@@ -27,5 +27,20 @@ namespace AzureServiceCatalog.Helpers
                 TraceHelper.TraceOperation(thisOperationContext);
             }
         }
+
+        public async Task<string> GetBlueprintVersions(string subscriptionId, string blueprintName, BaseOperationContext parentOperationContext)
+        {
+            var thisOperationContext = new BaseOperationContext(parentOperationContext, "BlueprintsHelper:GetBlueprintVersions");
+            try
+            {
+                var requestUrl = $"{Config.AzureResourceManagerUrl}/subscriptions/{subscriptionId}/providers/Microsoft.Blueprint/blueprints/{blueprintName}/versions?api-version={blueprintApiVersion}";
+                return await ArmHttpHelper.Get(requestUrl, thisOperationContext);
+            }
+            finally
+            {
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
+            }
+        }
     }
 }

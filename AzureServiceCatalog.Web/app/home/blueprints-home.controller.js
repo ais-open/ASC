@@ -10,7 +10,7 @@
         var vm = this;
         vm.blueprints = [];
         vm.selectedSubscription = null;
-        vm.getLastModifiedDate = getLastModifiedDate;
+        vm.subscriptionId = "";
         vm.subscriptions = initialData;
         vm.subscriptionChanged = subscriptionChanged;
         vm.getLastModifiedDate = getLastModifiedDate;
@@ -19,6 +19,7 @@
         function activate() {
             if (vm.subscriptions && vm.subscriptions.length > 0) {
                 vm.selectedSubscription = vm.subscriptions[0];
+                vm.subscriptionId = vm.selectedSubscription.rowKey;
                 subscriptionChanged();
             }
         }

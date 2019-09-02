@@ -14,15 +14,15 @@ using System;
 
 namespace AzureServiceCatalog.Web.Controllers
 {
-    [RoutePrefix("api/blueprints")]
-    public class BlueprintsController : ApiController
+    [RoutePrefix("api/blueprint-versions")]
+    public class BlueprintVersionsController : ApiController
     {
         private BlueprintsHelper client = new BlueprintsHelper();
 
-        [Route("")]
-        public async Task<IHttpActionResult> Get(string subscriptionId)
+        [Route("{blueprintName}")]
+        public async Task<IHttpActionResult> Get(string subscriptionId, string blueprintName)
         {
-            var thisOperationContext = new BaseOperationContext("BlueprintsController:Get")
+            var thisOperationContext = new BaseOperationContext("BlueprintVersionsController:Get")
             {
                 IpAddress = HttpContext.Current.Request.UserHostAddress,
                 UserId = ClaimsPrincipal.Current.SignedInUserName(),
@@ -30,23 +30,25 @@ namespace AzureServiceCatalog.Web.Controllers
             };
             try
             {
-                var blueprints = await this.client.GetBlueprintDefinitions(subscriptionId, thisOperationContext);
+                var blueprintVersions = await this.client.GetBlueprintVersions(subscriptionId, blueprintName, thisOperationContext);
                 var list = new List<object>();
-                dynamic updatedBlueprints = JObject.Parse(blueprints);
-                foreach (var item in updatedBlueprints.value)
+                dynamic updatedBlueprintVersions = JObject.Parse(blueprintVersions);
+                foreach (var item in updatedBlueprintVersions.value)
                 {
-                    var blueprintItem = new Blueprint
+                    var blueprintVersionItem = new BlueprintVersion
                     {
                         Id = item.id,
                         Name = item.name,
+                        BlueprintName = item.properties.blueprintName,
                         Type = item.type,
                         Scope = item.properties.targetScope,
                         Description = item.properties.description,
                         CreatedDate = item.properties.status.timeCreated,
                         LastModifiedDate = item.properties.status.lastModified,
-                        Properties = item.properties,
+                        ResourceGroups = item.properties.resourceGroups,
+                        Parameters = item.properties.parameters
                     };
-                    list.Add(blueprintItem);
+                    list.Add(blueprintVersionItem);
                 }
                 return this.Ok(list);
             }

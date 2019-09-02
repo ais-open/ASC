@@ -287,6 +287,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\AuditLogsController.cs" />
+    <Compile Include="Controllers\BlueprintVersionsController.cs" />
     <Compile Include="Controllers\BlueprintsController.cs" />
     <Compile Include="Controllers\FeedbackController.cs" />
     <Compile Include="Controllers\PoliciesController.cs" />
@@ -316,6 +317,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Content Include=".jshintrc" />
+    <Content Include="app\blueprint\assign-blueprint.html" />
+    <Content Include="app\blueprint\assign-blueprint.controller.js" />
+    <Content Include="app\dashboard\dashboard.controller.js" />
+    <Content Include="app\dashboard\dashboard.html" />
     <Content Include="app\deployments\deployment.controller.js" />
     <Content Include="app\deployments\deployment.html" />
     <Content Include="app\deployments\deployments.controller.js" />
@@ -326,6 +331,8 @@
     <Content Include="app\enroll-support\enrollment-support-app.js" />
     <Content Include="app\enroll-support\enrollment-support.html" />
     <Content Include="app\enroll-support\enrollment-support.controller.js" />
+    <Content Include="app\home\blueprints-home.controller.js" />
+    <Content Include="app\home\blueprints-home.html" />
     <Content Include="app\shared\error-dialog-box.controller.js" />
     <Content Include="app\shared\error-dialog-box.html" />
     <Content Include="app\support\feedback.controller.js" />

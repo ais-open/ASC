@@ -23,7 +23,7 @@ namespace AzureServiceCatalog.Models
         public string CreatedDate { get; set; }
         [JsonProperty("lastModifiedDate")]
         public string LastModifiedDate { get; set; }
-        [JsonProperty("propeties")]
+        [JsonProperty("properties")]
         public Object Properties { get; set; }
 
     }

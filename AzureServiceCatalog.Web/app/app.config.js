@@ -303,6 +303,19 @@
                             return securityInitialDataService.getData();
                         }]
                 }
+            })
+            .state('assign-blueprint', {
+                url: '/assign-blueprint/:subscriptionId/:blueprintName',
+                templateUrl: 'app/blueprint/assign-blueprint.html',
+                controller: 'AssignBlueprintCtrl',
+                controllerAs: 'vm',
+                resolve: {
+                    initialData: ['$stateParams', 'ascApi', function ($stateParams, ascApi) {
+                        if ($stateParams.blueprintName) {
+                            return ascApi.getBlueprintVersions($stateParams.subscriptionId, $stateParams.blueprintName);
+                        }
+                    }]
+                }
             });
 
         $urlRouterProvider.otherwise('/');

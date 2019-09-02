@@ -58,7 +58,8 @@
             sendFeedback: sendFeedback,
             getDefaultFeedbackInfo: getDefaultFeedbackInfo,
             sendEnrollmentSupportRequest: sendEnrollmentSupportRequest,
-            getBlueprints: getBlueprints
+            getBlueprints: getBlueprints,
+            getBlueprintVersions: getBlueprintVersions
 
         };
 
@@ -300,6 +301,10 @@
 
         function getBlueprints(subscriptionId) {
             return httpGet('/api/blueprints?subscriptionId=' + subscriptionId);
+        }
+
+        function getBlueprintVersions(subscriptionId, blueprintName) {
+            return httpGet('/api/blueprint-versions/' + blueprintName + '?subscriptionId=' + subscriptionId);
         }
 
         //#region Private Methods
