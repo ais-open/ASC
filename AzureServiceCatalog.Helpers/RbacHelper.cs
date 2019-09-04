@@ -279,8 +279,35 @@ namespace AzureServiceCatalog.Helpers
                 dynamic roleAssignments = JObject.Parse(response);
                 var items = roleAssignments.value as IEnumerable<dynamic>;
                 var ascRoleAssignments = items.Where(x => x.properties.roleDefinitionId == ascContributorRole.id).ToList();
-
+       
                 return ascRoleAssignments.ToJArray().ToString();
+            }
+            finally
+            {
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
+            }
+        }
+
+        public async Task<string> GrantRoleForBlueprintAssignment(string subscriptionId, string roleId, string objectId, BaseOperationContext parentOperationContext)
+        {
+            var thisOperationContext = new BaseOperationContext(parentOperationContext, "RbacHelper:GrantRoleForBlueprintAssignment");
+            try
+            {
+                var newRoleAssignmentId = Guid.NewGuid().ToString();
+                var requestUrl = $"{Config.AzureResourceManagerUrl}/subscriptions/{subscriptionId}/providers/Microsoft.Authorization/roleAssignments/{newRoleAssignmentId}?api-version={apiVersion}";
+                var requestBody = new
+                {
+                    properties = new
+                    {
+                        roleDefinitionId = $"/subscriptions/{subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/8e3af657-a8ff-443c-a75c-2fe8c4bcb635",
+                        principalId = objectId,
+                        scope = "/subscriptions/" + subscriptionId
+                    }
+                };
+                var requestJson = JsonConvert.SerializeObject(requestBody);
+                var json = await ArmHttpHelper.Put(requestUrl, requestJson, thisOperationContext);
+                return json;
             }
             finally
             {

@@ -42,5 +42,51 @@ namespace AzureServiceCatalog.Helpers
                 TraceHelper.TraceOperation(thisOperationContext);
             }
         }
+
+        public async Task<string> GetAssignedBlueprint(string subscriptionId, string blueprintAssignmentName, BaseOperationContext parentOperationContext)
+        {
+            var thisOperationContext = new BaseOperationContext(parentOperationContext, "BlueprintsHelper:GetAssignedBlueprint");
+            try
+            {
+                var requestUrl = $"{Config.AzureResourceManagerUrl}/subscriptions/{subscriptionId}/providers/Microsoft.Blueprint/blueprintAssignments/{blueprintAssignmentName}/versions?api-version={blueprintApiVersion}";
+                return await ArmHttpHelper.Get(requestUrl, thisOperationContext);
+            }
+            finally
+            {
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
+            }
+        }
+
+        public async Task<string> AssignBlueprint(string subscriptionId, string assignmentName, object blueprintAssignment, BaseOperationContext parentOperationContext)
+        {
+            var thisOperationContext = new BaseOperationContext(parentOperationContext, "BlueprintsHelper:AssignBlueprint");
+            try
+            {
+                var requestUrl = $"{Config.AzureResourceManagerUrl}/subscriptions/{subscriptionId}/providers/Microsoft.Blueprint/blueprintAssignments/{assignmentName}?api-version={blueprintApiVersion}";
+                return await ArmHttpHelper.Put(requestUrl, blueprintAssignment, thisOperationContext);
+            }
+            finally
+            {
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
+            }
+        }
+
+        public async Task<string> GetObjectIdOfBlueprintServicePrincipal(string subscriptionId, string blueprintAssignmentName, BaseOperationContext parentOperationContext)
+        {
+            var thisOperationContext = new BaseOperationContext(parentOperationContext, "BlueprintsHelper:GetObjectIdOfBlueprintServicePrincipal");
+            try
+            {
+                var requestUrl = $"{Config.AzureResourceManagerUrl}/subscriptions/{subscriptionId}/providers/Microsoft.Blueprint/blueprintAssignments/{blueprintAssignmentName}/WhoIsBlueprint?api-version={blueprintApiVersion}";
+                return await ArmHttpHelper.Post(requestUrl, null, thisOperationContext);
+            }
+            finally
+            {
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
+            }
+
+        }
     }
 }

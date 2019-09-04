@@ -59,7 +59,10 @@
             getDefaultFeedbackInfo: getDefaultFeedbackInfo,
             sendEnrollmentSupportRequest: sendEnrollmentSupportRequest,
             getBlueprints: getBlueprints,
-            getBlueprintVersions: getBlueprintVersions
+            getBlueprintVersions: getBlueprintVersions,
+            getAssignedBlueprint: getAssignedBlueprint,
+            getUserAssignedIdentities: getUserAssignedIdentities,
+            assignBlueprint: assignBlueprint
 
         };
 
@@ -305,6 +308,18 @@
 
         function getBlueprintVersions(subscriptionId, blueprintName) {
             return httpGet('/api/blueprint-versions/' + blueprintName + '?subscriptionId=' + subscriptionId);
+        }
+
+        function getAssignedBlueprint(subscriptionId, blueprintAssignmentName) {
+            return httpGet('/api/blueprint-assignments/' + blueprintAssignmentName + '?subscriptionId=' + subscriptionId);
+        }
+
+        function getUserAssignedIdentities(subscriptionId) {
+            return httpGet('/api/managed-identities/userAssignedIdentities/?subscriptionId=' + subscriptionId);
+        }
+
+        function assignBlueprint(subscriptionId, blueprintAssignmentName, blueprintAssignment) {
+            return httpPut('/api/blueprint-assignments/' + blueprintAssignmentName + '?subscriptionId=' + subscriptionId, blueprintAssignment);
         }
 
         //#region Private Methods
