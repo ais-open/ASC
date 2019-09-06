@@ -14,6 +14,7 @@
             state: 'blueprints-home', title: 'Blueprints',
             descendants: [
                 { state: 'assign-blueprint', title: 'Assign Blueprint' },
+                { state: 'blueprint-assignments', title: 'Blueprint Assignments' },
             ]
         },
         {

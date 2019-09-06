@@ -108,6 +108,9 @@ namespace AzureServiceCatalog.Web
                     "~/app/deployments/deployment.controller.js",
                     "~/app/dashboard/dashboard.controller.js",
                     "~/app/blueprint/assign-blueprint.controller.js",
+                    "~/app/blueprint/blueprint-assignments.controller.js",
+                    "~/app/blueprint/view-blueprint-details-modal.controller.js",
+                    "~/app/blueprint/view-blueprint-details-initial-data.service.js",
                     "~/app/app.run.js",
                     "~/app/app.config.js",
                     "~/app/support/feedback.controller.js"));

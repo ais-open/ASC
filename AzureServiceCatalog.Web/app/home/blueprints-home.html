@@ -1,18 +1,46 @@
-﻿<div class="product-tile-container col-lg-3 col-md-4 col-sm-6 col-xs-12 " ng-repeat="blueprint in vm.blueprints | orderBy: 'name'">
-    <div class="product-tile">
-        <h4 class="text-primary bold-text product-header">
-            <a ui-sref="assign-blueprint({ subscriptionId: vm.subscriptionId, blueprintName: blueprint.name })" title={{blueprint.name}}>
-                <img src="../../Content/images/azure-blueprint.png" ng-attr-title="{{blueprint.name}}" />
-                {{blueprint.name}}
-            </a>
-        </h4>
-        <hr />
-        <div class="caption">
-            {{blueprint.description}}<br />
-
-            <span class="product-tile-included-resources bold-text text-primary">Last Modified Date:</span>
-            <span class="product-tile-included-resources">{{vm.getLastModifiedDate(blueprint.lastModifiedDate)}}</span>
-
-        </div>
+﻿<div>
+    <div>
+        <h1>
+            Blueprints
+            <span style="float:right">
+                <a class="btn btn-primary" href="{{vm.portalUrl}}" target="_blank">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    <span>Add New Blueprint</span>
+                </a>
+                <button class="btn btn-info" ng-click="vm.getBlueprints()">
+                    <i class="glyphicon glyphicon-refresh"></i>
+                    Refresh
+                </button>
+                <a class="btn btn-warning" href="{{vm.portalUrl}}" target="_blank">
+                    <i class="glyphicon glyphicon-share"></i>
+                    <span>Manage In Portal</span>
+                </a>
+            </span>
+        </h1>
+    </div>
+    <div>
+        <table class="table table-striped table-hover table-condensed table-fixed-layout middle-align">
+            <thead>
+                <tr>
+                    <th class="col-md-3">Blueprint Name</th>
+                    <th class="col-md-8">Description</th>
+                    <th class="col-md-2"></th>
+                    <th class="col-md-1"></th>
+                    <th class="col-md-2"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="selectable" ng-repeat="blueprint in vm.blueprints | orderBy: 'name'" >
+                    <td class="col-md-3">
+                        <a class="btn btn-link" ui-sref="assign-blueprint({ subscriptionId: vm.subscriptionId, blueprintName: blueprint.name })">{{blueprint.name}}</a>
+                    </td>
+                    <td class="col-md-9 middle-align">{{blueprint.description}}</td>
+                    <td class="col-md-2 middle-align text-right"><button class="btn btn-warning" ng-click="vm.viewDetails(blueprint)">View Details...</button></td>
+                    <td class="col-md-1 middle-align text-right"><button class="btn btn-warning" ui-sref="assign-blueprint({ subscriptionId: vm.subscriptionId, blueprintName: blueprint.name })">Assign</button></td>
+                    <td class="col-md-2 middle-align text-right"><button  class="btn btn-warning" ui-sref="blueprint-assignments">View Assignments</button></td>
+                    <td class="col-md-1 middle-align"></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>

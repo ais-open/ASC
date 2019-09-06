@@ -316,6 +316,17 @@
                         }
                     }]
                 }
+            })
+            .state('blueprint-assignments', {
+                url: '/blueprint-assignments',
+                templateUrl: 'app/blueprint/blueprint-assignments.html',
+                controller: 'BlueprintAssignmentsCtrl',
+                controllerAs: 'vm',
+                resolve: {
+                    initialData: ['$stateParams', 'ascApi', function ($stateParams, ascApi) {
+                        return [];
+                    }]
+                }
             });
 
         $urlRouterProvider.otherwise('/');

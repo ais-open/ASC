@@ -128,7 +128,6 @@
         }
 
         function openErrorDialog(config) {
-            console.log(config);
             var modalInstance = $uibModal.open({
                 templateUrl: '/app/shared/error-dialog-box.html',
                 controller: 'ErrDialogBoxCtrl',

@@ -16,7 +16,6 @@
         function getDate(requestDate) {
             var date = new Date(requestDate);
             var updatedDate = date.toLocaleString();
-            console.log(updatedDate);
             return updatedDate;
         }
 

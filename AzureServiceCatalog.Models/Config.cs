@@ -15,6 +15,7 @@ namespace AzureServiceCatalog.Models
         public static readonly string Authority = ConfigurationManager.AppSettings["ida:Authority"];
         public static readonly string AzureResourceManagerIdentifier = ConfigurationManager.AppSettings["ida:AzureResourceManagerIdentifier"];
         public static readonly string AzureResourceManagerUrl = ConfigurationManager.AppSettings["ida:AzureResourceManagerUrl"];
+        public static readonly string PortalUrl = ConfigurationManager.AppSettings["ida:PortalUrl"];
         public static readonly string AzureResourceManagerAPIVersion = ConfigurationManager.AppSettings["ida:AzureResourceManagerAPIVersion"];
         public static readonly string GraphAPIIdentifier = ConfigurationManager.AppSettings["ida:GraphAPIIdentifier"];
         public static readonly string GraphAPIVersion = ConfigurationManager.AppSettings["ida:GraphAPIVersion"];

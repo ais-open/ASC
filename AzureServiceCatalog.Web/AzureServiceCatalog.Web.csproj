@@ -319,8 +319,13 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Content Include=".jshintrc" />
+    <Content Include="app\blueprint\blueprint-assignments.controller.js" />
+    <Content Include="app\blueprint\blueprint-assignments.html" />
     <Content Include="app\blueprint\assign-blueprint.html" />
     <Content Include="app\blueprint\assign-blueprint.controller.js" />
+    <Content Include="app\blueprint\view-blueprint-details-initial-data.service.js" />
+    <Content Include="app\blueprint\view-blueprint-details-modal.controller.js" />
+    <Content Include="app\blueprint\view-blueprint-details-modal.html" />
     <Content Include="app\dashboard\dashboard.controller.js" />
     <Content Include="app\dashboard\dashboard.html" />
     <Content Include="app\deployments\deployment.controller.js" />
@@ -762,6 +767,7 @@
     <Content Include="Web.AzureGov.config">
       <!--<DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>-->
+      <SubType>Designer</SubType>
     </Content>
     <None Include="Web.gov.config">
       <DependentUpon>Web.config</DependentUpon>

@@ -673,7 +673,7 @@ h3.uidialog {
     border-radius: 4px;
     position: fixed;
     top: 40%;
-    left: 32%;
+    left: 25%;
     margin-top: -50px;
     margin-left: -100px;
     width: 300px;
@@ -686,7 +686,20 @@ h3.uidialog {
     border-radius: 4px;
     position: fixed;
     top: 40%;
-    left: 60%;
+    left: 45%;
+    margin-top: -50px;
+    margin-left: -100px;
+    width: 300px;
+}
+
+#dashboardButton3 {
+    min-height: 170px;
+    margin-bottom: 20px;
+    border: 5px solid #0080e1;
+    border-radius: 4px;
+    position: fixed;
+    top: 40%;
+    left: 65%;
     margin-top: -50px;
     margin-left: -100px;
     width: 300px;
@@ -709,6 +722,12 @@ h3.uidialog {
 #dashboardButtonLabel2 {
     line-height: 120px;
     margin-left: 1px;
+    font-size: 20px;
+}
+
+#dashboardButtonLabel3 {
+    line-height: 120px;
+    margin-left: 33px;
     font-size: 20px;
 }
 

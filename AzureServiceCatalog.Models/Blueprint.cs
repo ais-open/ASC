@@ -25,6 +25,8 @@ namespace AzureServiceCatalog.Models
         public string LastModifiedDate { get; set; }
         [JsonProperty("properties")]
         public Object Properties { get; set; }
+        [JsonProperty("portalUrl")]
+        public string PortalUrl { get; set; }
 
     }
 }
