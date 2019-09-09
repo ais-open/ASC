@@ -212,6 +212,7 @@
     <Compile Include="TemplateEntity.cs" />
     <Compile Include="TemplateViewModel.cs" />
     <Compile Include="UserDetailsViewModel.cs" />
+    <Compile Include="Users.cs" />
     <Compile Include="UserSubscriptionInfo.cs" />
   </ItemGroup>
   <ItemGroup>

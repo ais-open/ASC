@@ -207,6 +207,32 @@ namespace AzureServiceCatalog.Helpers
             }
         }
 
+        public static async Task<List<User>> GetUserList (string organizationId, BaseOperationContext parentOperationContext)
+        {
+            var thisOperationContext = new BaseOperationContext(parentOperationContext, "AzureADGraphApiHelper:GetUserList");
+
+            try
+            {
+                var requestUrl = $"{Config.GraphAPIIdentifier}{organizationId}/users?api-version={Config.GraphAPIVersion}";
+                var httpClient = GetAuthenticatedHttpClientForGraphApiForUser(thisOperationContext);
+
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
+                HttpResponseMessage response = await httpClient.SendAsync(request);
+
+                string result = await response.Content.ReadAsStringAsync();
+                var usersObject = JsonConvert.DeserializeObject<Users>(result);
+
+                List<User> userList= usersObject.value; 
+
+                return userList;
+            }
+            finally
+            {
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
+            }
+        }
+
         public static async Task<string> GetObjectIdOfServicePrincipalInOrganization(string organizationId, string applicationId, BaseOperationContext parentOperationContext)
         {
             var thisOperationContext = new BaseOperationContext(parentOperationContext, "AzureADGraphApiHelper:GetObjectIdOfServicePrincipalInOrganization");
