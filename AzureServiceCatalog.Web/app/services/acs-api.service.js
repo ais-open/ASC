@@ -62,7 +62,9 @@
             getBlueprintVersions: getBlueprintVersions,
             getAssignedBlueprint: getAssignedBlueprint,
             getUserAssignedIdentities: getUserAssignedIdentities,
-            assignBlueprint: assignBlueprint
+            assignBlueprint: assignBlueprint,
+            getUsers: getUsers,
+            getPortalUrl: getPortalUrl
 
         };
 
@@ -320,6 +322,14 @@
 
         function assignBlueprint(subscriptionId, blueprintAssignmentName, blueprintAssignment) {
             return httpPut('/api/blueprint-assignments/' + blueprintAssignmentName + '?subscriptionId=' + subscriptionId, blueprintAssignment);
+        }
+
+        function getUsers() {
+            return httpGet('/api/identity/users');
+        }
+
+        function getPortalUrl(extensionForUrl, extensionType) {
+            return httpGet('/api/identity/portal-url?extensionForUrl=' + extensionForUrl+ '&extensionType=' + extensionType);
         }
 
         //#region Private Methods

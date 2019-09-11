@@ -16,7 +16,9 @@ namespace AzureServiceCatalog.Models
         public string objectType { get; set; }
         public string objectId { get; set; }
         public string displayName { get; set; }
+        public string mail { get; set; }
         public string userPrincipalName { get; set; }
         public string userType { get; set; }
+        public bool isSelected { get; set; }
     }
 }

@@ -253,10 +253,5 @@ namespace AzureServiceCatalog.Helpers
             }
             return results;
         }
-
-        public static string GetPortalUrl()
-        {
-            return Config.PortalUrl;
-        }
     }
 }

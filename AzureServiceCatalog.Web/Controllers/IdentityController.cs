@@ -197,6 +197,65 @@ namespace AzureServiceCatalog.Web.Controllers
             }
         }
 
+        [Route("users")]
+        public async Task<IHttpActionResult> GetUsers()
+        {
+            var thisOperationContext = new BaseOperationContext("IdentityController:GetUsers")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
+            try
+            {
+                string tenantId = ClaimsPrincipal.Current.TenantId();
+                var users = await AzureADGraphApiHelper.GetUserList(tenantId, thisOperationContext);
+                return this.Ok(users);
+            }
+            catch (Exception ex)
+            {
+                TraceHelper.TraceError(thisOperationContext.OperationId, thisOperationContext.OperationName, ex);
+                return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
+            }
+            finally
+            {
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
+            }
+        }
+
+        [AllowAnonymous]
+        [Route("portal-url")]
+        public IHttpActionResult GetPortalUrl(string extensionForUrl, string extensionType)
+        {
+            var thisOperationContext = new BaseOperationContext("IdentityController:GetPortalUrl")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
+            try
+            {
+                string portalUrl = Config.PortalUrl;
+                if (extensionType == "Common")
+                {
+                    extensionForUrl = "#" + extensionForUrl;
+                }
+                var updatedUrl = portalUrl + extensionForUrl;
+                return this.Ok(updatedUrl);
+            }
+            catch (Exception ex)
+            {
+                TraceHelper.TraceError(thisOperationContext.OperationId, thisOperationContext.OperationName, ex);
+                return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
+            }
+            finally
+            {
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
+            }
+        }
+
         [Route("asc-contributor")]
         public async Task<IHttpActionResult> PutAscContributorRole(string subscriptionId)
         {

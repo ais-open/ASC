@@ -2,10 +2,10 @@
     'use strict';
 
     angular.module('ascApp').controller('AssignBlueprintCtrl', AssignBlueprintCtrl);
-    AssignBlueprintCtrl.$inject = ['$state', 'initialData', 'ascApi', 'toastr'];
+    AssignBlueprintCtrl.$inject = ['$uibModal', '$state', 'initialData', 'ascApi', 'toastr'];
 
     /* @ngInject */
-    function AssignBlueprintCtrl($state, initialData, ascApi, toastr) {
+    function AssignBlueprintCtrl($uibModal, $state, initialData, ascApi, toastr) {
         /* jshint validthis: true */
         var vm = this;
         vm.subscriptionId = "";
@@ -24,10 +24,14 @@
         vm.targetScope = "";
         vm.resourceGroups = [];
         vm.parameters = [];
+        vm.extensionForUrl = "blade/Microsoft_AAD_IAM/UsersManagementMenuBlade/AllUsers";
+        vm.portalUrlForUsers = "";
+        vm.getPortalUrlForUsers = getPortalUrlForUsers;
         vm.getLocations = getLocations;
         vm.getParameters = getParameters;
         vm.getResourceGroups = getResourceGroups;
         vm.onVersionChange = onVersionChange;
+        vm.selectFromUsersList = selectFromUsersList;
         vm.assign = assign;
 
         activate();
@@ -54,15 +58,46 @@
                     getResourceGroups(vm.selectedBlueprintVersion);
                 }
             }
+            getPortalUrlForUsers();
             getLocations();
             getUserAssignedIdentities();
         }
 
         function getParameters(selectedBlueprintVersion) {
             var parameters = [];
-            _.forIn(selectedBlueprintVersion.parameters, function (value, key) {
-                parameters.push({ name: key, info: value, value: value.defaultValue });
+            _.forIn(selectedBlueprintVersion.parameters, function (param, key) {
+                var newParameter = {
+                    "name": key,
+                    "value": "",
+                    "displayName": "",
+                    "strongType": "",
+                    "description": "",
+                    "type": param.type,
+                    "allowedValues": []
+                };
+                if (newParameter.type === "array") {
+                    newParameter.value = "[]";
+                }
+                if (typeof param.metadata !== "undefined") {
+                    if (typeof param.metadata.displayName !== "undefined") {
+                        newParameter.displayName = param.metadata.displayName;
+                    }
+                    if (typeof param.metadata.strongType !== "undefined") {
+                        newParameter.strongType = param.metadata.strongType;
+                    }
+                    if (typeof param.metadata.description !== "undefined") {
+                        newParameter.description = param.metadata.description;
+                    }
+                }
+                if (typeof param.allowedValues !== "undefined") {
+                    newParameter.allowedValues = param.allowedValues;
+                }
+                if (typeof param.defaultValue !== "undefined") {
+                    newParameter.value = param.defaultValue;
+                }
+                parameters.push(newParameter);
             });
+            console.log(parameters)
             vm.parameters = parameters;
         }
 
@@ -91,6 +126,12 @@
             vm.resourceGroups = resourceGroups;
         }
 
+        function getPortalUrlForUsers() {
+            ascApi.getPortalUrl(vm.extensionForUrl, 'Common').then(function (data) {
+                vm.portalUrlForUsers = data;
+            });
+        }
+
         function getLocations() {
             ascApi.getStorageProvider(vm.subscriptionId).then(function (data) {
                 var storageAccounts = _.find(data.resourceTypes, { resourceType: 'storageAccounts' });
@@ -102,6 +143,7 @@
             ascApi.getUserAssignedIdentities(vm.subscriptionId).then(function (data) {
                 vm.userAssignedIdentities = data;
             });
+            document.getElementById('blueprintAssignmentName').focus();
         }
 
         function onVersionChange() {
@@ -111,7 +153,25 @@
             getResourceGroups(vm.selectedBlueprintVersion);
         }
 
+        function selectFromUsersList(parameter) {
+            var rgDialog = $uibModal.open({
+                templateUrl: '/app/blueprint/users-list-modal.html',
+                controller: 'UsersListCtrl',
+                controllerAs: 'vm',
+                resolve: {
+                    initialData: ['usersListInitialDataService', function (usersListInitialDataService) {
+                        return parameter;
+                    }]
+                },
+                size: 'lg'
+            });
+            rgDialog.result.then(function (selectedUsers) {
+                
+            });
+        }
+
         function assign() {
+            var isErrorNull = true;
             ascApi.getAssignedBlueprint(vm.subscriptionId, vm.assignmentName).then(function (data) {
                 if (typeof data.error === "undefined") {
                     var msg = 'A resource already exists with the same name in this scope. Please choose a different name.';
@@ -137,9 +197,17 @@
                     var resourceGroups = {};
                     _.forIn(vm.parameters, function (param) {
                         var parameterValue = param.value;
-                        if (param.info.type === "array" || param.info.type === "object") {
-                            parameterValue = JSON.parse(parameterValue);
-                        } else if (param.info.type === "int") {
+                        if (param.type === "array") {
+                            try {
+                                parameterValue = JSON.parse(parameterValue);
+                            }
+                            catch (exc) {
+                                isErrorNull = false;
+                                var heading = 'Invalid Parameter Value (' + param.name + ')';
+                                var msg = 'Parameter value should be an javascript array.';
+                                toastr.warning(msg, heading);
+                            }
+                        } else if (param.type === "int") {
                             parameterValue = parseInt(parameterValue, 10);
                         }
                         parameters[`${param.name}`] = {
@@ -161,15 +229,18 @@
                         }
                     });
                     blueprintAssignment.properties['resourceGroups'] = resourceGroups;
-                    ascApi.assignBlueprint(vm.subscriptionId, vm.assignmentName, blueprintAssignment).then(function (data) {
-                        if (data.error) {
-                            console.log('Error while assigning blueprint!', data);
-                            toastr.error('Unexpected error while assigning.', 'Error');
-                        } else {
-                            toastr.success('Blueprint assigned successfully.', 'Success');
-                            $state.go('manage-assigned-blueprint-list');
-                        }
-                    });
+                    if (isErrorNull) {
+                        ascApi.assignBlueprint(vm.subscriptionId, vm.assignmentName, blueprintAssignment).then(function (data) {
+                            if (data.error) {
+                                console.log('Error while assigning blueprint!', data);
+                                toastr.error('Unexpected error while assigning.', 'Error');
+                            } else {
+                                toastr.success('Blueprint assigned successfully.', 'Success');
+                                //$state.go('manage-assigned-blueprint-list');
+                            }
+                        });
+                    }
+
                 }
             });
         }

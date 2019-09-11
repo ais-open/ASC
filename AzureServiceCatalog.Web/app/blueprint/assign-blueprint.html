@@ -1,145 +1,142 @@
 ﻿<form name="frmAssign" class="form-horizontal" novalidate>
     <div>
         <h2>Assign Blueprint</h2>
-        <h4>Basics</h4>
-        <div class="col-md-12">
-            <div name="blueprintVersionForm" class="form-inline control-columns" novalidate>
-                <div class="form-group col-xs-12">
-                    <label class="col-lg-2 col-xs-12 col-sm-3">Blueprint Name: </label>
-                    <input type="text" name="blueprintName" ng-model="vm.blueprintName" class="form-control" placeholder="Blueprint Name" disabled>
-                </div>
-                <div class="form-group col-xs-12">
-                    <label class="col-lg-2 col-xs-12 col-sm-3">Assignment Name: </label>
-                    <input type="text" name="blueprintAssignmentName" ng-model="vm.assignmentName" class="form-control" placeholder="Assignment Name" required>
-                </div>
-                <div class="form-group col-xs-12">
-                    <label class="col-lg-2 col-xs-12 col-sm-3">Location: </label>
-                    <select class="form-control" name="blueprintAssignmentLocation" ng-model="vm.location" ng-options="l as l for l in vm.locations" required></select>
-                </div>
-                <div class="form-group col-xs-12">
-                    <label class="col-lg-2 col-xs-12 col-sm-3">Blueprint Version: </label>
-                    <select class="form-control" name="selectedVersion" ng-model="vm.selectedVersion" ng-change="vm.onVersionChange()" ng-options="v as v for v in vm.versionNames" required></select>
-                </div>
-                <div class="form-group col-xs-12">
-                    <label class="col-lg-2 col-xs-12 col-sm-3">Lock Assignment: </label>
-                    <select class="form-control" name="LockAssignment" ng-model="vm.lockAssigment">
-                        <option ng-model="vm.lockAssigment" value="none">Don't Lock</option>
-                        <option ng-model="vm.lockAssigment" value="allResourcesDoNotDelete">Do Not Delete</option>
-                        <option ng-model="vm.lockAssigment" value="allResourcesReadOnly">Read Only</option>
-                    </select>
-                </div>
-            </div>
-            <br />
-        </div>
-        <br />
-        <br />
-        <br />
-        <h4>Managed Identity</h4>
-        <div class="col-md-12">
-            <div>
-                <input class="col-lg-2 col-xs-12 col-sm-1" name="ManagedIdentity" type="radio" ng-model="vm.managedIdentity" value="SystemAssigned">  System assigned <br />
-                <input class="col-lg-2 col-xs-12 col-sm-1" name="ManagedIdentity" type="radio" ng-model="vm.managedIdentity" value="UserAssigned"> User assigned <br />
-            </div>
-        </div>
-        <div class="col-md-12" ng-show="vm.managedIdentity == 'UserAssigned'">
-            <div class="form-inline control-columns">
-                <div class="form-group col-xs-12">
-                    <label class="col-lg-2 col-xs-12 col-sm-3"></label>
-                    <!--<select class="form-control" ng-model="vm.selectedUserIdentity">
-                        <option ng-for="v as v for v in vm.userAssignedIdentities" ng-value="v">{{v.name}}</option>
-                    </select>-->
-                    <select class="form-control" name="SelectedUserIdentity" ng-model="vm.selectedUserIdentity" ng-options="v.name for v in vm.userAssignedIdentities"></select>
-                </div>
-            </div>
-        </div>
-        <br />
-        <br />
-        <br />
-        <h4>Artifact parameters</h4>
-        <table class="table table-condensed">
-            <thead>
-                <tr>
-                    <th style="width: 450px;">
-                        ARTIFACT / PARAMETER
-                    </th>
-                    <th>
-                        PARAMETER VALUE
-                    </th>
-                </tr>
-            </thead>
-        </table>
-
-        <div>
-            <div class="col-lg-2 col-xs-12 col-sm-3">
-                <h4 style="font-weight: bold">{{vm.lodash.startCase(vm.targetScope)}}</h4>
-                <br />
-            </div>
-
-            <div class="col-md-12" ng-repeat="resourceGroup in vm.resourceGroups">
-                <fieldset class="col-md-12">
-                    <legend style="font-size: 15px; font-weight: bold">
-                        {{resourceGroup.displayName ? resourceGroup.displayName : resourceGroup.key}}
-                    </legend>
-                    <div class="form-inline control-columns">
-                        <div class="form-group col-xs-12">
-                            <span class="col-lg-4 col-xs-12 col-sm-3">
-                                Resource Group: Name
-                                <span ng-show="resourceGroup.info.metadata.description" class="glyphicon glyphicon-info-sign" aria-hidden="true" uib-tooltip="{{resourceGroup.info.metadata.description}}" tooltip-placement="left"></span>
-                            </span>
-                            <input class="form-control" ng-model="resourceGroup.name" ng-disabled="resourceGroup.isNameAvailable" />
+        <div id="basic" class="col-md-12">
+            <h4>Basics</h4>
+            <div class="col-md-12">
+                <div name="blueprintVersionForm" class="form-inline control-columns" novalidate>
+                    <div class="form-group col-xs-12">
+                        <label class="col-lg-2 col-xs-12 col-sm-3">Blueprint Name: </label>
+                        <input type="text" name="blueprintName" ng-model="vm.blueprintName" class="form-control" placeholder="Blueprint Name" disabled required>
+                    </div>
+                    <div class="form-group col-xs-12">
+                        <label class="col-lg-2 col-xs-12 col-sm-3">Assignment Name: </label>
+                        <input type="text" id="blueprintAssignmentName" name="blueprintAssignmentName" ng-model="vm.assignmentName" class="form-control" placeholder="Assignment Name" required>
+                    </div>
+                    <div class="form-group col-xs-12">
+                        <label class="col-lg-2 col-xs-12 col-sm-3">Location: </label>
+                        <select class="form-control" name="blueprintAssignmentLocation" ng-model="vm.location" ng-options="l as l for l in vm.locations" required></select>
+                    </div>
+                    <div class="form-group col-xs-12">
+                        <label class="col-lg-2 col-xs-12 col-sm-3">Blueprint Version: </label>
+                        <select class="form-control" name="selectedVersion" ng-model="vm.selectedVersion" ng-change="vm.onVersionChange()" ng-options="v as v for v in vm.versionNames" required></select>
+                    </div>
+                    <div class="form-group col-xs-12">
+                        <label class="col-lg-2 col-xs-12 col-sm-3">Lock Assignment: </label>
+                        <select class="form-control" name="LockAssignment" ng-model="vm.lockAssigment" required>
+                            <option ng-model="vm.lockAssigment" value="none">Don't Lock</option>
+                            <option ng-model="vm.lockAssigment" value="allResourcesDoNotDelete">Do Not Delete</option>
+                            <option ng-model="vm.lockAssigment" value="allResourcesReadOnly">Read Only</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-xs-12">
+                        <label class="col-lg-2 col-xs-12 col-sm-3">ManagedIdentity: </label>
+                        <div>
+                            <input name="ManagedIdentity" type="radio" ng-model="vm.managedIdentity" value="SystemAssigned">
+                            System assigned <br />
+                            <input name="ManagedIdentity" type="radio" ng-model="vm.managedIdentity" value="UserAssigned">
+                            User assigned <br />
                         </div>
-
-                        <div class="form-group col-xs-12">
-                            <span class="col-lg-4 col-xs-12 col-sm-3">
-                                Resource Group: Location
-                                <span ng-show="resourceGroup.info.metadata.description" class="glyphicon glyphicon-info-sign" aria-hidden="true" uib-tooltip="{{resourceGroup.info.metadata.description}}" tooltip-placement="left"></span>
-                            </span>
-                            <input class="form-control" ng-model="resourceGroup.location" ng-disabled="resourceGroup.isLocationAvailable" />
+                        <div class="col-md-12" ng-show="vm.managedIdentity == 'UserAssigned'">
+                            <div class="form-inline control-columns">
+                                <div class="form-group col-xs-12">
+                                    <label class="col-lg-2 col-xs-12 col-sm-3"></label>
+                                    <select class="form-control" name="SelectedUserIdentity" ng-model="vm.selectedUserIdentity" ng-options="v.name for v in vm.userAssignedIdentities"></select>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </fieldset>
+                </div>
+                <br />
             </div>
-
+        </div>
+        <div id="artifacts" class="col-md-12" style="margin-top:10px">
+            <h4>Artifact parameters</h4>
             <table class="table table-condensed">
                 <thead>
                     <tr>
-                        <th></th>
+                        <th style="width: 450px;">
+                            ARTIFACT / PARAMETER
+                        </th>
+                        <th>
+                            PARAMETER VALUE
+                        </th>
                     </tr>
                 </thead>
             </table>
             <div>
-                <div class="col-lg-2 col-xs-12 col-sm-3" ng-show="vm.parameters.length > 0">
-                    <label style="margin-bottom: 20px;">Parameters</label>
+                <div class="col-lg-2 col-xs-12 col-sm-3">
+                    <label class="col-lg-2 col-xs-12 col-sm-3">{{vm.lodash.startCase(vm.targetScope)}}</label>
                     <br />
                 </div>
-                <div class="form-group col-md-12" ng-repeat="parameter in vm.parameters">
-                    <span class="col-lg-4 col-xs-12 col-sm-3">
-                        {{parameter.info.metadata.displayName}}
-                        <span ng-show="parameter.info.metadata.description" class="glyphicon glyphicon-info-sign" aria-hidden="true" uib-tooltip="{{parameter.info.metadata.description}}" tooltip-placement="left"></span>
-                    </span>
 
-                    <div class="col-md-3" ng-show="{{vm.lodash.includes(['string', 'int', 'array', 'object'], parameter.info.type) && parameter.info.allowedValues.length === 0}}">
-                        <input type="text" class="form-control" ng-model="parameter.value" placeholder="Enter Value" required />
+                <div class="col-md-12" ng-repeat="resourceGroup in vm.resourceGroups">
+                    <fieldset class="col-md-12">
+                        <legend style="font-size: 15px; font-weight: bold">
+                            {{resourceGroup.displayName ? resourceGroup.displayName : resourceGroup.key}}
+                        </legend>
+                        <div class="form-inline control-columns">
+                            <div class="form-group col-xs-12">
+                                <span class="col-lg-4 col-xs-12 col-sm-4">
+                                    Resource Group: Name
+                                    <span ng-show="resourceGroup.info.metadata.description" class="glyphicon glyphicon-info-sign" aria-hidden="true" uib-tooltip="{{resourceGroup.info.metadata.description}}" tooltip-placement="left"></span>
+                                </span>
+                                <input class="form-control" ng-model="resourceGroup.name" ng-disabled="resourceGroup.isNameAvailable" required/>
+                            </div>
+
+                            <div class="form-group col-xs-12">
+                                <span class="col-lg-4 col-xs-12 col-sm-4">
+                                    Resource Group: Location
+                                    <span ng-show="resourceGroup.info.metadata.description" class="glyphicon glyphicon-info-sign" aria-hidden="true" uib-tooltip="{{resourceGroup.info.metadata.description}}" tooltip-placement="left"></span>
+                                </span>
+                                <input class="form-control" ng-model="resourceGroup.location" ng-disabled="resourceGroup.isLocationAvailable" required/>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <th></th>
+                        </tr>
+                    </thead>
+                </table>
+                <div style="overflow:auto;margin-left:11px">
+                    <div class="col-lg-2 col-xs-12 col-sm-3" ng-show="vm.parameters.length > 0">
+                        <label style="margin-bottom: 20px;">Parameters</label>
+                        <br />
                     </div>
-                    <div class="col-md-3" ng-show="{{vm.lodash.includes(['string', 'int', 'array', 'object'], parameter.info.type) && !parameter.info.allowedValues}}">
-                        <input type="text" class="form-control" ng-model="parameter.value" placeholder="Enter Value" required />
-                    </div>
-                    <div class="col-md-3" ng-show="{{parameter.info.type === 'secureString' && parameter.info.allowedValues.length === 0}}">
-                        <input type="password" class="form-control" ng-model="parameter.value" placeholder="Enter Value" required />
-                    </div>
-                    <div class="col-md-3" ng-show="{{vm.lodash.includes(['string', 'int'], parameter.info.type) && parameter.info.allowedValues.length > 0}}">
-                        <select class="form-control" ng-model="parameter.value" ng-options="p for p in parameter.info.allowedValues"></select>
+                    <div class="col-md-12" ng-repeat="parameter in vm.parameters">
+                        <div class="form-inline control-columns">
+                            <div class="form-group col-xs-12">
+                                <span class="col-lg-4 col-xs-12 col-sm-4">
+                                    {{parameter.displayName}}
+                                    <span ng-show="parameter.description" class="glyphicon glyphicon-info-sign" aria-hidden="true" uib-tooltip="{{parameter.description}}" tooltip-placement="left"></span>
+                                </span>
+                                <input ng-show="{{vm.lodash.includes(['string', 'int', 'array', 'object'], parameter.type) && parameter.allowedValues.length === 0 && parameter.strongType !== 'PrincipalId'}}"
+                                       type="text" class="form-control" ng-model="parameter.value" placeholder="Enter Value" required />
+                                <input ng-show="{{parameter.type === 'secureString' && parameter.allowedValues.length === 0}}"
+                                       type="password" class="form-control" ng-model="parameter.value" placeholder="Enter Value" required />
+                                <select ng-show="{{vm.lodash.includes(['string', 'int'], parameter.type) && parameter.allowedValues.length > 0}}"
+                                        class="form-control" ng-model="parameter.value" ng-options="p for p in parameter.allowedValues"></select>
+                                <div class="form-inline" ng-show="{{vm.lodash.includes(['string', 'int', 'array', 'object'], parameter.type) && parameter.allowedValues.length === 0 && parameter.strongType === 'PrincipalId'}}">
+                                    <input type="text" class="form-control col-md-4" style="width:259px" ng-model="parameter.value" placeholder="Enter Value" required>
+                                    <a class="btn btn-warning" href="{{vm.portalUrlForUsers}}" target="_blank">
+                                        <i class="glyphicon glyphicon-search" title="Search In Portal"></i>
+                                    </a><br/>
+                                    <span class="col-sm-4">(Search user, group or application in portal and Copy the Object Id & paste it here.)</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-
-        </div>
-
-        <div class="row">
-            <div class="col-md-3">
-                <button ng-disabled="!frmAssign.$valid" class="btn btn-primary" ng-click="vm.assign()">Assign</button>
+            <div class="row">
+                <div class="col-md-3">
+                    <button ng-disabled="!frmAssign.$valid" class="btn btn-primary" ng-click="vm.assign()">Assign</button>
+                </div>
             </div>
         </div>
-
     </div>
 </form>

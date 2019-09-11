@@ -213,8 +213,13 @@ namespace AzureServiceCatalog.Helpers
 
             try
             {
-                var requestUrl = $"{Config.GraphAPIIdentifier}{organizationId}/users?api-version={Config.GraphAPIVersion}";
-                var httpClient = GetAuthenticatedHttpClientForGraphApiForUser(thisOperationContext);
+                var requestUrl = $"{Config.GraphAPIIdentifier}{organizationId}/users?api-version=2013-04-05";
+                var httpClient = Helpers.GetAuthenticatedHttpClientForUser(thisOperationContext);
+                var isRunningInAzureGeneral = Config.IsRunningInAzureGeneral(Config.StorageAccountEndpointSuffix);
+                if (!isRunningInAzureGeneral)
+                {
+                    httpClient = GetAuthenticatedHttpClientForGraphApiForUser(thisOperationContext);
+                }
 
                 HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
                 HttpResponseMessage response = await httpClient.SendAsync(request);

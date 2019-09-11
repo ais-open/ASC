@@ -32,7 +32,6 @@ namespace AzureServiceCatalog.Web.Controllers
             {
                 var blueprints = await this.client.GetBlueprintDefinitions(subscriptionId, thisOperationContext);
                 var list = new List<object>();
-                var blueprintPortalUrl = Helpers.Helpers.GetPortalUrl() + "#blade/Microsoft_Azure_Policy/BlueprintsMenuBlade/Blueprints";
                 dynamic updatedBlueprints = JObject.Parse(blueprints);
                 foreach (var item in updatedBlueprints.value)
                 {
@@ -46,7 +45,6 @@ namespace AzureServiceCatalog.Web.Controllers
                         CreatedDate = item.properties.status.timeCreated,
                         LastModifiedDate = item.properties.status.lastModified,
                         Properties = item.properties,
-                        PortalUrl = blueprintPortalUrl
                     };
                     list.Add(blueprintItem);
                 }

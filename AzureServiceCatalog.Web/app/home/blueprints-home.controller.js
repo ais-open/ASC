@@ -11,8 +11,10 @@
         vm.blueprints = [];
         vm.selectedSubscription = null;
         vm.subscriptionId = "";
-        vm.portalUrl = "";
+        vm.portalUrlForBlueprints = "";
+        vm.extensionForUrl = "blade/Microsoft_Azure_Policy/BlueprintsMenuBlade/Blueprints";
         vm.subscriptions = initialData;
+        vm.getPortalUrlForBlueprints = vm.getPortalUrlForBlueprints;
         vm.getBlueprints = getBlueprints;
         vm.viewDetails = viewDetails;
         vm.getLastModifiedDate = getLastModifiedDate;
@@ -26,10 +28,16 @@
             }
         }
 
+        function getPortalUrlForBlueprints() {
+            ascApi.getPortalUrl(vm.extensionForUrl, 'Common').then(function (data) {
+                vm.portalUrlForBlueprints = data;
+            });
+        }
+
         function getBlueprints() {
             ascApi.getBlueprints(vm.subscriptionId).then(function (data) {
                 vm.blueprints = data;
-                vm.portalUrl = vm.blueprints[0].portalUrl;
+                getPortalUrlForBlueprints();
             });
         }
 
