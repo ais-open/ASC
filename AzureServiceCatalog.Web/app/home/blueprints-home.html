@@ -1,7 +1,7 @@
 ﻿<div>
     <div>
         <h1>
-            Blueprints
+            {{vm.lodash.toUpper("Blueprints")}}
             <span style="float:right">
                 <a class="btn btn-primary" href="{{vm.portalUrlForBlueprints}}" target="_blank">
                     <i class="glyphicon glyphicon-plus"></i>
@@ -15,6 +15,9 @@
                     <i class="glyphicon glyphicon-share"></i>
                     <span>Manage In Portal</span>
                 </a>
+                <button class="btn btn-warning" ui-sref="blueprint-assignments({subscriptionId: vm.subscriptionId})">
+                    View Assignments
+                </button>
             </span>
         </h1>
     </div>
@@ -26,7 +29,6 @@
                     <th class="col-md-8">Description</th>
                     <th class="col-md-2"></th>
                     <th class="col-md-1"></th>
-                    <th class="col-md-2"></th>
                 </tr>
             </thead>
             <tbody>
@@ -37,8 +39,6 @@
                     <td class="col-md-9 middle-align">{{blueprint.description}}</td>
                     <td class="col-md-2 middle-align text-right"><button class="btn btn-warning" ng-click="vm.viewDetails(blueprint)">View Details...</button></td>
                     <td class="col-md-1 middle-align text-right"><button class="btn btn-warning" ui-sref="assign-blueprint({ subscriptionId: vm.subscriptionId, blueprintName: blueprint.name })">Assign</button></td>
-                    <td class="col-md-2 middle-align text-right"><button  class="btn btn-warning" ui-sref="blueprint-assignments">View Assignments</button></td>
-                    <td class="col-md-1 middle-align"></td>
                 </tr>
             </tbody>
         </table>

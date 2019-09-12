@@ -1,14 +1,10 @@
 ﻿<form name="frmAssign" class="form-horizontal" novalidate>
     <div>
-        <h2>Assign Blueprint</h2>
+        <h2>{{vm.lodash.toUpper(vm.blueprintName)}} {{vm.lodash.toUpper("Assign")}}</h2>
         <div id="basic" class="col-md-12">
             <h4>Basics</h4>
             <div class="col-md-12">
                 <div name="blueprintVersionForm" class="form-inline control-columns" novalidate>
-                    <div class="form-group col-xs-12">
-                        <label class="col-lg-2 col-xs-12 col-sm-3">Blueprint Name: </label>
-                        <input type="text" name="blueprintName" ng-model="vm.blueprintName" class="form-control" placeholder="Blueprint Name" disabled required>
-                    </div>
                     <div class="form-group col-xs-12">
                         <label class="col-lg-2 col-xs-12 col-sm-3">Assignment Name: </label>
                         <input type="text" id="blueprintAssignmentName" name="blueprintAssignmentName" ng-model="vm.assignmentName" class="form-control" placeholder="Assignment Name" required>

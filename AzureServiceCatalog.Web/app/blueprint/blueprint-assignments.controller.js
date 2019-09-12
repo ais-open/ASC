@@ -9,10 +9,23 @@
         /* jshint validthis: true */
         var vm = this;
         vm.lodash = _;
-
+        vm.blueprintAssignments = initialData;
+        vm.viewDetails = viewDetails;
+        vm.update = update;
         activate();
 
         function activate() {
+            console.log(initialData);
+            if (initialData) {
+
+            }
+        }
+
+        function viewDetails() {
+
+        }
+
+        function update() {
 
         }
     }

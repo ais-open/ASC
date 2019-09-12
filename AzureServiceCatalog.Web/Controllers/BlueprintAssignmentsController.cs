@@ -19,6 +19,58 @@ namespace AzureServiceCatalog.Web.Controllers
     {
         private BlueprintsHelper client = new BlueprintsHelper();
 
+        [Route("")]
+        public async Task<IHttpActionResult> Get(string subscriptionId)
+        {
+            var thisOperationContext = new BaseOperationContext("BlueprintAssignmentsController:Get")
+            {
+                IpAddress = HttpContext.Current.Request.UserHostAddress,
+                UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                UserName = ClaimsPrincipal.Current.Identity.Name
+            };
+            try
+            {
+                var blueprintAssignments = await this.client.GetBlueprintAssignments(subscriptionId, thisOperationContext);
+                var list = new List<object>();
+                dynamic updatedBlueprintAssignments = JObject.Parse(blueprintAssignments);
+                foreach (var item in updatedBlueprintAssignments.value)
+                {
+                    var blueprintAssignmentItem = new BlueprintAssignment
+                    {
+                        Id = item.id,
+                        Name = item.name,
+                        Type = item.type,
+                        Scope = item.properties.scope,
+                        Location = item.location,
+                        CreatedDate = item.properties.status.timeCreated,
+                        LastModifiedDate = item.properties.status.lastModified,
+                        BlueprintId = item.properties.blueprintId,
+                        ProvisioningState = item.properties.provisioningState,
+                        LockMode = item.properties.locks.mode,
+                        ManagedIdentity = item.identity.type,
+                        ResourceGroups = item.properties.resourceGroups,
+                        Parameters = item.properties.parameters,
+                    };
+                    var tempArr = blueprintAssignmentItem.BlueprintId.Split('/');
+                    var blueprintsIndex = Array.IndexOf(tempArr, "blueprints");
+                    var blueprintName = tempArr[blueprintsIndex + 1];
+                    blueprintAssignmentItem.BlueprintName = blueprintName;
+                    list.Add(blueprintAssignmentItem);
+                }
+                return this.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                TraceHelper.TraceError(thisOperationContext.OperationId, thisOperationContext.OperationName, ex);
+                return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
+            }
+            finally
+            {
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
+            }
+        }
+
         [Route("{blueprintAssignmentName}")]
         public async Task<IHttpActionResult> Get(string subscriptionId, string blueprintAssignmentName)
         {

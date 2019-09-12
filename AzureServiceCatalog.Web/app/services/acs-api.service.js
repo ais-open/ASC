@@ -61,6 +61,7 @@
             getBlueprints: getBlueprints,
             getBlueprintVersions: getBlueprintVersions,
             getAssignedBlueprint: getAssignedBlueprint,
+            getBlueprintAssignments: getBlueprintAssignments,
             getUserAssignedIdentities: getUserAssignedIdentities,
             assignBlueprint: assignBlueprint,
             getUsers: getUsers,
@@ -314,6 +315,10 @@
 
         function getAssignedBlueprint(subscriptionId, blueprintAssignmentName) {
             return httpGet('/api/blueprint-assignments/' + blueprintAssignmentName + '?subscriptionId=' + subscriptionId);
+        }
+
+        function getBlueprintAssignments(subscriptionId) {
+            return httpGet('/api/blueprint-assignments?subscriptionId=' + subscriptionId);
         }
 
         function getUserAssignedIdentities(subscriptionId) {

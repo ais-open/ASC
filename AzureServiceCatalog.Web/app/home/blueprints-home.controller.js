@@ -8,6 +8,7 @@
     function BlueprintsHomeCtrl($uibModal, initialData, ascApi) {
         /* jshint validthis: true */
         var vm = this;
+        vm.lodash = _;
         vm.blueprints = [];
         vm.selectedSubscription = null;
         vm.subscriptionId = "";

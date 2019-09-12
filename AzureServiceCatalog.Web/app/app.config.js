@@ -318,13 +318,13 @@
                 }
             })
             .state('blueprint-assignments', {
-                url: '/blueprint-assignments',
+                url: '/blueprint-assignments/:subscriptionId',
                 templateUrl: 'app/blueprint/blueprint-assignments.html',
                 controller: 'BlueprintAssignmentsCtrl',
                 controllerAs: 'vm',
                 resolve: {
                     initialData: ['$stateParams', 'ascApi', function ($stateParams, ascApi) {
-                        return [];
+                        return ascApi.getBlueprintAssignments($stateParams.subscriptionId);
                     }]
                 }
             });
