@@ -10,10 +10,8 @@
         var vm = this;
         vm.subscriptionId = subscriptionId;
         vm.blueprint = initialData.blueprint;
-        vm.portalUrl = initialData.blueprint.portalUrl;
         vm.close = close;
         vm.onAssignButtonClick = onAssignButtonClick;
-        vm.onViewAssignmentsButtonClick = onViewAssignmentsButtonClick;
         vm.createdDate = getFormattedDate(vm.blueprint.createdDate);
         vm.lastModifiedDate = getFormattedDate(vm.blueprint.lastModifiedDate);
 
@@ -27,11 +25,6 @@
                 subscriptionId: vm.subscriptionId,
                 blueprintName: vm.blueprint.name
             });
-        }
-
-        function onViewAssignmentsButtonClick() {
-            $uibModalInstance.dismiss();
-            $state.go('blueprint-assignments');
         }
 
         function getFormattedDate(dateToBeFormatted) {

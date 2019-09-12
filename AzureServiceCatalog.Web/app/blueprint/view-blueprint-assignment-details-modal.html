@@ -1,0 +1,81 @@
+﻿<div class="modal-header">
+    <h2>Properties</h2>
+</div>
+
+<div class="modal-body">
+    <form class="form">
+        <div style="overflow:auto;">
+            <table class="col-md-12">
+                <tr>
+                    <td style="width:50%">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" class="form-control" placeholder="Name" ng-model="vm.blueprintAssignment.name" disabled>
+                        </div>
+                    </td>
+                    <td style="width:50%;padding-left:5px">
+                        <div class="form-group">
+                            <label>Scope</label>
+                            <input type="text" class="form-control" placeholder="Scope" ng-model="vm.blueprintAssignment.scope" disabled>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:50%">
+                        <div class="form-group">
+                            <label>Blueprint Name</label>
+                            <input type="text" class="form-control" placeholder="Description" ng-model="vm.blueprintAssignment.blueprintName" disabled>
+                        </div>
+                    </td>
+                    <td style="width:50%;padding-left:5px">
+                        <div class="form-group">
+                            <label>Blueprint Version</label>
+                            <input type="text" class="form-control" placeholder="Name" ng-model="vm.blueprintAssignment.blueprintVersion" disabled>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="form-group">
+                            <label>Path</label>
+                            <input type="text" class="form-control" placeholder="Blueprint Assignment Path" ng-model="vm.blueprintAssignment.id" disabled>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:50%;">
+                        <div class="form-group">
+                            <label>Location</label>
+                            <input type="text" class="form-control" placeholder="Location" ng-model="vm.blueprintAssignment.location" disabled>
+                        </div>
+                    </td>
+                    <td style="width:50%; padding-left:5px">
+                        <div class="form-group">
+                            <label>Lock Mode</label>
+                            <input type="text" class="form-control" placeholder="Lock Mode" ng-model="vm.blueprintAssignment.lockMode" disabled>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:50%;">
+                        <div class="form-group">
+                            <label>Created Date</label>
+                            <input type="text" class="form-control" placeholder="Created Date" ng-model="vm.createdDate" disabled>
+                        </div>
+                    </td>
+                    <td style="width:50%; padding-left:5px">
+                        <div class="form-group">
+                            <label>Last Modified Date</label>
+                            <input type="text" class="form-control" placeholder="Last Modified Date" ng-model="vm.lastModifiedDate" disabled>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </form>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="vm.onAssignButtonClick()">Update</button>
+    <button class="btn btn-default" ng-click="vm.close()">Close</button>
+</div>

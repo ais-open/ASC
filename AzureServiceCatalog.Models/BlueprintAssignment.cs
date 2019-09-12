@@ -13,6 +13,8 @@ namespace AzureServiceCatalog.Models
         public string Name { get; set; }
         [JsonProperty("blueprintName")]
         public string BlueprintName { get; set; }
+        [JsonProperty("blueprintVersion")]
+        public string BlueprintVersion { get; set; }
         [JsonProperty("type")]
         public string Type { get; set; }
         [JsonProperty("id")]

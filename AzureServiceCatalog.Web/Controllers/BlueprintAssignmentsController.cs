@@ -55,6 +55,10 @@ namespace AzureServiceCatalog.Web.Controllers
                     var blueprintsIndex = Array.IndexOf(tempArr, "blueprints");
                     var blueprintName = tempArr[blueprintsIndex + 1];
                     blueprintAssignmentItem.BlueprintName = blueprintName;
+                    var tempArr1 = blueprintAssignmentItem.BlueprintId.Split('/');
+                    var versionsIndex = Array.IndexOf(tempArr, "versions");
+                    var blueprintVersion = tempArr[versionsIndex + 1];
+                    blueprintAssignmentItem.BlueprintVersion = blueprintVersion;
                     list.Add(blueprintAssignmentItem);
                 }
                 return this.Ok(list);

@@ -2,10 +2,10 @@
     'use strict';
 
     angular.module('ascApp').controller('BlueprintAssignmentsCtrl', BlueprintAssignmentsCtrl);
-    BlueprintAssignmentsCtrl.$inject = ['$state', 'initialData', 'ascApi', 'toastr'];
+    BlueprintAssignmentsCtrl.$inject = ['$uibModal', '$state', 'initialData', 'ascApi', 'toastr'];
 
     /* @ngInject */
-    function BlueprintAssignmentsCtrl($state, initialData, ascApi, toastr) {
+    function BlueprintAssignmentsCtrl($uibModal, $state, initialData, ascApi, toastr) {
         /* jshint validthis: true */
         var vm = this;
         vm.lodash = _;
@@ -21,8 +21,21 @@
             }
         }
 
-        function viewDetails() {
-
+        function viewDetails(blueprintAssignment) {
+            $uibModal.open({
+                templateUrl: '/app/blueprint/view-blueprint-assignment-details-modal.html',
+                controller: 'ViewBlueprintAssignmentDetailsCtrl',
+                controllerAs: 'vm',
+                resolve: {
+                    initialData: ['ascApi', function (ascApi) {
+                        return blueprintAssignment;
+                    }],
+                    subscriptionId: function () {
+                        return vm.subscriptionId;
+                    }
+                },
+                size: 'lg'
+            });
         }
 
         function update() {
