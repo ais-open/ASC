@@ -48,8 +48,8 @@
                 controller: 'ViewBlueprintDetailsCtrl',
                 controllerAs: 'vm',
                 resolve: {
-                    initialData: ['viewBlueprintDetailsInitialDataService', function (viewBlueprintDetailsInitialDataService) {
-                        return viewBlueprintDetailsInitialDataService.getData(blueprint);
+                    initialData: ['ascApi', function (ascApi) {
+                        return blueprint;
                     }],
                     subscriptionId: function () {
                         return vm.subscriptionId;

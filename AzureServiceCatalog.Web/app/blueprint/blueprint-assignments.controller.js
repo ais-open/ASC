@@ -9,16 +9,27 @@
         /* jshint validthis: true */
         var vm = this;
         vm.lodash = _;
-        vm.blueprintAssignments = initialData;
+        vm.blueprintAssignments = [];
+        vm.selectedSubscription = null;
+        vm.subscriptionId = "";
+        vm.subscriptions = initialData;
+        vm.getBlueprintAssignments = getBlueprintAssignments;
         vm.viewDetails = viewDetails;
         vm.update = update;
         activate();
 
         function activate() {
-            console.log(initialData);
-            if (initialData) {
-
+            if (vm.subscriptions && vm.subscriptions.length > 0) {
+                vm.selectedSubscription = vm.subscriptions[0];
+                vm.subscriptionId = vm.selectedSubscription.rowKey;
+                getBlueprintAssignments();
             }
+        }
+
+        function getBlueprintAssignments() {
+            ascApi.getBlueprintAssignments(vm.subscriptionId).then(function (data) {
+                vm.blueprintAssignments = data;
+            });
         }
 
         function viewDetails(blueprintAssignment) {

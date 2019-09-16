@@ -319,6 +319,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Content Include=".jshintrc" />
+    <Content Include="app\blueprint\update-blueprint-assignment.controller.js" />
+    <Content Include="app\blueprint\update-blueprint-assignment.html" />
     <Content Include="app\blueprint\blueprint-assignments.controller.js" />
     <Content Include="app\blueprint\blueprint-assignments.html" />
     <Content Include="app\blueprint\assign-blueprint.html" />

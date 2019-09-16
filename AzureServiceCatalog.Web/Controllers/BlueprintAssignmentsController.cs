@@ -86,10 +86,37 @@ namespace AzureServiceCatalog.Web.Controllers
             };
             try
             {
-                var assignedBlueprint = await this.client.GetAssignedBlueprint(subscriptionId, blueprintAssignmentName, thisOperationContext);
-                dynamic updatedAssignedBlueprint= JObject.Parse(assignedBlueprint);
-                //create object of type blueprint assignment
-                return this.Ok(updatedAssignedBlueprint);
+                var blueprintAssignment = await this.client.GetBlueprintAssignment(subscriptionId, blueprintAssignmentName, thisOperationContext);
+                dynamic item = JObject.Parse(blueprintAssignment);
+                BlueprintAssignment blueprintAssignmentItem = null;
+                if (item["error"] == null)
+                {
+                    blueprintAssignmentItem = new BlueprintAssignment
+                    {
+                        Id = item.id,
+                        Name = item.name,
+                        Type = item.type,
+                        Scope = item.properties.scope,
+                        Location = item.location,
+                        CreatedDate = item.properties.status.timeCreated,
+                        LastModifiedDate = item.properties.status.lastModified,
+                        BlueprintId = item.properties.blueprintId,
+                        ProvisioningState = item.properties.provisioningState,
+                        LockMode = item.properties.locks.mode,
+                        ManagedIdentity = item.identity.type,
+                        ResourceGroups = item.properties.resourceGroups,
+                        Parameters = item.properties.parameters,
+                    };
+                    var tempArr = blueprintAssignmentItem.BlueprintId.Split('/');
+                    var blueprintsIndex = Array.IndexOf(tempArr, "blueprints");
+                    var blueprintName = tempArr[blueprintsIndex + 1];
+                    blueprintAssignmentItem.BlueprintName = blueprintName;
+                    var tempArr1 = blueprintAssignmentItem.BlueprintId.Split('/');
+                    var versionsIndex = Array.IndexOf(tempArr, "versions");
+                    var blueprintVersion = tempArr[versionsIndex + 1];
+                    blueprintAssignmentItem.BlueprintVersion = blueprintVersion;
+                }
+                return this.Ok(blueprintAssignmentItem);
             }
             catch (Exception ex)
             {

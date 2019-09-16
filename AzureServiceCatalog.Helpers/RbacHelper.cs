@@ -294,13 +294,14 @@ namespace AzureServiceCatalog.Helpers
             var thisOperationContext = new BaseOperationContext(parentOperationContext, "RbacHelper:GrantRoleForBlueprintAssignment");
             try
             {
-                var newRoleAssignmentId = Guid.NewGuid().ToString();
-                var requestUrl = $"{Config.AzureResourceManagerUrl}/subscriptions/{subscriptionId}/providers/Microsoft.Authorization/roleAssignments/{newRoleAssignmentId}?api-version={apiVersion}";
+                var roleAssignmentId = Guid.NewGuid().ToString();
+                string roleDefinitionId = await AzureResourceManagerHelper.GetRoleId("Owner", subscriptionId, thisOperationContext);
+                var requestUrl = $"{Config.AzureResourceManagerUrl}/subscriptions/{subscriptionId}/providers/Microsoft.Authorization/roleAssignments/{roleAssignmentId}?api-version={apiVersion}";
                 var requestBody = new
                 {
                     properties = new
                     {
-                        roleDefinitionId = $"/subscriptions/{subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/8e3af657-a8ff-443c-a75c-2fe8c4bcb635",
+                        roleDefinitionId = roleDefinitionId,
                         principalId = objectId,
                         scope = "/subscriptions/" + subscriptionId
                     }

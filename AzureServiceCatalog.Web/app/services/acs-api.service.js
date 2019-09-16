@@ -60,7 +60,7 @@
             sendEnrollmentSupportRequest: sendEnrollmentSupportRequest,
             getBlueprints: getBlueprints,
             getBlueprintVersions: getBlueprintVersions,
-            getAssignedBlueprint: getAssignedBlueprint,
+            getBlueprintAssignment: getBlueprintAssignment,
             getBlueprintAssignments: getBlueprintAssignments,
             getUserAssignedIdentities: getUserAssignedIdentities,
             assignBlueprint: assignBlueprint,
@@ -313,7 +313,7 @@
             return httpGet('/api/blueprint-versions/' + blueprintName + '?subscriptionId=' + subscriptionId);
         }
 
-        function getAssignedBlueprint(subscriptionId, blueprintAssignmentName) {
+        function getBlueprintAssignment(subscriptionId, blueprintAssignmentName) {
             return httpGet('/api/blueprint-assignments/' + blueprintAssignmentName + '?subscriptionId=' + subscriptionId);
         }
 

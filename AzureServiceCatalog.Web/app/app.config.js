@@ -326,7 +326,18 @@
                 controllerAs: 'vm',
                 resolve: {
                     initialData: ['$stateParams', 'ascApi', function ($stateParams, ascApi) {
-                        return [];
+                        return ascApi.getEnrolledSubscriptions();
+                    }]
+                }
+            })
+            .state('update-blueprint-assignment', {
+                url: '/update-blueprint-assignment/:subscriptionId/:blueprintAssignmentName',
+                templateUrl: 'app/blueprint/update-blueprint-assignment.html',
+                controller: 'UpdateBlueprintAssignmentCtrl',
+                controllerAs: 'vm',
+                resolve: {
+                    initialData: ['$stateParams', 'ascApi', function ($stateParams, ascApi) {
+                        return ascApi.getBlueprintAssignment($stateParams.subscriptionId, $stateParams.blueprintAssignmentName);
                     }]
                 }
             });

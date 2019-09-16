@@ -25,7 +25,12 @@
             state: 'blueprints-home', title: 'Blueprints',
             descendants: [
                 { state: 'assign-blueprint', title: 'Assign Blueprint' },
-                { state: 'blueprint-assignments', title: 'Blueprint Assignments' },
+                {
+                    state: 'blueprint-assignments', title: 'Blueprint Assignments',
+                    descendants: [
+                        { state: 'update-blueprint-assignment', title: 'Update Blueprint Assignment' }
+                    ]
+                },
             ]
         },
         //{

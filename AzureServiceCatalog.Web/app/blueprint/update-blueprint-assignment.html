@@ -1,46 +1,39 @@
 ﻿<form name="frmAssign" class="form-horizontal" novalidate>
     <div>
-        <h2>{{vm.lodash.toUpper(vm.blueprintName)}} {{vm.lodash.toUpper("Assign")}}</h2>
-        <div ng-show="{{vm.blueprintVersions.length == 0}}">
-            <h3>Blueprint is not yet published!</h3>
-            <a class="btn btn-warning" href="{{vm.portalUrlForBlueprints}}" target="_blank">
-                <i class="glyphicon glyphicon-share"></i>
-                <span>Publish</span>
-            </a>
-        </div>
-        <div id="basic" class="col-md-12" ng-show="{{vm.blueprintVersions.length > 0}}">
+        <h2>{{vm.lodash.toUpper(vm.blueprintAssignment.name)}} {{vm.lodash.toUpper("Update")}}</h2>
+        <div id="basic" class="col-md-12">
             <h4>Basics</h4>
             <div class="col-md-12">
                 <div name="blueprintVersionForm" class="form-inline control-columns" novalidate>
                     <div class="form-group col-xs-12">
                         <label class="col-lg-2 col-xs-12 col-sm-3">Assignment Name: </label>
-                        <input type="text" id="blueprintAssignmentName" name="blueprintAssignmentName" ng-model="vm.assignmentName" class="form-control" placeholder="Assignment Name" required>
+                        <input type="text" id="blueprintAssignmentName" name="blueprintAssignmentName" ng-model="vm.blueprintAssignment.name" class="form-control" placeholder="Assignment Name" required disabled>
                     </div>
                     <div class="form-group col-xs-12">
                         <label class="col-lg-2 col-xs-12 col-sm-3">Location: </label>
-                        <select class="form-control" name="blueprintAssignmentLocation" ng-model="vm.location" ng-options="l as l for l in vm.locations" required></select>
+                        <input type="text" class="form-control" name="blueprintAssignmentLocation" ng-model="vm.blueprintAssignment.location" required disabled>
                     </div>
                     <div class="form-group col-xs-12">
                         <label class="col-lg-2 col-xs-12 col-sm-3">Blueprint Version: </label>
-                        <select class="form-control" name="selectedVersion" ng-model="vm.selectedVersion" ng-change="vm.onVersionChange()" ng-options="v as v for v in vm.versionNames" required></select>
+                        <select class="form-control" id="BlueprintVersion" name="selectedVersion" ng-model="vm.selectedVersion" ng-change="vm.onVersionChange()" ng-options="v as v for v in vm.versionNames" required></select>
                     </div>
                     <div class="form-group col-xs-12">
                         <label class="col-lg-2 col-xs-12 col-sm-3">Lock Assignment: </label>
-                        <select class="form-control" name="LockAssignment" ng-model="vm.lockAssigment" required>
-                            <option ng-model="vm.lockAssigment" value="none">Don't Lock</option>
-                            <option ng-model="vm.lockAssigment" value="allResourcesDoNotDelete">Do Not Delete</option>
-                            <option ng-model="vm.lockAssigment" value="allResourcesReadOnly">Read Only</option>
+                        <select class="form-control" name="LockAssignment" ng-model="vm.lockAssignment" required>
+                            <option ng-model="vm.lockAssignment" value="none">Don't Lock</option>
+                            <option ng-model="vm.lockAssignment" value="allResourcesDoNotDelete">Do Not Delete</option>
+                            <option ng-model="vm.lockAssignment" value="allResourcesReadOnly">Read Only</option>
                         </select>
                     </div>
                     <div class="form-group col-xs-12">
                         <label class="col-lg-2 col-xs-12 col-sm-3">ManagedIdentity: </label>
                         <div>
-                            <input name="ManagedIdentity" type="radio" ng-model="vm.managedIdentity" value="SystemAssigned">
+                            <input name="ManagedIdentity" type="radio" ng-model="vm.managedIdentity" value="systemAssigned">
                             System assigned <br />
-                            <input name="ManagedIdentity" type="radio" ng-model="vm.managedIdentity" value="UserAssigned">
+                            <input name="ManagedIdentity" type="radio" ng-model="vm.managedIdentity" value="userAssigned">
                             User assigned <br />
                         </div>
-                        <div class="col-md-12" ng-show="vm.managedIdentity == 'UserAssigned'">
+                        <div class="col-md-12" ng-show="vm.managedIdentity == 'userAssigned'">
                             <div class="form-inline control-columns">
                                 <div class="form-group col-xs-12">
                                     <label class="col-lg-2 col-xs-12 col-sm-3"></label>
@@ -53,7 +46,7 @@
                 <br />
             </div>
         </div>
-        <div id="artifacts" class="col-md-12" style="margin-top:10px" ng-show="{{vm.blueprintVersions.length > 0}}">
+        <div id="artifacts" class="col-md-12" style="margin-top:10px">
             <h4>Artifact parameters</h4>
             <table class="table table-condensed">
                 <thead>
@@ -135,7 +128,7 @@
             </div>
             <div class="row">
                 <div class="col-md-3">
-                    <button ng-disabled="!frmAssign.$valid" class="btn btn-primary" ng-click="vm.assign()">Assign</button>
+                    <button ng-disabled="!frmAssign.$valid" class="btn btn-primary" ng-click="vm.update()">Update</button>
                 </div>
             </div>
         </div>

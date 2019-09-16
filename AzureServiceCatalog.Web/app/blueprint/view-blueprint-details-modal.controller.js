@@ -9,7 +9,7 @@
         /* jshint validthis: true */
         var vm = this;
         vm.subscriptionId = subscriptionId;
-        vm.blueprint = initialData.blueprint;
+        vm.blueprint = initialData;
         vm.close = close;
         vm.onAssignButtonClick = onAssignButtonClick;
         vm.createdDate = getFormattedDate(vm.blueprint.createdDate);
