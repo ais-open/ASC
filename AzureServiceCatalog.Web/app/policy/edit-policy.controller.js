@@ -99,8 +99,7 @@
 
         function preview() {
             toPolicy();
-            var policyTitle = "Policy Preview (" + vm.policy.name + ")";
-            dialogs.openJsonModal(vm.policy, policyTitle);
+            dialogs.openJsonModal(vm.policy, vm.policy.name);
         }
 
         function save() {
@@ -120,6 +119,8 @@
                     toastr.success('Policy saved successfully.', 'Success');
                 }
             });
+
+            $state.go('manage-policy-list');
         }
 
         function toPolicy() {
