@@ -1,27 +1,78 @@
-﻿<div class="product-tile-container col-lg-3 col-md-4 col-sm-6 col-xs-12 " ng-repeat="product in vm.products | orderBy: 'name'" ng-if="product.isPublished">
-    <div class="product-tile">
-        <h4 class="text-primary bold-text product-header">
-            <a ui-sref="product-details({id: product.rowKey, product: product})" title={{product.name}}>
-                <img ng-src="{{product.productImagePath || 'Content/images/azure.png'}}" ng-attr-title="{{product.name}}"/>
-                {{product.name}}
-            </a>
-            <small class="product-price">${{product.productPrice}}/month</small>
-        </h4>
-        <hr/>
-        <div class="caption">
-            {{product.description}}<br/>
-
-            <span class="product-tile-included-resources bold-text text-primary">Included Resources:</span>
-            <span class="product-tile-included-resources" ng-repeat="resource in product.data.resources">
-                {{vm.resourceDictionary[resource.type].name || resource.type}}{{vm.getResourceNameDisplay(resource)}}<span ng-if="!$last">,</span>
-            </span>
-        </div>
+﻿<div  style="overflow-y: auto; height:375px">
+    <h1>AVAILABLE CATALOG</h1>
+    <div>
+        <table class="table table-striped table-hover table-condensed table-fixed-layout middle-align">
+            <thead>
+                <tr>
+                    <th class="col-md-3">Product Name</th>
+                    <th class="col-md-8">Included Resources</th>
+                    <th class="col-md-1 center-content">Provision</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="selectable" ng-repeat="product in vm.templates | orderBy: 'name'" ng-if="product.isPublished" ui-sref="product-details({id: product.rowKey, product: product})">
+                    <td class="col-md-3">
+                        <a class="btn btn-link" title="{{product.name}}">{{product.name}}</a>
+                    </td>
+                    <td class="col-md-9">
+                        <Span ng-repeat="resource in product.data.resources">
+                            {{vm.resourceDictionary[resource.type].name || resource.type}}{{vm.getResourceNameDisplay(resource)}}
+                            <span ng-if="!$last">,</span>
+                        </Span>
+                    </td>
+                    <td class="col-md-9 center-content middle-align">
+                        <button class="btn btn-warning" ui-sref="product-details({id: product.rowKey, product: product})">Provision</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
-<div class="no-content-warning" ng-if="!vm.hasPublishedProducts">
+
+<div class="no-content-warning" ng-if="!vm.hasPublishedTemplates">
     <h1>No products have been published yet</h1>
     <h2 ng-if="shell.userDetail.canCreate">
         Please go to Manage <span class="glyphicon glyphicon-arrow-right"></span> Product Catalog and publish a new product
     </h2>
     <h2 ng-if="!shell.userDetail.canCreate">Please contact an administrator to add new products</h2>
+</div>
+
+<div ng-show="vm.userHasManageAccess" style="overflow-y: auto; height:400px; margin-top: 50px;">
+    <h1>
+        ALL PRODUCT CATALOG
+        <span style="float:right; margin-right: 51px;" class="btn-group" uib-dropdown is-open="status.isopen">
+            <button type="button" class="btn btn-primary dropdown-toggle" uib-dropdown-toggle ng-disabled="disabled">
+                Add New Product <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+                <li><a ui-sref="add-product-designer">Add with Drag/Drop</a></li>
+                <li><a ui-sref="edit-product">Add with JSON Editor</a></li>
+                <li><a ng-click="vm.importQuickStartTemplates()">Import from Quick Starts</a></li>
+                <li>
+                    <a ng-click="vm.importFile($event)">Import Product from File</a>
+                    <input class="file-select" type="file" file-reader="vm.importJSON" accept=".json" />
+                </li>
+            </ul>
+        </span>
+    </h1>
+    <div>
+        <table class="table table-striped table-hover table-condensed table-fixed-layout middle-align">
+            <thead>
+                <tr>
+                    <th class="col-md-3">Product Name</th>
+                    <th class="col-md-8">Description</th>
+                    <th class="col-md-1 center-content">Published</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="selectable" ng-repeat="item in vm.templates | orderBy: 'name'" ui-sref="edit-product({ id: item.rowKey })">
+                    <td class="col-md-3">
+                        <a class="btn btn-link">{{item.name}}</a>
+                    </td>
+                    <td class="col-md-9 middle-align">{{item.description}}</td>
+                    <td class="col-md-9 center-content middle-align"><span ng-if="item.isPublished" class="glyphicon glyphicon-check"></span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>

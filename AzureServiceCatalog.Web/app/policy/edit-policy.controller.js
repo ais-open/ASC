@@ -21,6 +21,13 @@
         vm.root = { id: 1, title: 'if', nodes: [] };
         vm.save = save;
         vm.toPolicy = toPolicy;
+        vm.subscriptionName = $stateParams.subscriptionName;
+
+        if ($stateParams.id === null || $stateParams.id === "") {
+            vm.disablePolicyNameEntryField = false;
+        } else {
+            vm.disablePolicyNameEntryField = true;
+        }
 
         activate();
 
@@ -92,7 +99,8 @@
 
         function preview() {
             toPolicy();
-            dialogs.openJsonModal(vm.policy, vm.policy.name);
+            var policyTitle = "Policy Preview (" + vm.policy.name + ")";
+            dialogs.openJsonModal(vm.policy, policyTitle);
         }
 
         function save() {

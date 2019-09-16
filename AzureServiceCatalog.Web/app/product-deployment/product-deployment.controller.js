@@ -24,6 +24,7 @@
         vm.subscriptions = initialData.subscriptions;
         vm.templateData = JSON.parse(initialData.product.templateData);
         vm.toggleNewResourceGroup = toggleNewResourceGroup;
+        vm.product = initialData.product;
 
         activate();
 

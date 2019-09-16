@@ -15,6 +15,7 @@
         vm.isState = isState;
         vm.spinnerMessage = 'Retrieving data...';
         vm.showFeedback = showFeedback;
+        vm.showNavLinks = true;
 
         vm.spinnerOptions = {
             radius: 40,
@@ -83,10 +84,18 @@
         function stateChangeSuccess(event, toState, toParams, fromState, fromParams) {
             var current = getNavState(siteMap, toState.name);
             if (current) {
-                vm.currentNav = (current.state === 'dashboard' ? null : current.title);
-                vm.parentStates = _(getParents(current)).reverse().value();
+                if (current.state === 'manage-policy-list' || current.state === 'edit-policy' || current.state === 'product-deployment')
+                {
+                    vm.showNavLinks = false;
+                }
+                else {
+                    vm.currentNav = (current.state === 'dashboard' ? null : current.title);
+                    vm.parentStates = _(getParents(current)).reverse().value();
+                    vm.showNavLinks = true;
+                }                
             } else {
                 vm.currentNav = '(unknown state)';
+                vm.showNavLinks = true;
             }
         }
 

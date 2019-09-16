@@ -1,21 +1,34 @@
-﻿<div>
+﻿
+<ol class="breadcrumb">
+    <li><a ui-sref="dashboard">Home</a></li>
+
+    <li uib-dropdown>
+        <a class="dropdown-toggle" ng-model="vm.selectedSubscription" uib-dropdown-toggle>
+            <span>{{vm.selectedSubscription.displayName}}</span><i class="glyphicon glyphicon-chevron-down" style="top: 5px; margin-left: 5px;"></i>
+        </a>
+        <ul class="dropdown-menu" ng-repeat="sub in vm.subscriptions" ng-click="vm.getPoliciesForSelectedSubcription(sub.rowKey)">
+            <li class="exactFit" ng-bind-html="sub.displayName"></li>
+        </ul>
+    </li>
+    <li>Policies</li>
+</ol>
+
+
+<div ng-show="vm.isAuthenticated && !vm.isActivation && vm.userHasManageAccess">
     <h1>
         Policy List
-        <button class="btn btn-primary" ui-sref="edit-policy( { subscriptionId: vm.selectedSubscription.rowKey} )">Add New Policy</button>
-    </h1>
+        <span style="float:right">
+            <a class="btn btn-primary" ui-sref="edit-policy({subscriptionId: vm.selectedSubscription.rowKey, subscriptionName: vm.selectedSubscription.displayName})">
+                <i class="glyphicon glyphicon-plus"></i>
+                <span>Add New Policy</span>
+            </a>
+            <button class="btn btn-info" ng-click="vm.getPolicies()">
+                <i class="glyphicon glyphicon-refresh"></i>
+                Refresh
+            </button>
 
-    <div class="row padded-row comment-text">
-        <div class="col-md-3">
-            <ui-select name="subscription" class="overFlow" ng-model="vm.selectedSubscription" theme="bootstrap" on-select="vm.subscriptionChanged()" required>
-                <ui-select-match placeholder="Select Subscription...">
-                    {{$select.selected.displayName | characters: 30}}
-                </ui-select-match>
-                <ui-select-choices repeat="sub in vm.subscriptions | filter: {displayName: $select.search}">
-                    <span class="exactFit" ng-bind-html="sub.displayName | highlight:$select.search"></span>
-                </ui-select-choices>
-            </ui-select>
-        </div>
-    </div>
+        </span>
+    </h1>
 
     <div>
         <table class="table table-striped table-hover table-condensed table-fixed-layout middle-align">
@@ -26,7 +39,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="selectable" ng-repeat="item in vm.policies | orderBy: 'name'" ui-sref="edit-policy({ subscriptionId: vm.selectedSubscription.rowKey, id: item.policy.name })">
+                <tr class="selectable" ng-repeat="item in vm.policies | orderBy: 'name'" ui-sref="edit-policy({ subscriptionId: vm.selectedSubscription.rowKey, subscriptionName: vm.selectedSubscription.displayName, id: item.policy.name })">
                     <td class="col-md-3">
                         <a class="btn btn-link">{{vm.getPolicyDefName(item.policy)}}</a>
                     </td>
@@ -35,4 +48,7 @@
             </tbody>
         </table>
     </div>
+</div>
+<div ng-hide="vm.isAuthenticated && !vm.isActivation && vm.userHasManageAccess">
+    <p>You do not have access to this page, please contact administrator</p>
 </div>

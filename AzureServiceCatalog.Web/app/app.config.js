@@ -247,13 +247,15 @@
                 controllerAs: 'vm',
                 adminPermissionRequired: true,
                 resolve: {
-                    initialData: ['ascApi', function (ascApi) {
-                        return ascApi.getEnrolledSubscriptions();
+                    initialData: ['identityInfo', 'ascApi', function (identityInfo, ascApi) {
+                        if (identityInfo.isAuthenticated) {
+                            return ascApi.getEnrolledSubscriptions();
+                        }
                     }]
                 }
             })
             .state('edit-policy', {
-                url: '/edit-policy/:subscriptionId/:id',
+                url: '/edit-policy/:subscriptionId/:subscriptionName/:id',
                 templateUrl: 'app/policy/edit-policy.html',
                 controller: 'EditPolicyCtrl',
                 controllerAs: 'vm',
@@ -318,13 +320,13 @@
                 }
             })
             .state('blueprint-assignments', {
-                url: '/blueprint-assignments/:subscriptionId',
+                url: '/blueprint-assignments',
                 templateUrl: 'app/blueprint/blueprint-assignments.html',
                 controller: 'BlueprintAssignmentsCtrl',
                 controllerAs: 'vm',
                 resolve: {
                     initialData: ['$stateParams', 'ascApi', function ($stateParams, ascApi) {
-                        return ascApi.getBlueprintAssignments($stateParams.subscriptionId);
+                        return [];
                     }]
                 }
             });

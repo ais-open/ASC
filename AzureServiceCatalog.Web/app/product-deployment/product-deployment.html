@@ -1,8 +1,15 @@
-﻿<form name="frmDeploy" class="form-horizontal" novalidate>
-    <div>
-        <h2><strong class="text-center">Product Provisioning</strong></h2>
+﻿<ol class="breadcrumb">
+    <li><a ui-sref="dashboard">Home</a></li>
+    <li><a ui-sref="home">Product Catalog</a></li>
+    <li><a ui-sref="product-details({id: vm.product.rowKey, product: vm.product})">Product Details</a></li>
+    <li>Product Provisioning</li>
+</ol>
 
-        <div class="row padded-row comment-text">
+<form name="frmDeploy" class="form-horizontal" novalidate>
+    <div>
+        <h2><strong class="text-center">{{vm.product.name}}</strong></h2>
+
+        <div class="row padded-row comment-text" style="margin-top: 20px;">
             <div class="col-md-2">
                 Subscription:
             </div>

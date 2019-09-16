@@ -2,24 +2,38 @@
     'use strict';
 
     angular.module('ascApp').controller('PolicyListCtrl', PolicyListCtrl);
-    PolicyListCtrl.$inject = ['initialData', 'ascApi'];
+    PolicyListCtrl.$inject = ['identityInfo', 'initialData', 'ascApi', 'appStorage'];
 
     /* @ngInject */
-    function PolicyListCtrl(initialData, ascApi) {
+    function PolicyListCtrl(identityInfo, initialData, ascApi, appStorage) {
         /* jshint validthis: true */
-        var vm = this;
-        vm.policies = [];
-        vm.selectedSubscription = null;
-        vm.getPolicyDefName = getPolicyDefName;
-        vm.subscriptions = initialData;
-        vm.subscriptionChanged = subscriptionChanged;
+            var vm = this;
 
-        activate();
+            vm.isActivation = identityInfo.isActivation;
+            vm.isAuthenticated = identityInfo.isAuthenticated;
+            vm.policies = [];
+            vm.selectedSubscription = null;
+            vm.getPolicyDefName = getPolicyDefName;
+            vm.subscriptions = initialData;
+            vm.getPolicies = getPolicies;
+            vm.userDetail = appStorage.getUserDetail();
+            vm.userHasManageAccess = getUserAccessDetails();
+            vm.getPoliciesForSelectedSubcription = getPoliciesForSelectedSubcription;
+
+            activate();
 
         function activate() {
             if (vm.subscriptions && vm.subscriptions.length > 0) {
                 vm.selectedSubscription = vm.subscriptions[0];
-                subscriptionChanged();
+                getPolicies();
+            }
+        }
+
+        function getUserAccessDetails() {
+            if (vm.userDetail.canCreate || vm.userDetail.canAdmin) {
+                return true;
+            } else {
+                return false;
             }
         }
 
@@ -35,8 +49,16 @@
             return name;
         }
 
-        function subscriptionChanged() {
+        function getPolicies() {
             ascApi.getPolicies(vm.selectedSubscription.rowKey).then(function (data) {
+                vm.policies = _.filter(data, function (item) {
+                    return item.policy.properties.policyType === 'Custom';
+                });
+            });
+        }
+
+        function getPoliciesForSelectedSubcription(rowkey) {
+            ascApi.getPolicies(rowkey).then(function (data) {
                 vm.policies = _.filter(data, function (item) {
                     return item.policy.properties.policyType === 'Custom';
                 });

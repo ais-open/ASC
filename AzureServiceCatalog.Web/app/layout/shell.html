@@ -104,8 +104,8 @@
 
 
 
-    <ol ng-show="shell.isAuthenticated && !shell.isActivation" class="breadcrumb">
-        <li><a ui-sref="dashboard">{{shell.userDetail.organization.verifiedDomain}}</a></li>
+    <ol ng-show="shell.isAuthenticated && !shell.isActivation && shell.showNavLinks" class="breadcrumb">
+        <li><a ui-sref="dashboard">Home</a></li>
         <li ng-repeat="parent in shell.parentStates">
             <a ui-sref="{{parent.state}}">{{parent.title}}</a>
         </li>

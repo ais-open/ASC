@@ -1,4 +1,10 @@
-﻿<div>
+﻿<ol class="breadcrumb">
+    <li><a ui-sref="dashboard">Home</a></li>
+    <li><a ui-sref="manage-policy-list">{{vm.subscriptionName}}</a></li>
+    <li>Add/Edit Policy</li>
+</ol>
+
+<div>
     <h2>{{vm.policy.id ? 'Edit' : 'Add'}} Policy</h2>
     <p>
         <a target="_blank" href="https://azure.microsoft.com/en-us/documentation/articles/resource-manager-policy/">Learn about ARM Policy</a>
@@ -9,11 +15,11 @@
             <form name="policyForm" class="form-inline control-columns" novalidate>
                 <div class="form-group col-xs-12" ng-class="{ 'has-error' : userForm.productName.$invalid && !userForm.productName.$pristine }">
                     <label class="col-lg-2 col-xs-12 col-sm-3">Policy Name: </label>
-                    <input type="text" name="policyName" class="form-control" ng-model="vm.policy.name" placeholder="Unique Policy Name" required>
+                    <input type="text" name="policyName" class="form-control" ng-model="vm.policy.name" ng-disabled="{{vm.disablePolicyNameEntryField}}" placeholder="Unique Policy Name" required>
                 </div>
                 <div class="form-group col-xs-12" ng-class="{ 'has-error' : userForm.productName.$invalid && !userForm.productName.$pristine }">
                     <label class="col-lg-2 col-xs-12 col-sm-3">Description: </label>
-                    <input type="text" name="policyName" class="form-control" ng-model="vm.policy.properties.description" placeholder="Description" required>
+                    <textarea type="text" name="policyName" class="form-control" ng-model="vm.policy.properties.description" placeholder="Description" required/>
                 </div>
             </form>
 
@@ -63,7 +69,7 @@
                                     <div class="form-group">
                                         <label for="exampleInputName2">{{node.title}}:</label>
 
-                                        <select class="form-control" ng-model="node.target">
+                                        <select class="form-control" ng-model="node.target" style="margin-left: 10px;">
                                             <option>(Select)</option>
                                             <optgroup label="Fields">
                                                 <option>name</option>
@@ -78,9 +84,9 @@
                                             </optgroup>
                                         </select>
 
-                                        <input type="text" id="tag-field" ng-show="node.target === 'tags.*'" class="form-control" ng-model="node.tagsField" placeholder="tags field" />
+                                        <input type="text" id="tag-field" ng-show="node.target === 'tags.*'" class="form-control" ng-model="node.tagsField" placeholder="tags field" style="margin-left: 10px;"/>
 
-                                        <select class="form-control" ng-model="node.operator">
+                                        <select class="form-control" ng-model="node.operator" style="margin-left: 10px;">
                                             <option>(Select Operator)</option>
                                             <option>equals</option>
                                             <option>like</option>
@@ -88,8 +94,8 @@
                                             <option>in</option>
                                             <option>containsKey</option>
                                         </select>
-                                        <input type="text" class="form-control" ng-model="node.value" placeholder="value" />
-                                        <div class="checkbox" uib-tooltip="Use values for this condition in allowed values lookup?">
+                                        <input type="text" class="form-control" ng-model="node.value" placeholder="value" style="margin-left: 10px;"/>
+                                        <div class="checkbox" uib-tooltip="Use values for this condition in allowed values lookup?" style="margin-left: 10px;">
                                             <input type="checkbox" ng-change="vm.lookupPathChecked(node)" ng-model="node.lookupPath" />
                                         </div>
                                     </div>
