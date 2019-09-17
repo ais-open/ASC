@@ -65,13 +65,20 @@
             getUserAssignedIdentities: getUserAssignedIdentities,
             assignBlueprint: assignBlueprint,
             getUsers: getUsers,
-            getPortalUrl: getPortalUrl
-
+            getPortalUrl: getPortalUrl,
+            setselectedSubcription: setselectedSubcription,
+            getselectedSubscription: getselectedSubscription
         };
 
         return service;
 
+        function setselectedSubcription(id) {
+            $window.localStorage.setItem('selected-subscription', id);
+        }
 
+        function getselectedSubscription() {
+            return $window.localStorage.getItem('selected-subscription');
+        }
 
         function createCustomRole(subscriptionId) {
             return httpPut('/api/identity/asc-contributor?subscriptionId=' + subscriptionId);

@@ -19,14 +19,33 @@
             vm.userDetail = appStorage.getUserDetail();
             vm.userHasManageAccess = getUserAccessDetails();
             vm.getPoliciesForSelectedSubcription = getPoliciesForSelectedSubcription;
+            vm.getSubscriptionById = getSubscriptionById;
 
             activate();
 
         function activate() {
             if (vm.subscriptions && vm.subscriptions.length > 0) {
-                vm.selectedSubscription = vm.subscriptions[0];
+                
+                var subId = ascApi.getselectedSubscription();
+
+                if (subId !== "" || subId !== null)
+                vm.selectedSubscription = vm.getSubscriptionById(vm.subscriptions, 'rowKey', subId);
+
+                if (vm.selectedSubscription === null) {
+                    vm.selectedSubscription = vm.subscriptions[0];
+                }
+
                 getPolicies();
             }
+        }
+
+        function getSubscriptionById(array, key, value) {
+            for (var i = 0; i < array.length; i++) {
+                if (array[i][key] === value) {
+                    return array[i];
+                }
+            }
+            return null;
         }
 
         function getUserAccessDetails() {
@@ -58,6 +77,7 @@
         }
 
         function getPoliciesForSelectedSubcription(rowkey) {
+            ascApi.setselectedSubcription(rowkey);    
             ascApi.getPolicies(rowkey).then(function (data) {
                 vm.policies = _.filter(data, function (item) {
                     return item.policy.properties.policyType === 'Custom';

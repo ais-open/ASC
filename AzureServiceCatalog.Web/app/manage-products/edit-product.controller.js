@@ -56,7 +56,7 @@
         function deleteTemplate() {
             dialogs.confirm('Are you sure you want to delete this Template?', 'Delete?', ['Yes', 'No']).then(function () {
                 ascApi.deleteTemplate(vm.selectedItem.rowKey).then(function (data) {
-                    $state.go('product-list');
+                    $state.go('home');
                 });
             });
         }

@@ -1,7 +1,8 @@
 ﻿<ol class="breadcrumb">
     <li><a ui-sref="dashboard">Home</a></li>
-    <li><a ui-sref="manage-policy-list">{{vm.subscriptionName}}</a></li>
-    <li>Add/Edit Policy</li>
+    <li>{{vm.subscriptionName}}</li>
+    <li><a ui-sref="manage-policy-list">Policies</a></li>
+    <li>{{vm.policy.id ? 'Edit' : 'Add'}} Policy</li>
 </ol>
 
 <div>

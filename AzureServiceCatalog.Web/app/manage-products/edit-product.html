@@ -1,5 +1,5 @@
 ﻿<div>
-    <h1>{{vm.selectedItem.eTag ? 'Edit' : 'Add'}} Product Details</h1>
+    <h1 class="text-uppercase">{{vm.selectedItem.rowKey ? 'Edit' : 'Add'}} Product Details</h1>
     <div class="row">
         <div class="col-md-12" ng-show="vm.selectedItem">
             <form name="productForm" class="form-inline control-columns" novalidate>
@@ -27,7 +27,7 @@
                 </div>
             </form>
 
-            <button class="btn btn-default" ng-click="vm.dialogs.openEditFieldModal(vm.selectedItem, 'image', 'productImage', vm.selectedItem.productImagePath)">{{(vm.selectedItem.productImage || vm.selectedItem.productImagePath) ? 'Change' : 'Add'}} Image</button>
+            <!--<button class="btn btn-default" ng-click="vm.dialogs.openEditFieldModal(vm.selectedItem, 'image', 'productImage', vm.selectedItem.productImagePath)">{{(vm.selectedItem.productImage || vm.selectedItem.productImagePath) ? 'Change' : 'Add'}} Image</button>-->
             <button class="btn btn-primary" ng-disabled="!vm.canSave(productForm)" ng-click="vm.save()">Save</button>
             <button class="btn" ng-disabled="vm.isClean()" ng-click="vm.reset()">Reset</button>
             <button class="btn btn-primary" ng-disabled="!vm.selectedItem.rowKey" ng-click="vm.downloadTemplate()"><span class="glyphicon glyphicon-arrow-down"></span> Download</button>

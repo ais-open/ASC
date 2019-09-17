@@ -13,6 +13,7 @@
         vm.selectedSubscription = null;
         vm.subscriptions = initialData;
         vm.subscriptionChanged = subscriptionChanged;
+        vm.getPolicyAssignmentForSelectedSubcription = getPolicyAssignmentForSelectedSubcription;
 
         activate();
 
@@ -41,6 +42,15 @@
             ascApi.getPolicyAssignments(vm.selectedSubscription.rowKey).then(function (data) {
                 vm.policyAssignments = data.value;
             });
+        }
+
+        function getPolicyAssignmentForSelectedSubcription(rowkey) {
+            ascApi.setselectedSubcription(rowkey);            
+            ascApi.getPolicyAssignments(rowKey).then(function (data) {
+                vm.policyAssignments = data.value;
+            });
+
+            
         }
     }
 })();

@@ -2,14 +2,14 @@
     'use strict';
 
     var siteMap = [
-        { state: 'home', title: 'Product Catalog',
+        { state: 'home', title: 'Product Catalogs',
             descendants: [
                 { state: 'add-product-designer', title: 'Add Product (drag/drop)' },
                 { state: 'edit-product', title: 'Product Details' },
                 {
                     state: 'product-details', title: 'Product Details',
                     descendants: [
-                        { state: 'product-deployment', title: 'Product Provisioning' }
+                        { state: 'product-deployment', title: 'Provision' }
                     ]
                 }
             ]
@@ -53,7 +53,7 @@
         { state: 'manage-policy-list', title: 'Policies',
             descendants: [{ state: 'edit-policy', title: 'Policy' }]
         },
-        { state: 'manage-policy-assignments', title: 'Manage Policy Assignments',
+        { state: 'manage-policy-assignments', title: 'Policy Assignments',
             descendants: [{ state: 'edit-policy-assignment', title: 'Edit Policy Assignment' }]
         },
         { state: 'manage-security', title: 'Manage Security' },

@@ -99,7 +99,7 @@
 
         function preview() {
             toPolicy();
-            dialogs.openJsonModal(vm.policy, vm.policy.name);
+            dialogs.openJsonModal(vm.policy, 'Policy Preview');
         }
 
         function save() {

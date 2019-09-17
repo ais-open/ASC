@@ -29,7 +29,7 @@
                     </label>
                     <input class="" id="isPublishedCheckbox" type="checkbox" ng-model="vm.product.isPublished" />
                 </div>
-                <button class="btn btn-default" ng-click="vm.dialogs.openEditFieldModal(vm.product, 'image', 'productImage')">{{vm.product.productImage ? 'Change' : 'Add'}} Image</button>
+                <!--<button class="btn btn-default" ng-click="vm.dialogs.openEditFieldModal(vm.product, 'image', 'productImage')">{{vm.product.productImage ? 'Change' : 'Add'}} Image</button>-->
                 <button class="btn btn-primary" ng-disabled="!vm.canSave()" ng-click="vm.save()">Save</button>
             </form>
             <p ng-show="userForm.name.$invalid && !userForm.name.$pristine" class="help-block has-error">Your product name is required.</p>

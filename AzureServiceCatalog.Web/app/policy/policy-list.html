@@ -16,7 +16,7 @@
 
 <div ng-show="vm.isAuthenticated && !vm.isActivation && vm.userHasManageAccess">
     <h1>
-        Policy List
+        POLICIES
         <span style="float:right">
             <a class="btn btn-primary" ui-sref="edit-policy({subscriptionId: vm.selectedSubscription.rowKey, subscriptionName: vm.selectedSubscription.displayName})">
                 <i class="glyphicon glyphicon-plus"></i>
@@ -26,6 +26,7 @@
                 <i class="glyphicon glyphicon-refresh"></i>
                 Refresh
             </button>
+            <button class="btn btn-warning" ui-sref="manage-policy-assignments">View Assignments</button>
 
         </span>
     </h1>

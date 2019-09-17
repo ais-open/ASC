@@ -1,4 +1,21 @@
-﻿<div>
+﻿<ol class="breadcrumb">
+    <li><a ui-sref="dashboard">Home</a></li>
+
+    <!--<li uib-dropdown>
+        <a class="dropdown-toggle" ng-model="vm.selectedSubscription" uib-dropdown-toggle>
+            <span>{{vm.selectedSubscription.displayName}}</span><i class="glyphicon glyphicon-chevron-down" style="top: 5px; margin-left: 5px;"></i>
+        </a>
+        <ul class="dropdown-menu" ng-repeat="sub in vm.subscriptions" ng-click="vm.getPolicyAssignmentForSelectedSubcription(sub.rowKey)">
+            <li class="exactFit" ng-bind-html="sub.displayName"></li>
+        </ul>
+    </li>-->
+    <li>{{vm.subscription.displayName}}</li>
+    <li><a ui-sref="manage-policy-list">Policies</a></li>
+    <li><a ui-sref="manage-policy-assignments">Manage Policy Assignments</a></li>
+    <li>Edit Policy Assignment</li>
+</ol>
+
+<div>
     <h2>Edit Policy Assignment</h2>
 
     <h4>Scope of Assignments &mdash; Subscription: {{vm.subscription.displayName}}</h4>

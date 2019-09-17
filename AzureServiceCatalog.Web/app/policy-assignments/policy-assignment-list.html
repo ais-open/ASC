@@ -1,12 +1,31 @@
-﻿<div>
+﻿<ol class="breadcrumb">
+    <li><a ui-sref="dashboard">Home</a></li>
+
+    <li uib-dropdown>
+        <a class="dropdown-toggle" ng-model="vm.selectedSubscription" uib-dropdown-toggle>
+            <span>{{vm.selectedSubscription.displayName}}</span><i class="glyphicon glyphicon-chevron-down" style="top: 5px; margin-left: 5px;"></i>
+        </a>
+        <ul class="dropdown-menu" ng-repeat="sub in vm.subscriptions" ng-click="vm.getPolicyAssignmentForSelectedSubcription(sub.rowKey)">
+            <li class="exactFit" ng-bind-html="sub.displayName"></li>
+        </ul>
+    </li>
+    <li><a ui-sref="manage-policy-list">Policies</a></li>
+    <li>Manage Policy Assignments</li>
+</ol>
+
+<div>
     <h1>
-        Policy Assignment List
+        POLICY ASSIGNMENTS
+        <span style="float:right">
+            <button class="btn btn-primary" ui-sref="edit-policy-assignment( { subscriptionId: vm.selectedSubscription.rowKey} )">Edit Assignment Scope</button>
+        </span>
     </h1>
+
 
     <form class="form-horizontal">
         <div class="form-group">
-            <label class="control-label col-md-3">Scope of Assignments &mdash; Subscription:</label>
-            <div class="col-md-3">
+            <!--<label class="control-label col-md-3">Scope of Assignments &mdash; Subscription:</label>-->
+            <!--<div class="col-md-3">
                 <ui-select name="subscription" class="overFlow" ng-model="vm.selectedSubscription" theme="bootstrap" on-select="vm.subscriptionChanged()" required>
                     <ui-select-match placeholder="Select Subscription...">
                         {{$select.selected.displayName | characters: 30}}
@@ -15,10 +34,10 @@
                         <span class="exactFit" ng-bind-html="sub.displayName | highlight:$select.search"></span>
                     </ui-select-choices>
                 </ui-select>
-            </div>
-            <div class="col-md-3">
+            </div>-->
+            <!--<div class="col-md-3">
                 <button class="btn btn-primary" ui-sref="edit-policy-assignment( { subscriptionId: vm.selectedSubscription.rowKey} )">Edit Assignment Scope</button>
-            </div>
+            </div>-->
         </div>
     </form>
 

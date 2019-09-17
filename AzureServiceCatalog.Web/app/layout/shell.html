@@ -24,10 +24,10 @@
                 <!--User dropdown menu-->
                 <div class="nav-bar">
                     <ul class="nav navbar-nav navbar-right" style="position: relative;">
-                        <li>
+                        <!--<li>
                             <a data-toggle="collapse" data-target=".navbar-collapse" ng-hide="shell.isState('activation-login') || shell.activation"
                                href="http://www.appliedis.com/expertise/cloud-computing" target="_blank">About</a>
-                        </li>
+                        </li>-->
                         <!--<li><a data-toggle="collapse" data-target=".navbar-collapse" ui-sref="login" ng-hide="shell.isAuthenticated">Login</a></li>-->
                         <li ng-class="{'active':shell.isState('activation-login')}">
                             <a data-toggle="collapse" data-target=".navbar-collapse" ui-sref="activation-login" ng-hide="shell.isAuthenticated || shell.isState('activation-login')">
@@ -50,7 +50,7 @@
                                 <span class="glyphicon glyphicon-cog"></span> Manage
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a data-toggle="collapse" data-target=".navbar-collapse" ui-sref="product-list" ng-show="shell.userDetail.canCreate">Product Catalog</a></li>
+                                <li><a data-toggle="collapse" data-target=".navbar-collapse" ui-sref="home" ng-show="shell.userDetail.canCreate">Product Catalog</a></li>
                                 <li ng-show="shell.userDetail.canCreate && shell.userDetail.canAdmin" role="separator" class="divider"></li>
                                 <li ng-show="shell.userDetail.canAdmin"><a ui-sref="manage-policy-list">Policies</a></li>
                                 <li ng-show="shell.userDetail.canAdmin"><a ui-sref="manage-policy-assignments">Policy Assignments</a></li>
