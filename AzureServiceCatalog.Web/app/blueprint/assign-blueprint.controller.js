@@ -9,6 +9,7 @@
         /* jshint validthis: true */
         var vm = this;
         vm.subscriptionId = $state.params.subscriptionId;
+        vm.subscriptionName = $state.params.subscriptionName;
         vm.lodash = _;
         vm.locations = [];
         vm.blueprintName = $state.params.blueprintName;
@@ -34,7 +35,6 @@
         vm.getResourceGroups = getResourceGroups;
         vm.onVersionChange = onVersionChange;
         vm.assign = assign;
-
         activate();
 
         function activate() {
@@ -223,7 +223,7 @@
                                 toastr.error('Unexpected error while assigning.', 'Error');
                             } else {
                                 toastr.success('Blueprint assigned successfully.', 'Success');
-                                $state.go('blueprint-assignments', { subscriptionId: vm.subscriptionId });
+                                $state.go('blueprint-assignments', { subscriptionId: vm.subscriptionId, subscriptionName: vm.subscriptionName });
                             }
                         });
                     }

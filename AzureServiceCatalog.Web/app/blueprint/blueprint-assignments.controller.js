@@ -11,19 +11,20 @@
         vm.lodash = _;
         vm.blueprintAssignments = [];
         vm.selectedSubscription = null;
-        vm.subscriptionId = "";
-        vm.subscriptions = initialData;
+        vm.subscriptionId = $state.params.subscriptionId;
+        vm.subscriptionName = $state.params.subscriptionName;
         vm.getBlueprintAssignments = getBlueprintAssignments;
         vm.viewDetails = viewDetails;
         vm.update = update;
         activate();
 
         function activate() {
-            if (vm.subscriptions && vm.subscriptions.length > 0) {
-                vm.selectedSubscription = vm.subscriptions[0];
-                vm.subscriptionId = vm.selectedSubscription.rowKey;
-                getBlueprintAssignments();
-            }
+            vm.blueprintAssignments = initialData;
+            //if (vm.subscriptions && vm.subscriptions.length > 0) {
+            //    vm.selectedSubscription = vm.subscriptions[0];
+            //    vm.subscriptionId = vm.selectedSubscription.rowKey;
+            //    getBlueprintAssignments();
+            //}
         }
 
         function getBlueprintAssignments() {
@@ -43,6 +44,9 @@
                     }],
                     subscriptionId: function () {
                         return vm.subscriptionId;
+                    },
+                    subscriptionName: function () {
+                        return vm.subscriptionName;
                     }
                 },
                 size: 'lg'

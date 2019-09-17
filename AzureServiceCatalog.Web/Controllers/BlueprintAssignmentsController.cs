@@ -51,6 +51,10 @@ namespace AzureServiceCatalog.Web.Controllers
                         ResourceGroups = item.properties.resourceGroups,
                         Parameters = item.properties.parameters,
                     };
+                    if (blueprintAssignmentItem.ManagedIdentity == "userAssigned")
+                    {
+                        blueprintAssignmentItem.UserAssignedIdentities = item.identity.userAssignedIdentities;
+                    }
                     var tempArr = blueprintAssignmentItem.BlueprintId.Split('/');
                     var blueprintsIndex = Array.IndexOf(tempArr, "blueprints");
                     var blueprintName = tempArr[blueprintsIndex + 1];
@@ -107,6 +111,10 @@ namespace AzureServiceCatalog.Web.Controllers
                         ResourceGroups = item.properties.resourceGroups,
                         Parameters = item.properties.parameters,
                     };
+                    if (blueprintAssignmentItem.ManagedIdentity == "userAssigned")
+                    {
+                        blueprintAssignmentItem.UserAssignedIdentities = item.identity.userAssignedIdentities;
+                    }
                     var tempArr = blueprintAssignmentItem.BlueprintId.Split('/');
                     var blueprintsIndex = Array.IndexOf(tempArr, "blueprints");
                     var blueprintName = tempArr[blueprintsIndex + 1];
@@ -136,18 +144,22 @@ namespace AzureServiceCatalog.Web.Controllers
             var thisOperationContext = new BaseOperationContext("BlueprintAssignmentsController:Put");
             try
             {
-                string objectId = null;
-                string tenantId = ClaimsPrincipal.Current.TenantId();
-                var blueprintSP = await this.client.GetObjectIdOfBlueprintServicePrincipal(subscriptionId, blueprintAssignmentName, thisOperationContext);
-                var responseForBlueprintSP = this.Request.CreateResponse(HttpStatusCode.OK);
-                if (responseForBlueprintSP.IsSuccessStatusCode)
+                dynamic assignment = blueprintAssignment;
+                var managedIdentity = assignment.identity.type;
+                if (managedIdentity == "SystemAssigned")
                 {
-                    dynamic data = JObject.Parse(blueprintSP);
-                    objectId = data.objectId;
+                    string objectId = null;
+                    string tenantId = ClaimsPrincipal.Current.TenantId();
+                    var blueprintSP = await this.client.GetObjectIdOfBlueprintServicePrincipal(subscriptionId, blueprintAssignmentName, thisOperationContext);
+                    var responseForBlueprintSP = this.Request.CreateResponse(HttpStatusCode.OK);
+                    if (responseForBlueprintSP.IsSuccessStatusCode)
+                    {
+                        dynamic data = JObject.Parse(blueprintSP);
+                        objectId = data.objectId;
+                    }
+                    RbacHelper rbacClient = new RbacHelper();
+                    var json = await rbacClient.GrantRoleForBlueprintAssignment(subscriptionId, "Owner", objectId, thisOperationContext);
                 }
-                RbacHelper rbacClient = new RbacHelper();
-                var json = await rbacClient.GrantRoleForBlueprintAssignment(subscriptionId, "Owner", objectId, thisOperationContext);
-
                 var azureResponse = await this.client.AssignBlueprint(subscriptionId, blueprintAssignmentName, blueprintAssignment, thisOperationContext);
                 var responseMsg = this.Request.CreateResponse(HttpStatusCode.OK);
                 responseMsg.Content = azureResponse.ToStringContent();

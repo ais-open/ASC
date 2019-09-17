@@ -1,4 +1,10 @@
-﻿<form name="frmAssign" class="form-horizontal" novalidate>
+﻿<ol class="breadcrumb">
+    <li><a ui-sref="dashboard">Home</a></li>
+    <li>{{vm.subscriptionName}}</li>
+    <li><a ui-sref="blueprints-home">Blueprints</a></li>
+    <li>Assign Blueprint</li>
+</ol>
+<form name="frmAssign" class="form-horizontal" novalidate>
     <div>
         <h2>{{vm.lodash.toUpper(vm.blueprintName)}} {{vm.lodash.toUpper("Assign")}}</h2>
         <div ng-show="{{vm.blueprintVersions.length == 0}}">

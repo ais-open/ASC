@@ -307,7 +307,7 @@
                 }
             })
             .state('assign-blueprint', {
-                url: '/assign-blueprint/:subscriptionId/:blueprintName',
+                url: '/assign-blueprint/:subscriptionId/:subscriptionName/:blueprintName',
                 templateUrl: 'app/blueprint/assign-blueprint.html',
                 controller: 'AssignBlueprintCtrl',
                 controllerAs: 'vm',
@@ -320,18 +320,18 @@
                 }
             })
             .state('blueprint-assignments', {
-                url: '/blueprint-assignments',
+                url: '/blueprint-assignments/:subscriptionId/:subscriptionName',
                 templateUrl: 'app/blueprint/blueprint-assignments.html',
                 controller: 'BlueprintAssignmentsCtrl',
                 controllerAs: 'vm',
                 resolve: {
                     initialData: ['$stateParams', 'ascApi', function ($stateParams, ascApi) {
-                        return ascApi.getEnrolledSubscriptions();
+                        return ascApi.getBlueprintAssignments($stateParams.subscriptionId);
                     }]
                 }
             })
             .state('update-blueprint-assignment', {
-                url: '/update-blueprint-assignment/:subscriptionId/:blueprintAssignmentName',
+                url: '/update-blueprint-assignment/:subscriptionId/:subscriptionName/:blueprintAssignmentName',
                 templateUrl: 'app/blueprint/update-blueprint-assignment.html',
                 controller: 'UpdateBlueprintAssignmentCtrl',
                 controllerAs: 'vm',

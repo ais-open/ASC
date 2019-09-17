@@ -39,5 +39,7 @@ namespace AzureServiceCatalog.Models
         public Object ResourceGroups { get; set; }
         [JsonProperty("parameters")]
         public Object Parameters { get; set; }
+        [JsonProperty("userAssignedIdentities")]
+        public Object UserAssignedIdentities { get; set; }
     }
 }

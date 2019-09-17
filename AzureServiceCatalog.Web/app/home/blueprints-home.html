@@ -1,4 +1,18 @@
-﻿<div>
+﻿<ol class="breadcrumb">
+    <li><a ui-sref="dashboard">Home</a></li>
+
+    <li uib-dropdown>
+        <a class="dropdown-toggle" ng-model="vm.selectedSubscription" uib-dropdown-toggle>
+            <span>{{vm.selectedSubscription.displayName}}</span><i class="glyphicon glyphicon-chevron-down" style="top: 5px; margin-left: 5px;"></i>
+        </a>
+        <ul class="dropdown-menu" ng-repeat="sub in vm.subscriptions" ng-click="vm.onChangeSelectedSubcription(sub)">
+            <li class="exactFit" ng-bind-html="sub.displayName"></li>
+        </ul>
+    </li>
+    <li>Blueprints</li>
+</ol>
+
+<div>
     <div>
         <h1>
             {{vm.lodash.toUpper("Blueprints")}}
@@ -15,7 +29,7 @@
                     <i class="glyphicon glyphicon-share"></i>
                     <span>Manage In Portal</span>
                 </a>
-                <button class="btn btn-warning" ui-sref="blueprint-assignments({subscriptionId: vm.subscriptionId})">
+                <button class="btn btn-warning" ui-sref="blueprint-assignments({subscriptionId: vm.subscriptionId, subscriptionName: vm.selectedSubscription.displayName})">
                     View Assignments
                 </button>
             </span>
@@ -34,11 +48,11 @@
             <tbody>
                 <tr class="selectable" ng-repeat="blueprint in vm.blueprints | orderBy: 'name'" >
                     <td class="col-md-3">
-                        <a class="btn btn-link" ui-sref="assign-blueprint({ subscriptionId: vm.subscriptionId, blueprintName: blueprint.name })">{{blueprint.name}}</a>
+                        <a class="btn btn-link" ui-sref="assign-blueprint({ subscriptionId: vm.subscriptionId, subscriptionName: vm.selectedSubscription.displayName, blueprintName: blueprint.name })">{{blueprint.name}}</a>
                     </td>
                     <td class="col-md-9 middle-align">{{blueprint.description}}</td>
                     <td class="col-md-2 middle-align text-right"><button class="btn btn-warning" ng-click="vm.viewDetails(blueprint)">View Details...</button></td>
-                    <td class="col-md-1 middle-align text-right"><button class="btn btn-warning" ui-sref="assign-blueprint({ subscriptionId: vm.subscriptionId, blueprintName: blueprint.name })">Assign</button></td>
+                    <td class="col-md-1 middle-align text-right"><button class="btn btn-warning" ui-sref="assign-blueprint({ subscriptionId: vm.subscriptionId, blueprintName: blueprint.name, subscriptionName: vm.selectedSubscription.displayName })">Assign</button></td>
                 </tr>
             </tbody>
         </table>

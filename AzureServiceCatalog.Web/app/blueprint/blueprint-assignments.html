@@ -1,4 +1,11 @@
-﻿<div>
+﻿<ol class="breadcrumb">
+    <li><a ui-sref="dashboard">Home</a></li>
+    <li>{{vm.subscriptionName}}</li>
+    <li><a ui-sref="blueprints-home">Blueprints</a></li>
+    <li>Blueprint Assignments</li>
+</ol>
+
+<div>
     <div>
         <h1>
             {{vm.lodash.toUpper("Blueprint Assignments")}}
@@ -18,12 +25,12 @@
             <tbody>
                 <tr class="selectable" ng-repeat="blueprintAssignment in vm.blueprintAssignments | orderBy: 'name'">
                     <td class="col-md-3">
-                        <a class="btn btn-link" ui-sref="update-blueprint-assignment({ subscriptionId: vm.subscriptionId, blueprintAssignmentName: blueprintAssignment.name })">{{blueprintAssignment.name}}</a>
+                        <a class="btn btn-link" ui-sref="update-blueprint-assignment({ subscriptionId: vm.subscriptionId, subscriptionName: vm.subscriptionName, blueprintAssignmentName: blueprintAssignment.name })">{{blueprintAssignment.name}}</a>
                     </td>
                     <td class="col-md-3 middle-align">{{blueprintAssignment.blueprintName}}</td>
                     <td class="col-md-3 middle-align">{{vm.lodash.startCase(blueprintAssignment.provisioningState)}}</td>
                     <td class="col-md-2 middle-align text-right"><button class="btn btn-warning" ng-click="vm.viewDetails(blueprintAssignment)">View Details...</button></td>
-                    <td class="col-md-1 middle-align text-right"><button class="btn btn-warning" ui-sref="update-blueprint-assignment({ subscriptionId: vm.subscriptionId, blueprintAssignmentName: blueprintAssignment.name })">Update</button></td>
+                    <td class="col-md-1 middle-align text-right"><button class="btn btn-warning" ui-sref="update-blueprint-assignment({ subscriptionId: vm.subscriptionId, subscriptionName: vm.subscriptionName, blueprintAssignmentName: blueprintAssignment.name })">Update</button></td>
                 </tr>
             </tbody>
         </table>

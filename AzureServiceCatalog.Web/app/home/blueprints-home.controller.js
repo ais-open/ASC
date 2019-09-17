@@ -15,6 +15,7 @@
         vm.portalUrlForBlueprints = "";
         vm.extensionForUrl = "blade/Microsoft_Azure_Policy/BlueprintsMenuBlade/Blueprints";
         vm.subscriptions = initialData;
+        vm.onChangeSelectedSubcription = onChangeSelectedSubcription;
         vm.getPortalUrlForBlueprints = vm.getPortalUrlForBlueprints;
         vm.getBlueprints = getBlueprints;
         vm.viewDetails = viewDetails;
@@ -27,6 +28,12 @@
                 vm.subscriptionId = vm.selectedSubscription.rowKey;
                 getBlueprints();
             }
+        }
+
+        function onChangeSelectedSubcription(subscription) {
+            vm.selectedSubscription = subscription;
+            vm.subscriptionId = vm.selectedSubscription.rowKey;
+            getBlueprints();
         }
 
         function getPortalUrlForBlueprints() {
@@ -53,6 +60,9 @@
                     }],
                     subscriptionId: function () {
                         return vm.subscriptionId;
+                    },
+                    subscriptionName: function () {
+                        return vm.selectedSubscription.displayName;
                     }
                 },
                 size: 'lg'

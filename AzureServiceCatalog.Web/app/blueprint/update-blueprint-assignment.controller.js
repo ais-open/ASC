@@ -9,6 +9,7 @@
         /* jshint validthis: true */
         var vm = this;
         vm.subscriptionId = $state.params.subscriptionId;
+        vm.subscriptionName = $state.params.subscriptionName;
         vm.lodash = _;
         vm.blueprintName = "";
         vm.blueprintAssignment = null;
@@ -41,7 +42,7 @@
                 var subscriptionsIndex = tempArr.indexOf('subscriptions');
                 vm.subscriptionId = tempArr[subscriptionsIndex + 1];
                 vm.lockAssignment = vm.blueprintAssignment.lockMode;
-                vm.managedIdentity = vm.blueprintAssignment.managedIdentity;
+                vm.managedIdentity = vm.blueprintAssignment.managedIdentity.charAt(0).toUpperCase() + vm.blueprintAssignment.managedIdentity.slice(1)
                 vm.selectedVersion = vm.blueprintAssignment.blueprintVersion;
                 vm.targetScope = vm.blueprintAssignment.scope.includes('subscriptions') ? "Subscription": "Management Group";
             }
@@ -163,6 +164,14 @@
         function getUserAssignedIdentities() {
             ascApi.getUserAssignedIdentities(vm.subscriptionId).then(function (data) {
                 vm.userAssignedIdentities = data;
+                if (vm.managedIdentity == "UserAssigned") {
+                    for (var key in vm.blueprintAssignment.userAssignedIdentities) {
+                        var keyArr = key.split('/');
+                        var identityIndex = keyArr.indexOf('userAssignedIdentities');
+                        vm.selectedUserIdentity = keyArr[identityIndex + 1];
+                        vm.selectedUserIdentity = vm.userAssignedIdentities.find(i => i.name == keyArr[identityIndex + 1])
+                    }
+                }
             });
             document.getElementById('BlueprintVersion').focus();
         }
@@ -205,7 +214,7 @@
                     }
                 }
             };
-            if (vm.managedIdentity == "userAssigned") {
+            if (vm.managedIdentity == "UserAssigned") {
                 var selectedIdentity = vm.selectedUserIdentity.id;
                 blueprintAssignment.identity["userAssignedIdentities"] = {
                     [`${selectedIdentity}`]: {}

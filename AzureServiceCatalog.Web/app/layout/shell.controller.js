@@ -84,7 +84,8 @@
         function stateChangeSuccess(event, toState, toParams, fromState, fromParams) {
             var current = getNavState(siteMap, toState.name);
             if (current) {
-                if (current.state === 'manage-policy-list' || current.state === 'edit-policy' || current.state === 'product-deployment')
+                if (current.state === 'manage-policy-list' || current.state === 'edit-policy' || current.state === 'product-deployment' || current.state === 'blueprints-home'
+                    || current.state === 'assign-blueprint' || current.state === 'blueprint-assignments' || current.state === 'update-blueprint-assignment')
                 {
                     vm.showNavLinks = false;
                 }

@@ -2,13 +2,14 @@
     'use strict';
 
     angular.module('ascApp').controller('ViewBlueprintDetailsCtrl', ViewBlueprintDetailsCtrl);
-    ViewBlueprintDetailsCtrl.$inject = ['$state', '$uibModalInstance', 'initialData', 'subscriptionId', 'ascApi', 'toastr'];
+    ViewBlueprintDetailsCtrl.$inject = ['$state', '$uibModalInstance', 'initialData', 'subscriptionId', 'subscriptionName', 'ascApi', 'toastr'];
 
     /* @ngInject */
-    function ViewBlueprintDetailsCtrl($state, $uibModalInstance, initialData, subscriptionId, ascApi, toastr) {
+    function ViewBlueprintDetailsCtrl($state, $uibModalInstance, initialData, subscriptionId, subscriptionName, ascApi, toastr) {
         /* jshint validthis: true */
         var vm = this;
         vm.subscriptionId = subscriptionId;
+        vm.subscriptionName = subscriptionName;
         vm.blueprint = initialData;
         vm.close = close;
         vm.onAssignButtonClick = onAssignButtonClick;
@@ -23,6 +24,7 @@
             $uibModalInstance.dismiss();
             $state.go('assign-blueprint', {
                 subscriptionId: vm.subscriptionId,
+                subscriptionName: vm.subscriptionName,
                 blueprintName: vm.blueprint.name
             });
         }
