@@ -326,7 +326,7 @@
                 controllerAs: 'vm',
                 resolve: {
                     initialData: ['$stateParams', 'ascApi', function ($stateParams, ascApi) {
-                        return ascApi.getBlueprintAssignments($stateParams.subscriptionId);
+                        return ascApi.getEnrolledSubscriptions();
                     }]
                 }
             })

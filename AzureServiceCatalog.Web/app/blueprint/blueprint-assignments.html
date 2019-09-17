@@ -1,6 +1,13 @@
 ﻿<ol class="breadcrumb">
     <li><a ui-sref="dashboard">Home</a></li>
-    <li>{{vm.subscriptionName}}</li>
+    <li uib-dropdown>
+        <a class="dropdown-toggle" ng-model="vm.selectedSubscription" uib-dropdown-toggle>
+            <span>{{vm.selectedSubscription.displayName}}</span><i class="glyphicon glyphicon-chevron-down" style="top: 5px; margin-left: 5px;"></i>
+        </a>
+        <ul class="dropdown-menu" ng-repeat="sub in vm.subscriptions" ng-click="vm.onChangeSelectedSubcription(sub)">
+            <li class="exactFit" ng-bind-html="sub.displayName"></li>
+        </ul>
+    </li>
     <li><a ui-sref="blueprints-home">Blueprints</a></li>
     <li>Blueprint Assignments</li>
 </ol>

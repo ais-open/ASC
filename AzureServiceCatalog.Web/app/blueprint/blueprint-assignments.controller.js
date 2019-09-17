@@ -13,18 +13,25 @@
         vm.selectedSubscription = null;
         vm.subscriptionId = $state.params.subscriptionId;
         vm.subscriptionName = $state.params.subscriptionName;
+        vm.subscriptions = initialData;
+        vm.onChangeSelectedSubcription = onChangeSelectedSubcription;
         vm.getBlueprintAssignments = getBlueprintAssignments;
         vm.viewDetails = viewDetails;
         vm.update = update;
         activate();
 
         function activate() {
-            vm.blueprintAssignments = initialData;
-            //if (vm.subscriptions && vm.subscriptions.length > 0) {
-            //    vm.selectedSubscription = vm.subscriptions[0];
-            //    vm.subscriptionId = vm.selectedSubscription.rowKey;
-            //    getBlueprintAssignments();
-            //}
+            if (vm.subscriptions && vm.subscriptions.length > 0) {
+                vm.selectedSubscription = vm.subscriptions[0];
+                vm.subscriptionId = vm.selectedSubscription.rowKey;
+                getBlueprintAssignments();
+            }
+        }
+
+        function onChangeSelectedSubcription(subscription) {
+            vm.selectedSubscription = subscription;
+            vm.subscriptionId = vm.selectedSubscription.rowKey;
+            getBlueprintAssignments();
         }
 
         function getBlueprintAssignments() {
