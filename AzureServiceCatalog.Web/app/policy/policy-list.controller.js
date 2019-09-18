@@ -26,7 +26,7 @@
         function activate() {
             if (vm.subscriptions && vm.subscriptions.length > 0) {
                 
-                var subId = ascApi.getselectedSubscription();
+                var subId = appStorage.getselectedSubscription();
 
                 if (subId !== "" || subId !== null)
                 vm.selectedSubscription = vm.getSubscriptionById(vm.subscriptions, 'rowKey', subId);
@@ -49,7 +49,7 @@
         }
 
         function getUserAccessDetails() {
-            if (vm.userDetail.canCreate || vm.userDetail.canAdmin) {
+            if (vm.userDetail.canAdmin) {
                 return true;
             } else {
                 return false;
@@ -77,7 +77,7 @@
         }
 
         function getPoliciesForSelectedSubcription(rowkey) {
-            ascApi.setselectedSubcription(rowkey);    
+            appStorage.setselectedSubcription(rowkey);    
             ascApi.getPolicies(rowkey).then(function (data) {
                 vm.policies = _.filter(data, function (item) {
                     return item.policy.properties.policyType === 'Custom';

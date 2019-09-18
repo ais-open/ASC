@@ -15,10 +15,10 @@
     <li>Edit Policy Assignment</li>
 </ol>
 
-<div>
+<div ng-show="vm.isAuthenticated && !vm.isActivation && vm.userHasManageAccess">
     <h2>Edit Policy Assignment</h2>
 
-    <h4>Scope of Assignments &mdash; Subscription: {{vm.subscription.displayName}}</h4>
+    <!--<h4>Scope of Assignments &mdash; Subscription: {{vm.subscription.displayName}}</h4>-->
 
     <table class="table table-condensed">
         <thead>
@@ -38,8 +38,11 @@
     </table>
 
     <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
+        <div>
             <button class="btn btn-primary" ng-click="vm.saveAll()">Save Changes</button>
         </div>
     </div>
+</div>
+<div ng-hide="vm.userHasManageAccess">
+    <p>You do not have access to this page, please contact administrator</p>
 </div>

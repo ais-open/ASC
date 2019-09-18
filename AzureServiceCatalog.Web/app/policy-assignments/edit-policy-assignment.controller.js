@@ -3,10 +3,10 @@
 
     angular.module('ascApp').controller('EditPolicyAssignmentCtrl', EditPolicyAssignmentCtrl);
     EditPolicyAssignmentCtrl.$inject =
-        ['$q', '$state', 'initialData', 'ascApi', 'toastr', 'dialogsService'];
+        ['$q', '$state', 'initialData', 'ascApi', 'toastr', 'dialogsService', 'identityInfo', 'appStorage'];
 
     /* @ngInject */
-    function EditPolicyAssignmentCtrl($q, $state, initialData, ascApi, toastr, dialogs) {
+    function EditPolicyAssignmentCtrl($q, $state, initialData, ascApi, toastr, dialogs, identityInfo, appStorage) {
         /* jshint validthis: true */
         var vm = this;
         vm.assignments = {};
@@ -16,6 +16,10 @@
         vm.saveAll = saveAll;
         vm.getPolicyDefName = getPolicyDefName;
         vm.subscription = initialData.subscription;
+        vm.isActivation = identityInfo.isActivation;
+        vm.isAuthenticated = identityInfo.isAuthenticated;
+        vm.userDetail = appStorage.getUserDetail();
+        vm.userHasManageAccess = getUserAccessDetails();
 
         activate();
 
@@ -38,6 +42,14 @@
             }
 
             return name;
+        }
+
+        function getUserAccessDetails() {
+            if (vm.userDetail.canAdmin) {
+                return true;
+            } else {
+                return false;
+            }
         }
 
         function populateAssignmentsLookup() {

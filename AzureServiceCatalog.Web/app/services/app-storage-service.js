@@ -10,7 +10,9 @@
             getSelectedTenant: getSelectedTenant,
             setSelectedTenant: setSelectedTenant,
             getUserDetail: getUserDetail,
-            setUserDetail: setUserDetail
+            setUserDetail: setUserDetail,
+            setselectedSubcription: setselectedSubcription,
+            getselectedSubscription: getselectedSubscription
         };
 
         return service;
@@ -29,6 +31,14 @@
 
         function setUserDetail(userDetail) {
             $window.localStorage.setItem('user-detail', JSON.stringify(userDetail));
+        }
+
+        function setselectedSubcription(id) {
+            $window.localStorage.setItem('selected-subscription', id);
+        }
+
+        function getselectedSubscription() {
+            return $window.localStorage.getItem('selected-subscription');
         }
     }
 })();

@@ -13,7 +13,7 @@
     <li>Manage Policy Assignments</li>
 </ol>
 
-<div>
+<div ng-show="vm.isAuthenticated && !vm.isActivation && vm.userHasManageAccess">
     <h1>
         POLICY ASSIGNMENTS
         <span style="float:right">
@@ -57,4 +57,8 @@
             </tbody>
         </table>
     </div>
+</div>
+
+<div ng-hide="vm.userHasManageAccess">
+    <p>You do not have access to this page, please contact administrator</p>
 </div>

@@ -2,10 +2,10 @@
     'use strict';
 
     angular.module('ascApp').controller('PolicyAssignmentListCtrl', PolicyAssignmentListCtrl);
-    PolicyAssignmentListCtrl.$inject = ['initialData', 'ascApi'];
+    PolicyAssignmentListCtrl.$inject = ['initialData', 'ascApi', 'identityInfo', 'appStorage'];
 
     /* @ngInject */
-    function PolicyAssignmentListCtrl(initialData, ascApi) {
+    function PolicyAssignmentListCtrl(initialData, ascApi, identityInfo, appStorage) {
         /* jshint validthis: true */
         var vm = this;
         vm.getPolicyDefName = getPolicyDefName;
@@ -14,6 +14,10 @@
         vm.subscriptions = initialData;
         vm.subscriptionChanged = subscriptionChanged;
         vm.getPolicyAssignmentForSelectedSubcription = getPolicyAssignmentForSelectedSubcription;
+        vm.isActivation = identityInfo.isActivation;
+        vm.isAuthenticated = identityInfo.isAuthenticated;
+        vm.userDetail = appStorage.getUserDetail();
+        vm.userHasManageAccess = getUserAccessDetails();
 
         activate();
 
@@ -38,6 +42,14 @@
             return name;
         }
 
+        function getUserAccessDetails() {
+            if (vm.userDetail.canAdmin) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
         function subscriptionChanged() {
             ascApi.getPolicyAssignments(vm.selectedSubscription.rowKey).then(function (data) {
                 vm.policyAssignments = data.value;
@@ -45,7 +57,7 @@
         }
 
         function getPolicyAssignmentForSelectedSubcription(rowkey) {
-            ascApi.setselectedSubcription(rowkey);            
+            appStorage.setselectedSubcription(rowkey);            
             ascApi.getPolicyAssignments(rowKey).then(function (data) {
                 vm.policyAssignments = data.value;
             });
