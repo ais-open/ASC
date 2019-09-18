@@ -2,10 +2,10 @@
     'use strict';
 
     angular.module('ascApp').controller('BlueprintAssignmentsCtrl', BlueprintAssignmentsCtrl);
-    BlueprintAssignmentsCtrl.$inject = ['$uibModal', '$state', 'initialData', 'ascApi', 'toastr'];
+    BlueprintAssignmentsCtrl.$inject = ['$uibModal', '$state', 'initialData', 'ascApi', 'toastr', 'appStorage'];
 
     /* @ngInject */
-    function BlueprintAssignmentsCtrl($uibModal, $state, initialData, ascApi, toastr) {
+    function BlueprintAssignmentsCtrl($uibModal, $state, initialData, ascApi, toastr, appStorage) {
         /* jshint validthis: true */
         var vm = this;
         vm.lodash = _;
@@ -14,7 +14,7 @@
         vm.subscriptionId = $state.params.subscriptionId;
         vm.subscriptionName = $state.params.subscriptionName;
         vm.subscriptions = initialData;
-        vm.onChangeSelectedSubcription = onChangeSelectedSubcription;
+        vm.onSubscriptionChange = onSubscriptionChange;
         vm.getBlueprintAssignments = getBlueprintAssignments;
         vm.viewDetails = viewDetails;
         vm.update = update;
@@ -28,9 +28,9 @@
             }
         }
 
-        function onChangeSelectedSubcription(subscription) {
-            vm.selectedSubscription = subscription;
-            vm.subscriptionId = vm.selectedSubscription.rowKey;
+        function onSubscriptionChange(rowKey) {
+            appStorage.setselectedSubcription(rowkey);  
+            vm.subscriptionId = rowKey;
             getBlueprintAssignments();
         }
 

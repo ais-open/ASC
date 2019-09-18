@@ -4,7 +4,7 @@
         <a class="dropdown-toggle" ng-model="vm.selectedSubscription" uib-dropdown-toggle>
             <span>{{vm.selectedSubscription.displayName}}</span><i class="glyphicon glyphicon-chevron-down" style="top: 5px; margin-left: 5px;"></i>
         </a>
-        <ul class="dropdown-menu" ng-repeat="sub in vm.subscriptions" ng-click="vm.onChangeSelectedSubcription(sub)">
+        <ul class="dropdown-menu" ng-repeat="sub in vm.subscriptions" ng-click="vm.onSubscriptionChange(sub.rowKey)">
             <li class="exactFit" ng-bind-html="sub.displayName"></li>
         </ul>
     </li>

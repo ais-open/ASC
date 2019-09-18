@@ -2,10 +2,10 @@
     'use strict';
 
     angular.module('ascApp').controller('BlueprintsHomeCtrl', BlueprintsHomeCtrl);
-    BlueprintsHomeCtrl.$inject = ['$uibModal','initialData', 'ascApi'];
+    BlueprintsHomeCtrl.$inject = ['$uibModal', 'initialData', 'ascApi', 'appStorage'];
 
     /* @ngInject */
-    function BlueprintsHomeCtrl($uibModal, initialData, ascApi) {
+    function BlueprintsHomeCtrl($uibModal, initialData, ascApi, appStorage) {
         /* jshint validthis: true */
         var vm = this;
         vm.lodash = _;
@@ -15,24 +15,41 @@
         vm.portalUrlForBlueprints = "";
         vm.extensionForUrl = "blade/Microsoft_Azure_Policy/BlueprintsMenuBlade/Blueprints";
         vm.subscriptions = initialData;
-        vm.onChangeSelectedSubcription = onChangeSelectedSubcription;
+        vm.onSubscriptionChange = onSubscriptionChange;
         vm.getPortalUrlForBlueprints = vm.getPortalUrlForBlueprints;
         vm.getBlueprints = getBlueprints;
         vm.viewDetails = viewDetails;
         vm.getLastModifiedDate = getLastModifiedDate;
+        vm.getSubscriptionById = getSubscriptionById;
         activate();
 
         function activate() {
             if (vm.subscriptions && vm.subscriptions.length > 0) {
-                vm.selectedSubscription = vm.subscriptions[0];
-                vm.subscriptionId = vm.selectedSubscription.rowKey;
+                var subId = appStorage.getselectedSubscription();
+                if (subId !== "" || subId !== null) {
+                    vm.selectedSubscription = vm.getSubscriptionById(vm.subscriptions, 'rowKey', subId);
+                    vm.subscriptionId = subId
+                }
+                if (vm.selectedSubscription === null) {
+                    vm.selectedSubscription = vm.subscriptions[0];
+                    vm.subscriptionId = vm.selectedSubscription.rowKey;
+                }
                 getBlueprints();
             }
         }
 
-        function onChangeSelectedSubcription(subscription) {
-            vm.selectedSubscription = subscription;
-            vm.subscriptionId = vm.selectedSubscription.rowKey;
+        function getSubscriptionById(array, key, value) {
+            for (var i = 0; i < array.length; i++) {
+                if (array[i][key] === value) {
+                    return array[i];
+                }
+            }
+            return null;
+        }
+
+        function onSubscriptionChange(rowkey) {
+            appStorage.setselectedSubcription(rowkey); 
+            vm.subscriptionId = rowKey;
             getBlueprints();
         }
 
