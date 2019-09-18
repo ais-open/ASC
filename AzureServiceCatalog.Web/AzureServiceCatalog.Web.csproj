@@ -430,6 +430,7 @@
     <Content Include="Content\images\azure-automation.png" />
     <Content Include="Content\images\azure-autoscale-settings.png" />
     <Content Include="Content\images\azure-batch.png" />
+    <Content Include="Content\images\azure-blueprint.png" />
     <Content Include="Content\images\azure-certificate.png" />
     <Content Include="Content\images\azure-dns.png" />
     <Content Include="Content\images\azure-files-service.png" />
