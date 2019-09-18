@@ -2,7 +2,7 @@
     'use strict';
 
     var siteMap = [
-        { state: 'home', title: 'Product Catalogs',
+        { state: 'home', title: 'Product Catalog',
             descendants: [
                 { state: 'add-product-designer', title: 'Add Product (drag/drop)' },
                 { state: 'edit-product', title: 'Product Details' },
