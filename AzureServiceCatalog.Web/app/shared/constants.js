@@ -30,7 +30,7 @@
                     descendants: [
                         { state: 'update-blueprint-assignment', title: 'Update Blueprint Assignment' }
                     ]
-                },
+                }
             ]
         },
         //{
@@ -44,7 +44,7 @@
         { state: 'resource-groups', title: 'Spend' },
         { state: 'deployments', title: 'Provisioned',
             descendants: [
-                { state: 'deployment', title: 'Provision Detail' },
+                { state: 'deployment', title: 'Provision Detail' }
             ]
         },
         { state: 'manage-host-subscription', title: 'Manage Host Subscription' },

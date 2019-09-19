@@ -396,7 +396,7 @@
         }
 
         function handleError(error, requestUrl) {
-            var message = "An internal server error occured while performing operation \"" + requestUrl + "\". Please retry your request."
+            var message = "An internal server error occured while performing operation \"" + requestUrl + "\". Please retry your request.";
             if (error.status === 500) {
                 dialogs.errorDialog(message, error.data, 'Close');
             } else {
