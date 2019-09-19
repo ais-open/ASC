@@ -10,6 +10,9 @@
 
         vm.isActivation = identityInfo.isActivation;
         vm.isAuthenticated = identityInfo.isAuthenticated;
+        vm.isBlueprintFeatureEnabled = identityInfo.isBlueprintFeatureEnabled
+        vm.isPoliciesFeatureEnabled = identityInfo.isPoliciesFeatureEnabled;
+        vm.isProductCatalogFeatureEnabled = identityInfo.isProductCatalogFeatureEnabled;
         vm.shellShowSpinner = false;
         vm.showSpinner = false;
         vm.isState = isState;

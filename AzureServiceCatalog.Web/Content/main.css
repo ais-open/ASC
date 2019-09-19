@@ -667,48 +667,26 @@ h3.uidialog {
   margin: 0px;
 }
 #dashboardButton1 {
-    min-height: 170px;
-    margin-bottom: 20px;
-    border: 5px solid #0080e1;
-    border-radius: 4px;
-    position: fixed;
-    top: 40%;
     left: 25%;
-    margin-top: -50px;
-    margin-left: -100px;
-    width: 300px;
 }
-
 #dashboardButton2 {
-    min-height: 170px;
-    margin-bottom: 20px;
-    border: 5px solid #0080e1;
-    border-radius: 4px;
-    position: fixed;
-    top: 40%;
     left: 45%;
-    margin-top: -50px;
-    margin-left: -100px;
-    width: 300px;
 }
-
 #dashboardButton3 {
+    left: 65%;
+}
+.dashboard-button-default {
     min-height: 170px;
     margin-bottom: 20px;
     border: 5px solid #0080e1;
     border-radius: 4px;
     position: fixed;
     top: 40%;
-    left: 65%;
+    background-color: #3ea5ef;
     margin-top: -50px;
     margin-left: -100px;
     width: 300px;
 }
-
-.dashboard-button-default {
-    background-color: #3ea5ef;
-}
-
 .dashboard-button-default a {
     color: #fff;
 }

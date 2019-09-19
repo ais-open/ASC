@@ -18,7 +18,7 @@
         vm.assignmentName = "";
         vm.location = "";
         vm.selectedVersion = "";
-        vm.lockAssignment = "none";
+        vm.lockAssignment = "";
         vm.managedIdentity = "SystemAssigned";
         vm.userAssignedIdentities = [];
         vm.selectedUserIdentity = "";

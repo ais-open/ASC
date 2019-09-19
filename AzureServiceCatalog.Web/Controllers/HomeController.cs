@@ -29,6 +29,9 @@ namespace AzureServiceCatalog.Web.Controllers
             {
                 this.ViewBag.AppVersion = this.GetType().Assembly.GetName().Version.ToString();
                 this.ViewBag.WebConfigInUse = ConfigurationManager.AppSettings["WebConfigUsed"];
+                this.ViewBag.IsBlueprintFeatureEnabled = ConfigurationManager.AppSettings["ImportBlueprintFeature"].ToString().ToLower();
+                this.ViewBag.IsProductCatalogFeatureEnabled = ConfigurationManager.AppSettings["ImportProductCatalogFeature"];
+                this.ViewBag.IsPoliciesFeatureEnabled = ConfigurationManager.AppSettings["ImportPoliciesFeature"];
                 if (!activationLogin && !activation && string.IsNullOrEmpty(directoryName))
                 {
                     return View("Landing");

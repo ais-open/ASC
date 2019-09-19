@@ -50,10 +50,13 @@
                                 <span class="glyphicon glyphicon-cog"></span> Manage
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a data-toggle="collapse" data-target=".navbar-collapse" ui-sref="home" ng-show="shell.userDetail.canCreate">Product Catalog</a></li>
-                                <li ng-show="shell.userDetail.canCreate && shell.userDetail.canAdmin" role="separator" class="divider"></li>
-                                <li ng-show="shell.userDetail.canAdmin"><a ui-sref="manage-policy-list">Policies</a></li>
-                                <li ng-show="shell.userDetail.canAdmin"><a ui-sref="manage-policy-assignments">Policy Assignments</a></li>
+                                <li><a data-toggle="collapse" data-target=".navbar-collapse" ui-sref="home" ng-show="shell.userDetail.canCreate && shell.isProductCatalogFeatureEnabled">Product Catalog</a></li>
+                                <li ng-show="shell.userDetail.canCreate && shell.userDetail.canAdmin && shell.isProductCatalogFeatureEnabled" role="separator" class="divider"></li>
+                                <li ng-show="shell.userDetail.canCreate && shell.isBlueprintFeatureEnabled"><a ui-sref="blueprints-home">Blueprints</a></li>
+                                <li ng-show="shell.userDetail.canCreate && shell.isBlueprintFeatureEnabled"><a ui-sref="blueprint-assignments">Blueprint Assignment</a></li>
+                                <li ng-show="shell.userDetail.canCreate && shell.isBlueprintFeatureEnabled" role="separator" class="divider"></li>
+                                <li ng-show="shell.userDetail.canAdmin && shell.isPoliciesFeatureEnabled""><a ui-sref="manage-policy-list">Policies</a></li>
+                                <li ng-show="shell.userDetail.canAdmin && shell.isPoliciesFeatureEnabled""><a ui-sref="manage-policy-assignments">Policy Assignments</a></li>
                                 <li ng-show="shell.userDetail.canAdmin" role="separator" class="divider"></li>
                                 <li ng-show="shell.userDetail.canAdmin"><a ui-sref="manage-host-subscription">Host Subscription</a></li>
                                 <li ng-show="shell.userDetail.canAdmin"><a ui-sref="manage-enrolled-subscriptions">Enrolled Subscriptions</a></li>
