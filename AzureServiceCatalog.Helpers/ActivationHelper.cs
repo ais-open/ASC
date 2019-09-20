@@ -67,12 +67,8 @@ namespace AzureServiceCatalog.Helpers
                 templateInit2.TemplateData = response;
                 TemplateViewModel savedTemplateEntity2 = await repository.SaveTemplate(templateInit2, thisOperationContext);
 
-                var isRunningInAzureGeneral = Config.IsRunningInAzureGeneral(Config.StorageAccountEndpointSuffix);
-                if (isRunningInAzureGeneral)
-                {
-                    var notificationHelper = new NotificationHelper();
-                    notificationHelper.SendActivationNotification(activationInfo.Organization, thisOperationContext);
-                }
+                var notificationHelper = new NotificationHelper();
+                await notificationHelper.SendActivationNotificationAsync(activationInfo.Organization, thisOperationContext);
             }
             finally
             {

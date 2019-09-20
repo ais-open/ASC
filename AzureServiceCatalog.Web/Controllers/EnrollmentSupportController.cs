@@ -11,6 +11,7 @@ using AzureServiceCatalog.Helpers;
 using AzureServiceCatalog.Models;
 using AzureServiceCatalog.Web.Models;
 using Newtonsoft.Json.Linq;
+using System.Threading.Tasks;
 
 namespace AzureServiceCatalog.Web.Controllers
 {
@@ -19,13 +20,11 @@ namespace AzureServiceCatalog.Web.Controllers
         NotificationHelper notificationHelper = new NotificationHelper();
 
         [AllowAnonymous]
-        public IHttpActionResult Post([FromBody]EnrollmentSupportViewModel model)
+        public async Task<IHttpActionResult> PostAsync([FromBody]EnrollmentSupportViewModel model)
         {
             var thisOperationContext = new BaseOperationContext("EnrollmentSupportController:Post")
             {
-                IpAddress = HttpContext.Current.Request.UserHostAddress,
-                UserId = ClaimsPrincipal.Current.SignedInUserName(),
-                UserName = ClaimsPrincipal.Current.Identity.Name
+                IpAddress = HttpContext.Current.Request.UserHostAddress
             };
             try
             {
@@ -37,7 +36,7 @@ namespace AzureServiceCatalog.Web.Controllers
                     return Content(HttpStatusCode.BadRequest, JObject.FromObject(errorInformation));
                 } else
                 {
-                    notificationHelper.SendSupportNotification(model, thisOperationContext);
+                    await notificationHelper.SendSupportNotificationAsync(model, thisOperationContext);
                     return Ok();
                 }
             }

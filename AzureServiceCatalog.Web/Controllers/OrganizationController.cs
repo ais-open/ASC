@@ -56,9 +56,7 @@ namespace AzureServiceCatalog.Web.Controllers
         {
             var thisOperationContext = new BaseOperationContext("OrganizationController:GetByVerifiedDomain")
             {
-                IpAddress = HttpContext.Current.Request.UserHostAddress,
-                UserId = ClaimsPrincipal.Current.SignedInUserName(),
-                UserName = ClaimsPrincipal.Current.Identity.Name
+                IpAddress = HttpContext.Current.Request.UserHostAddress
             };
             try
             {

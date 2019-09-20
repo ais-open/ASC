@@ -18,13 +18,11 @@ namespace AzureServiceCatalog.Web.Controllers
     {
         NotificationHelper notificationHelper = new NotificationHelper();
         // POST: api/Feedback
-        public IHttpActionResult Post([FromBody]FeedbackViewModel model)
+        public async Task<IHttpActionResult> PostAsync([FromBody]FeedbackViewModel model)
         {
             var thisOperationContext = new BaseOperationContext("FeedbackController:Post")
             {
-                IpAddress = HttpContext.Current.Request.UserHostAddress,
-                UserId = ClaimsPrincipal.Current.SignedInUserName(),
-                UserName = ClaimsPrincipal.Current.Identity.Name
+                IpAddress = HttpContext.Current.Request.UserHostAddress
             };
             try
             {
@@ -38,7 +36,7 @@ namespace AzureServiceCatalog.Web.Controllers
                     return Content(HttpStatusCode.BadRequest, JObject.FromObject(errorInformation));
                 } else
                 {
-                    notificationHelper.SendFeedbackNotification(model, thisOperationContext);
+                    await notificationHelper.SendFeedbackNotificationAsync(model, thisOperationContext);
                     return Ok();
                 }
             }
@@ -58,9 +56,9 @@ namespace AzureServiceCatalog.Web.Controllers
         {
             var thisOperationContext = new BaseOperationContext("FeedbackController:Get")
             {
-                IpAddress = HttpContext.Current.Request.UserHostAddress,
-                UserId = ClaimsPrincipal.Current.SignedInUserName(),
-                UserName = ClaimsPrincipal.Current.Identity.Name
+                IpAddress = HttpContext.Current.Request.UserHostAddress
+                //UserId = ClaimsPrincipal.Current.SignedInUserName(),
+                //UserName = ClaimsPrincipal.Current.Identity.Name
             };
             try
             {
