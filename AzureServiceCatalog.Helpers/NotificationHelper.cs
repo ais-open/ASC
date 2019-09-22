@@ -16,7 +16,7 @@ namespace AzureServiceCatalog.Helpers
     public class NotificationHelper
     {
         private const string htmlLineBreak = "<br />";
-        public void SendFeedbackNotification(FeedbackViewModel model, BaseOperationContext parentOperationContext)
+        public async Task SendFeedbackNotificationAsync(FeedbackViewModel model, BaseOperationContext parentOperationContext)
         {
             var thisOperationContext = new BaseOperationContext(parentOperationContext, "NotificationHelper:SendFeedbackNotification");
             try
@@ -26,7 +26,7 @@ namespace AzureServiceCatalog.Helpers
                     var subject = string.Format(Config.FeedbackEmailSubjectFormat, model.Subject);
                     var message = $"Name: {model.Name}{htmlLineBreak}Email: {model.Email}{htmlLineBreak}Subject: {model.Subject}{htmlLineBreak}Comments: {model.Comments}";
 
-                    SendEmailNotification(Config.AdminEmailAddress, subject, message, parentOperationContext);
+                    await SendEmailNotification(Config.AdminEmailAddress, subject, message, parentOperationContext);
                 }
             }
             finally
@@ -36,7 +36,7 @@ namespace AzureServiceCatalog.Helpers
             }
         }
 
-        public void SendSupportNotification(EnrollmentSupportViewModel model, BaseOperationContext parentOperationContext)
+        public async Task SendSupportNotificationAsync(EnrollmentSupportViewModel model, BaseOperationContext parentOperationContext)
         {
             var thisOperationContext = new BaseOperationContext(parentOperationContext, "NotificationHelper:SendSupportNotification");
             try
@@ -47,7 +47,7 @@ namespace AzureServiceCatalog.Helpers
                     var message = $"First Name: {model.FirstName}{htmlLineBreak}Last Name: {model.LastName}{htmlLineBreak}Company: {model.Company}{htmlLineBreak}Title: {model.Title}{htmlLineBreak}" +
                                   $"Email: {model.Email}{htmlLineBreak}Phone: {model.Phone}{htmlLineBreak}Comments: {model.Comments}";
 
-                    SendEmailNotification(Config.AdminEmailAddress, subject, message, parentOperationContext);
+                    await SendEmailNotification(Config.AdminEmailAddress, subject, message, parentOperationContext);
                 }
             }
             finally
@@ -57,7 +57,7 @@ namespace AzureServiceCatalog.Helpers
             }
         }
 
-        public void SendActivationNotification(Organization org, BaseOperationContext parentOperationContext)
+        public async Task SendActivationNotificationAsync(Organization org, BaseOperationContext parentOperationContext)
         {
             var thisOperationContext = new BaseOperationContext(parentOperationContext, "NotificationHelper:SendActivationNotification");
             try
@@ -67,7 +67,7 @@ namespace AzureServiceCatalog.Helpers
                     var subject = $"New Activation: {org.VerifiedDomain}";
                     var message = $"New Activation{htmlLineBreak}First Name: {ClaimsPrincipal.Current.FirstName()}{htmlLineBreak}Last Name: {ClaimsPrincipal.Current.LastName()}{htmlLineBreak}Email: {ClaimsPrincipal.Current.EmailAddress()}{htmlLineBreak}Org Domain: {org.VerifiedDomain}{htmlLineBreak}Date Enrolled: {org.EnrolledDate}{htmlLineBreak}";
 
-                    SendEmailNotification(Config.AdminEmailAddress, subject, message, parentOperationContext);
+                    await SendEmailNotification(Config.AdminEmailAddress, subject, message, parentOperationContext);
                 }
             }
             finally
@@ -77,7 +77,7 @@ namespace AzureServiceCatalog.Helpers
             }
         }
 
-        private async void SendEmailNotification(string sendToEmailAddress, string subject, string message, BaseOperationContext parentOperationContext)
+        private async Task SendEmailNotification(string sendToEmailAddress, string subject, string message, BaseOperationContext parentOperationContext)
         {
             var thisOperationContext = new BaseOperationContext(parentOperationContext, "NotificationHelper:SendEmailNotification");
             try
