@@ -29,7 +29,7 @@ namespace AzureServiceCatalog.Web.Controllers
             };
             try
             {
-                var json = await AzureResourceManagerHelper.GetStorageProvider(subscriptionId, thisOperationContext);
+                var json = await AzureResourceManagerHelper.GetStorageProvider(subscriptionId, AuthType.App, thisOperationContext);
                 var responseMsg = this.Request.CreateResponse(HttpStatusCode.OK);
                 responseMsg.Content = new StringContent(json, Encoding.UTF8, "application/json");
                 IHttpActionResult response = ResponseMessage(responseMsg);

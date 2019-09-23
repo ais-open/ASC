@@ -172,7 +172,7 @@ namespace AzureServiceCatalog.Helpers
 
                 // Create Resource Group to hold Storage Account
                 string resourceGroup = Config.DefaultResourceGroup;
-                var json = await AzureResourceManagerHelper.GetStorageProvider(activationInfo.HostSubscription.SubscriptionId, thisOperationContext);
+                var json = await AzureResourceManagerHelper.GetStorageProvider(activationInfo.HostSubscription.SubscriptionId, AuthType.User, thisOperationContext);
                 JObject storageProvider = Newtonsoft.Json.JsonConvert.DeserializeObject<JObject>(json);
                 var client = Helpers.GetResourceManagementClient(activationInfo.HostSubscription.SubscriptionId, thisOperationContext);
                 string location = storageProvider["resourceTypes"][0]["locations"][0].ToString();

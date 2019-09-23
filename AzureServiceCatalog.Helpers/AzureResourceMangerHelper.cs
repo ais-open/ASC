@@ -52,15 +52,21 @@ namespace AzureServiceCatalog.Helpers
             }
         }
 
-        public static async Task<string> GetStorageProvider(string subscriptionId, BaseOperationContext parentOperationContext)
+        public static async Task<string> GetStorageProvider(string subscriptionId, AuthType authType, BaseOperationContext parentOperationContext)
         {
             var thisOperationContext = new BaseOperationContext(parentOperationContext, "AzureResourceManagerHelper: GetStorageProvider");
             try
             {
                 string tenantId = ClaimsPrincipal.Current.TenantId();
-                string requestUrl = string.Format("{0}/subscriptions/{1}/providers/Microsoft.Storage?api-version={2}", Config.AzureResourceManagerUrl, subscriptionId, Config.AzureResourceManagerAPIVersion);
-                //var httpClient = Utils.GetAuthenticatedHttpClientForUser();
-                var httpClient = Helpers.GetAuthenticatedHttpClientForApp(thisOperationContext);
+                string requestUrl = string.Format("{0}/subscriptions/{1}/providers/Microsoft.Storage?api-version={2}", Config.AzureResourceManagerUrl, subscriptionId, "2019-05-10");
+                var httpClient = new HttpClient();
+                if (authType == AuthType.User)
+                {
+                    httpClient = Helpers.GetAuthenticatedHttpClientForUser(thisOperationContext);
+                } else
+                {
+                    httpClient = Helpers.GetAuthenticatedHttpClientForApp(thisOperationContext);
+                }
                 HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
                 HttpResponseMessage response = await httpClient.SendAsync(request);
                 var result = await response.Content.ReadAsStringAsync();
