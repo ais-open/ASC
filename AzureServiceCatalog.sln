@@ -24,7 +24,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureServiceCatalog.Helpers
 		{AA3987AF-B57E-4092-A105-20C74DE63467} = {AA3987AF-B57E-4092-A105-20C74DE63467}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureServiceCatalog.Test", "AzureServiceCatalog.Test\AzureServiceCatalog.Test.csproj", "{29178CC8-F2C6-4BD4-8587-C972CDA94D5D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureServiceCatalog.Web.Test", "AzureServiceCatalog.Test\AzureServiceCatalog.Web.Test.csproj", "{29178CC8-F2C6-4BD4-8587-C972CDA94D5D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

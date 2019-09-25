@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
 
-namespace AzureServiceCatalog.Test
+namespace AzureServiceCatalog.Web.Test
 {
     [TestClass]
     public class HomeControllerTest
