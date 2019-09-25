@@ -20,7 +20,7 @@
         vm.userDetail = appStorage.getUserDetail();
         activate();
 
-        console.log('**identityInfo in DashboardCtrl', identityInfo);
+        //console.log('**identityInfo in DashboardCtrl', identityInfo);
 
         function activate() {
             if (vm.products) {

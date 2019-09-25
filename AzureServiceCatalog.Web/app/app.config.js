@@ -245,7 +245,7 @@
                 templateUrl: 'app/policy/policy-list.html',
                 controller: 'PolicyListCtrl',
                 controllerAs: 'vm',
-                adminPermissionRequired: true,
+                adminPermissionRequired: false,
                 resolve: {
                     initialData: ['identityInfo', 'ascApi', function (identityInfo, ascApi) {
                         if (identityInfo.isAuthenticated) {

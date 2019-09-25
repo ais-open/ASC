@@ -67,8 +67,8 @@ namespace AzureServiceCatalog.Helpers
                 templateInit2.TemplateData = response;
                 TemplateViewModel savedTemplateEntity2 = await repository.SaveTemplate(templateInit2, thisOperationContext);
 
-                var notificationHelper = new NotificationHelper();
-                await notificationHelper.SendActivationNotificationAsync(activationInfo.Organization, thisOperationContext);
+                //var notificationHelper = new NotificationHelper();
+                //await notificationHelper.SendActivationNotificationAsync(activationInfo.Organization, thisOperationContext);
             }
             finally
             {
@@ -188,9 +188,20 @@ namespace AzureServiceCatalog.Helpers
                 CacheDetails(activationInfo.HostSubscription.SubscriptionId, key, storageName, activationInfo.HostSubscription.OrganizationId, thisOperationContext);
                 var orgGroups = await AzureADGraphApiHelper.GetAllGroupsForOrganization(activationInfo.Organization.Id, parentOperationContext);
                 ContributorGroup[] contributorGroups = new ContributorGroup[1];
-                contributorGroups[0] = new ContributorGroup();
-                contributorGroups[0].Id = orgGroups[0].Id;
-                contributorGroups[0].Name = orgGroups[0].Name;
+                bool isDefaultOrgGroupPresent = orgGroups.FindIndex(i => i.Name == Config.DefaultAdGroup) >=0;
+                if (isDefaultOrgGroupPresent)
+                {
+                    var defaultAdGroup = orgGroups.Find(i => i.Name == Config.DefaultAdGroup);
+                    contributorGroups[0] = new ContributorGroup();
+                    contributorGroups[0].Id = defaultAdGroup.Id;
+                    contributorGroups[0].Name = defaultAdGroup.Name;
+                } else
+                {
+                    contributorGroups[0] = new ContributorGroup();
+                    contributorGroups[0].Id = orgGroups[0].Id;
+                    contributorGroups[0].Name = orgGroups[0].Name;
+                }
+
 
                 var jsonContributorGroups = JsonConvert.SerializeObject(contributorGroups);
                 await this.coreRepository.SaveSubscription(new Subscription

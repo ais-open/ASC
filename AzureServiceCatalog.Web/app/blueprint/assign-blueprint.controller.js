@@ -2,10 +2,10 @@
     'use strict';
 
     angular.module('ascApp').controller('AssignBlueprintCtrl', AssignBlueprintCtrl);
-    AssignBlueprintCtrl.$inject = ['$uibModal', '$state', 'initialData', 'ascApi', 'toastr'];
+    AssignBlueprintCtrl.$inject = ['$uibModal', '$state', 'initialData', 'ascApi', 'toastr', 'dialogsService'];
 
     /* @ngInject */
-    function AssignBlueprintCtrl($uibModal, $state, initialData, ascApi, toastr) {
+    function AssignBlueprintCtrl($uibModal, $state, initialData, ascApi, toastr, dialogs) {
         /* jshint validthis: true */
         var vm = this;
         vm.subscriptionId = $state.params.subscriptionId;
@@ -20,8 +20,6 @@
         vm.selectedVersion = "";
         vm.lockAssignment = "";
         vm.managedIdentity = "SystemAssigned";
-        vm.userAssignedIdentities = [];
-        vm.selectedUserIdentity = "";
         vm.targetScope = "";
         vm.resourceGroups = [];
         vm.parameters = [];
@@ -55,7 +53,6 @@
                     getResourceGroups(vm.selectedBlueprintVersion);
                     getPortalUrlForUsers();
                     getLocations();
-                    getUserAssignedIdentities();
                 } else {
                     getPortalUrlForBlueprints();
                 }
@@ -140,13 +137,6 @@
             });
         }
 
-        function getUserAssignedIdentities() {
-            ascApi.getUserAssignedIdentities(vm.subscriptionId).then(function (data) {
-                vm.userAssignedIdentities = data;
-            });
-            document.getElementById('blueprintAssignmentName').focus();
-        }
-
         function onVersionChange() {
             var selectedBlueprintVersionIndex = vm.versionNames.findIndex(i => i == vm.selectedVersion);
             vm.selectedBlueprintVersion = vm.blueprintVersions[selectedBlueprintVersionIndex];
@@ -154,80 +144,79 @@
             getResourceGroups(vm.selectedBlueprintVersion);
         }
 
-        function assign() {
+        function assignBlueprint() {
             var isErrorNull = true;
+            var blueprintAssignment = {
+                "identity": {
+                    "type": vm.managedIdentity
+                },
+                "location": vm.location,
+                "properties": {
+                    "blueprintId": vm.selectedBlueprintVersion.id,
+                    "locks": {
+                        "mode": vm.lockAssignment
+                    }
+                }
+            };
+            var parameters = {};
+            var resourceGroups = {};
+            _.forIn(vm.parameters, function (param) {
+                var parameterValue = param.value;
+                if (param.type === "array") {
+                    try {
+                        parameterValue = parameterValue.split(',');
+                    }
+                    catch (exc) {
+                        isErrorNull = false;
+                        var heading = 'Invalid Parameter Value (' + param.name + ')';
+                        var msg = 'Parameter value should be comma seperated string values.';
+                        toastr.warning(msg, heading);
+                    }
+                } else if (param.type === "int") {
+                    parameterValue = parseInt(parameterValue, 10);
+                }
+                parameters[`${param.name}`] = {
+                    "value": parameterValue
+                }
+            });
+            blueprintAssignment.properties['parameters'] = parameters;
+            _.forIn(vm.resourceGroups, function (rg) {
+                if (!rg.isNameAvailable || !rg.isLocationAvailable) {
+                    resourceGroups[`${rg.key}`] = {};
+                    //If name is not assigned in blueprint definition, add name property
+                    if (!rg.isNameAvailable) {
+                        resourceGroups[`${rg.key}`]["name"] = rg.name;
+                    }
+                    //If location is not assigned in blueprint definition, add location property
+                    if (!rg.isLocationAvailable) {
+                        resourceGroups[`${rg.key}`]["location"] = rg.location;
+                    }
+                }
+            });
+            blueprintAssignment.properties['resourceGroups'] = resourceGroups;
+            if (isErrorNull) {
+                ascApi.assignBlueprint(vm.subscriptionId, vm.assignmentName, blueprintAssignment).then(function (data) {
+                    if (data.error) {
+                        console.log('Error while assigning blueprint!', data);
+                        toastr.error('Unexpected error while assigning.', 'Error');
+                    } else {
+                        toastr.success('Blueprint assigned successfully.', 'Success');
+                        $state.go('blueprint-assignments', { subscriptionId: vm.subscriptionId, subscriptionName: vm.subscriptionName });
+                    }
+                });
+            }
+        }
+
+        function assign() {
             ascApi.getBlueprintAssignment(vm.subscriptionId, vm.assignmentName).then(function (data) {
                 if (data != null) {
                     var msg = 'A resource already exists with the same name in this scope. Please choose a different name.';
                     toastr.warning(msg, 'Invalid Name');
                     return;
                 } else {
-                    var blueprintAssignment = {
-                        "identity": {
-                            "type": vm.managedIdentity
-                        },
-                        "location": vm.location,
-                        "properties": {
-                            "blueprintId": vm.selectedBlueprintVersion.id,
-                            "locks": {
-                                "mode": vm.lockAssignment
-                            }
-                        }
-                    };
-                    if (vm.managedIdentity == "UserAssigned") {
-                        var selectedIdentity = vm.selectedUserIdentity.id;
-                        blueprintAssignment.identity["userAssignedIdentities"] = {
-                            [`${selectedIdentity}`]: {}
-                        };
-                    }
-                    var parameters = {};
-                    var resourceGroups = {};
-                    _.forIn(vm.parameters, function (param) {
-                        var parameterValue = param.value;
-                        if (param.type === "array") {
-                            try {
-                                parameterValue = parameterValue.split(',');
-                            }
-                            catch (exc) {
-                                isErrorNull = false;
-                                var heading = 'Invalid Parameter Value (' + param.name + ')';
-                                var msg = 'Parameter value should be comma seperated string values.';
-                                toastr.warning(msg, heading);
-                            }
-                        } else if (param.type === "int") {
-                            parameterValue = parseInt(parameterValue, 10);
-                        }
-                        parameters[`${param.name}`] = {
-                            "value": parameterValue
-                        }
+                    dialogs.confirm('Are you sure you want to assign the blueprint?', 'Assign Blueprint', ['Yes', 'No']).then(function () {
+                        assignBlueprint();
                     });
-                    blueprintAssignment.properties['parameters'] = parameters;
-                    _.forIn(vm.resourceGroups, function (rg) {
-                        if (!rg.isNameAvailable || !rg.isLocationAvailable) {
-                            resourceGroups[`${rg.key}`] = {};
-                            //If name is not assigned in blueprint definition, add name property
-                            if (!rg.isNameAvailable) {
-                                resourceGroups[`${rg.key}`]["name"] = rg.name;
-                            }
-                            //If location is not assigned in blueprint definition, add location property
-                            if (!rg.isLocationAvailable) {
-                                resourceGroups[`${rg.key}`]["location"] = rg.location;
-                            }
-                        }
-                    });
-                    blueprintAssignment.properties['resourceGroups'] = resourceGroups;
-                    if (isErrorNull) {
-                        ascApi.assignBlueprint(vm.subscriptionId, vm.assignmentName, blueprintAssignment).then(function (data) {
-                            if (data.error) {
-                                console.log('Error while assigning blueprint!', data);
-                                toastr.error('Unexpected error while assigning.', 'Error');
-                            } else {
-                                toastr.success('Blueprint assigned successfully.', 'Success');
-                                $state.go('blueprint-assignments', { subscriptionId: vm.subscriptionId, subscriptionName: vm.subscriptionName });
-                            }
-                        });
-                    }
-
                 }
             });
         }

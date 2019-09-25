@@ -38,23 +38,6 @@
                             <option ng-model="vm.lockAssignment" value="allResourcesReadOnly">Read Only</option>
                         </select>
                     </div>
-                    <div class="form-group col-xs-12">
-                        <label class="col-lg-2 col-xs-12 col-sm-3">ManagedIdentity: </label>
-                        <div>
-                            <input name="ManagedIdentity" type="radio" ng-model="vm.managedIdentity" value="SystemAssigned">
-                            System assigned <br />
-                            <input name="ManagedIdentity" type="radio" ng-model="vm.managedIdentity" value="UserAssigned">
-                            User assigned <br />
-                        </div>
-                        <div class="col-md-12" ng-show="vm.managedIdentity == 'UserAssigned'">
-                            <div class="form-inline control-columns">
-                                <div class="form-group col-xs-12">
-                                    <label class="col-lg-2 col-xs-12 col-sm-3"></label>
-                                    <select class="form-control" name="SelectedUserIdentity" ng-model="vm.selectedUserIdentity" ng-options="v.name for v in vm.userAssignedIdentities"></select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <br />
             </div>

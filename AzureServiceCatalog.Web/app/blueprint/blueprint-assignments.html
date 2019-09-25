@@ -16,6 +16,12 @@
     <div>
         <h1>
             {{vm.lodash.toUpper("Blueprint Assignments")}}
+            <span style="float:right">
+                <button class="btn btn-info" ng-click="vm.getBlueprintAssignments()">
+                    <i class="glyphicon glyphicon-refresh"></i>
+                    Refresh
+                </button>
+            </span>
         </h1>
     </div>
     <div>
