@@ -25,17 +25,18 @@
 
         function activate() {
             if (vm.subscriptions && vm.subscriptions.length > 0) {
-                
+            
                 var subId = appStorage.getselectedSubscription();
 
                 if (subId !== "" || subId !== null)
-                vm.selectedSubscription = vm.getSubscriptionById(vm.subscriptions, 'rowKey', subId);
+                    vm.selectedSubscription = vm.getSubscriptionById(vm.subscriptions, 'rowKey', subId);
 
                 if (vm.selectedSubscription === null) {
                     vm.selectedSubscription = vm.subscriptions[0];
                 }
-
-                getPolicies();
+                if (vm.userHasManageAccess) {
+                    getPolicies();
+                }
             }
         }
 
