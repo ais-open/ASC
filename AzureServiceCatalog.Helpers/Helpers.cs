@@ -127,7 +127,8 @@ namespace AzureServiceCatalog.Helpers
 
         public static string TenantId(this ClaimsPrincipal principal)
         {
-            return principal.FindFirst("http://schemas.microsoft.com/identity/claims/tenantid").Value;
+            return (principal.FindFirst("http://schemas.microsoft.com/identity/claims/tenantid")!= null)?
+                principal.FindFirst("http://schemas.microsoft.com/identity/claims/tenantid").Value : string.Empty;
         }
 
         public static List<string> Groups(this ClaimsPrincipal principal)
@@ -137,12 +138,14 @@ namespace AzureServiceCatalog.Helpers
 
         public static string UserId(this ClaimsPrincipal principal)
         {
-            return principal.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value;
+            return (principal.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier") != null) ?
+                principal.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier").Value : string.Empty;
         }
 
         public static string SignedInUserName(this ClaimsPrincipal principal)
         {
-            return principal.Claims.Where(c => c.Type.Contains("http://schemas.microsoft.com/identity/claims/objectidentifier")).First().Value;
+            return (principal.Claims.Where(c => c.Type.Contains("http://schemas.microsoft.com/identity/claims/objectidentifier"))!= null) ?
+                principal.Claims.Where(c => c.Type.Contains("http://schemas.microsoft.com/identity/claims/objectidentifier")).First().Value : string.Empty;
         }
 
         public static string FirstName(this ClaimsPrincipal principal)
