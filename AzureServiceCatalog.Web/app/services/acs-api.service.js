@@ -399,7 +399,11 @@
             var message = "An internal server error occured while performing operation \"" + requestUrl + "\". Please retry your request.";
             if (error.status === 500) {
                 dialogs.errorDialog(message, error.data, 'Close');
-            } else {
+            } else if (error.status === 403) {
+                message = "You are not authorized to perform the operation \"" + requestUrl + "\".";
+                dialogs.errorDialog(message, error.data, 'Close');
+            }
+            else {
                 message = error.data.message + "while performing operation \"" + requestUrl + "\".";
                 dialogs.errorDialog(message, error.data, 'Close');
             }

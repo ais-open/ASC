@@ -666,26 +666,33 @@ div#feedbackPost:hover {
 h3.uidialog {
   margin: 0px;
 }
+.dashboardcontainer { 
+    margin-top: 39%;
+    margin-left: 45%;
+    width: 970px;
+    height: 190px;
+    padding-top: 20px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
 #dashboardButton1 {
-    left: 25%;
+    float: left;
 }
 #dashboardButton2 {
-    left: 45%;
+    float: left;
+    margin-left:20px; 
 }
 #dashboardButton3 {
-    left: 65%;
+    float: left;
+    margin-left:20px; 
 }
 .dashboard-button-default {
-    min-height: 170px;
-    margin-bottom: 20px;
+    margin-top: -10px;
+    width: 300px;
+    height: 170px;
+    background-color: #3ea5ef;
     border: 5px solid #0080e1;
     border-radius: 4px;
-    position: fixed;
-    top: 40%;
-    background-color: #3ea5ef;
-    margin-top: -50px;
-    margin-left: -100px;
-    width: 300px;
 }
 .dashboard-button-default a {
     color: #fff;
@@ -708,4 +715,3 @@ h3.uidialog {
     margin-left: 33px;
     font-size: 20px;
 }
-
