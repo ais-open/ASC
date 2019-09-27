@@ -52,7 +52,7 @@ namespace AzureServiceCatalog.Web.Controllers
             catch (Exception ex)
             {
                 TraceHelper.TraceError(thisOperationContext.OperationId, thisOperationContext.OperationName, ex);
-                return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
+                return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation(thisOperationContext.OperationId, thisOperationContext.Timestamp)));
             }
             finally
             {
@@ -89,7 +89,7 @@ namespace AzureServiceCatalog.Web.Controllers
             catch (Exception ex)
             {
                 TraceHelper.TraceError(thisOperationContext.OperationId, thisOperationContext.OperationName, ex);
-                return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation()));
+                return Content(HttpStatusCode.InternalServerError, JObject.FromObject(ErrorInformation.GetInternalServerErrorInformation(thisOperationContext.OperationId, thisOperationContext.Timestamp)));
             }
             finally
             {
