@@ -5,10 +5,15 @@
 
 <div class="container">
 
-    <div class="no-content-warning" ng-if="vm.hostSubscriptionDetected">
-        <h1>Enrollment has already been completed.</h1>
-        <h4>Did you mean to log into your organization-specific tenant?</h4>
-        <p><a ng-href="?directoryName={{vm.trimmedOrgDomain}}">https://aisservicecatalog.com/?directoryName={{vm.trimmedOrgDomain}}</a></p>
+    <div ng-if="vm.hostSubscriptionDetected">
+        <h2>Enrollment has already been completed.</h2>
+        <p style="font-size:16px;">Click the Continue Button to visit the home page.</p>
+        <p>
+            <a class="btn btn-primary" ng-href="?directoryName={{vm.trimmedOrgDomain}}">
+                <span>Continue</span>
+                <i class="glyphicon glyphicon-chevron-right"></i>
+            </a>
+        </p>
     </div>
 
     <div ng-show="vm.showManagement && !vm.showEnrollmentSuccess">
@@ -83,11 +88,13 @@
     </div>
 
     <div ng-show="vm.showEnrollmentSuccess">
-        <h3>You have Enrolled successfully!</h3>
-        <h4>Here is your tenant-specific URL that your organization should use:</h4>
+        <h2>You have Enrolled successfully!</h2>
+        <p style="font-size:16px;">Click the Continue Button to visit the home page.</p>
         <p>
-            <a ng-href="/{{vm.trimmedOrgDomain}}">https://aisservicecatalog.com/{{vm.trimmedOrgDomain}}</a>
+            <a class="btn btn-primary" ng-href="/{{vm.trimmedOrgDomain}}">
+                <span>Continue</span>
+                <i class="glyphicon glyphicon-chevron-right"></i>
+            </a>
         </p>
-        <p>(You may click the link to visit your home page now. Also, make a note of the above link for future logins)</p>
     </div>
 </div>
