@@ -169,7 +169,7 @@
                     catch (exc) {
                         isErrorNull = false;
                         var heading = 'Invalid Parameter Value (' + param.name + ')';
-                        var msg = 'Parameter value should be comma seperated string values.';
+                        var msg = 'Parameter value should be comma seperated values.';
                         toastr.warning(msg, heading);
                     }
                 } else if (param.type === "int") {

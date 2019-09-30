@@ -87,7 +87,11 @@
                         if (matchingParameter.value == "") {
                             var parameterValue = data.value;
                             if (typeof parameterValue == 'object') {
-                                parameterValue = JSON.stringify(parameterValue);
+                                if (matchingParameter.type == 'array' && matchingParameter.strongType != '') {
+                                    parameterValue = parameterValue.toString();
+                                } else {
+                                    parameterValue = JSON.stringify(parameterValue);
+                                }  
                             }
                             matchingParameter.value = parameterValue;
                         }
@@ -209,7 +213,7 @@
                         catch (exc) {
                             isErrorNull = false;
                             var heading = 'Invalid Parameter Value (' + param.name + ')';
-                            var msg = 'Parameter value should be comma seperated string values.';
+                            var msg = 'Parameter value should be comma seperated values.';
                             toastr.warning(msg, heading);
                         }
                     } else if (param.type === "int") {
