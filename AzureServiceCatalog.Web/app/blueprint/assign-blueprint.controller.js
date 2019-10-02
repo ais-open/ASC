@@ -47,7 +47,7 @@
                     });
                     vm.versionNames = versionNames;
                     vm.selectedVersion = vm.versionNames[vm.versionNames.length - 1];
-                    var selectedBlueprintVersionIndex = vm.versionNames.findIndex(i => i == vm.selectedVersion);
+                    var selectedBlueprintVersionIndex = vm.versionNames.findIndex(i => i === vm.selectedVersion);
                     vm.selectedBlueprintVersion = vm.blueprintVersions[selectedBlueprintVersionIndex];
                     getParameters(vm.selectedBlueprintVersion);
                     getResourceGroups(vm.selectedBlueprintVersion);
@@ -138,7 +138,7 @@
         }
 
         function onVersionChange() {
-            var selectedBlueprintVersionIndex = vm.versionNames.findIndex(i => i == vm.selectedVersion);
+            var selectedBlueprintVersionIndex = vm.versionNames.findIndex(i => i === vm.selectedVersion);
             vm.selectedBlueprintVersion = vm.blueprintVersions[selectedBlueprintVersionIndex];
             getParameters(vm.selectedBlueprintVersion);
             getResourceGroups(vm.selectedBlueprintVersion);
@@ -209,7 +209,7 @@
 
         function assign() {
             ascApi.getBlueprintAssignment(vm.subscriptionId, vm.assignmentName).then(function (data) {
-                if (data != null) {
+                if (data !== null) {
                     var msg = 'A resource already exists with the same name in this scope. Please choose a different name.';
                     toastr.warning(msg, 'Invalid Name');
                     return;
