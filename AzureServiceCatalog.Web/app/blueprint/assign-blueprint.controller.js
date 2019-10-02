@@ -2,10 +2,10 @@
     'use strict';
 
     angular.module('ascApp').controller('AssignBlueprintCtrl', AssignBlueprintCtrl);
-    AssignBlueprintCtrl.$inject = ['$uibModal', '$state', 'initialData', 'ascApi', 'toastr', 'dialogsService'];
+    AssignBlueprintCtrl.$inject = ['$state', 'initialData', 'ascApi', 'toastr', 'dialogsService'];
 
     /* @ngInject */
-    function AssignBlueprintCtrl($uibModal, $state, initialData, ascApi, toastr, dialogs) {
+    function AssignBlueprintCtrl($state, initialData, ascApi, toastr, dialogs) {
         /* jshint validthis: true */
         var vm = this;
         vm.subscriptionId = $state.params.subscriptionId;
@@ -177,7 +177,7 @@
                 }
                 parameters[`${param.name}`] = {
                     "value": parameterValue
-                }
+                };
             });
             blueprintAssignment.properties['parameters'] = parameters;
             _.forIn(vm.resourceGroups, function (rg) {

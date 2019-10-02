@@ -3,19 +3,20 @@
 
     angular.module('ascApp').controller('ResourceGroupsCtrl', ResourceGroupsCtrl);
 
-    ResourceGroupsCtrl.$inject = ['initialData', 'ascApi'];
+    ResourceGroupsCtrl.$inject = ['ascApi', 'appStorage'];
 
     /* @ngInject */
-    function ResourceGroupsCtrl(initialData, ascApi) {
+    function ResourceGroupsCtrl(ascApi, appStorage) {
         /* jshint validthis: true */
         var vm = this;
 
         vm.resourceGroups = [];
-        vm.subscriptions = initialData;
+        vm.subscriptions = null;
         vm.selectedItem = null;
         vm.showData = showData;
         vm.subscriptionChanged = subscriptionChanged;
         vm.selectedSubscription = null;
+        vm.getEnrolledSubscription = getEnrolledSubscription;
 
 
         vm.options = {
@@ -78,10 +79,29 @@
         ////////////////
 
         function activate() {
+            vm.subscriptions = getEnrolledSubscription();
+
             if (vm.subscriptions && vm.subscriptions.length > 0) {
                 vm.selectedSubscription = vm.subscriptions[0];
                 subscriptionChanged();
             }
+        }
+
+        function getEnrolledSubscription() {
+            var enrolledSubscription = appStorage.getEnrolledSubscription();
+
+            if (enrolledSubscription === null) {
+                enrolledSubscription = [];
+                ascApi.getEnrolledSubscriptions().then(function (data) {
+                    for (var i = 0, length = data.length; i < length; i++) {
+                        enrolledSubscription.push(data[i]);
+                    }
+                    appStorage.setEnrolledSubscription(JSON.stringify(enrolledSubscription));
+                });
+            } else {
+                enrolledSubscription = JSON.parse(enrolledSubscription);
+            }
+            return enrolledSubscription;
         }
 
         function showData(resourceGroup) {

@@ -2,10 +2,10 @@
     'use strict';
 
     angular.module('ascApp').controller('ManageUserGroupsCtrl', ManageUserGroupsCtrl);
-    ManageUserGroupsCtrl.$inject = ['$uibModal', 'initialData', 'ascApi', 'toastr'];
+    ManageUserGroupsCtrl.$inject = ['initialData', 'ascApi', 'toastr'];
 
     /* @ngInject */
-    function ManageUserGroupsCtrl($uibModal, initialData, ascApi, toastr) {
+    function ManageUserGroupsCtrl(initialData, ascApi, toastr) {
         /* jshint validthis: true */
         var vm = this;
         vm.createGroups = [];

@@ -12,7 +12,9 @@
             getUserDetail: getUserDetail,
             setUserDetail: setUserDetail,
             setselectedSubcription: setselectedSubcription,
-            getselectedSubscription: getselectedSubscription
+            getselectedSubscription: getselectedSubscription,
+            setEnrolledSubscription: setEnrolledSubscription,
+            getEnrolledSubscription: getEnrolledSubscription
         };
 
         return service;
@@ -34,11 +36,21 @@
         }
 
         function setselectedSubcription(id) {
+            window.localStorage.removeItem('selected-subscription');
             $window.localStorage.setItem('selected-subscription', id);
         }
 
         function getselectedSubscription() {
             return $window.localStorage.getItem('selected-subscription');
+        }
+
+        function setEnrolledSubscription(enrolledSubscription) {
+            window.localStorage.removeItem('enrolled-subscription');
+            $window.localStorage.setItem('enrolled-subscription', enrolledSubscription);
+        }
+
+        function getEnrolledSubscription() {
+            return $window.localStorage.getItem('enrolled-subscription');
         }
     }
 })();

@@ -10,17 +10,18 @@
         var vm = this;
 
         vm.templates = initialData;
-        vm.editTemplates = false;
+        //vm.editTemplates = false;
         vm.importJSON = importJSON;
         vm.importFile = importFile;
-        vm.getResourceNameDisplay = getResourceNameDisplay;
-        vm.isDirectoryAuthenticated = identityInfo.isAuthenticated && identityInfo.directoryName;
-        vm.products = initialData;
+        vm.getResourceNameToDisplay = getResourceNameToDisplay;
+        //vm.isDirectoryAuthenticated = identityInfo.isAuthenticated && identityInfo.directoryName;
+        //vm.products = initialData;
         vm.resourceDictionary = productListService.resourceDictionary;
         vm.hasPublishedTemplates = false;
         vm.importQuickStartTemplates = importQuickStartTemplates;
         vm.userDetail = appStorage.getUserDetail();
         vm.userHasManageAccess = getUserAccessDetails();
+        vm.isAuthenticated = identityInfo.isAuthenticated;
         activate();
 
         function getUserAccessDetails() {
@@ -43,7 +44,7 @@
             }
         }
 
-        function getResourceNameDisplay(resource){
+        function getResourceNameToDisplay(resource){
             if (!resource.name || _.startsWith(resource.name, '[')) {
                 return null;
             } else {

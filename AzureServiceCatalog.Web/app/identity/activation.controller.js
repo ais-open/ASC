@@ -2,17 +2,17 @@
     'use strict';
 
     angular.module('ascApp').controller('ActivationCtrl', ActivationCtrl);
-    ActivationCtrl.$inject = ['$rootScope', '$q', '$uibModal', '$window', 'identityInfo', 'ascApi', 'dialogsService', 'toastr'];
+    ActivationCtrl.$inject = ['$rootScope', 'identityInfo', 'ascApi', 'toastr'];
 
     /* @ngInject */
-    function ActivationCtrl($rootScope, $q, $uibModal, $window, identityInfo, ascApi, dialogs, toastr) {
+    function ActivationCtrl($rootScope, identityInfo, ascApi, toastr) {
         /* jshint validthis: true */
         var vm = this;
         vm.activateStep = activateStep;
         vm.activationComplete = activationComplete;
         vm.activationInfo = {};
         vm.activateWelcomeComplete = activateWelcomeComplete;
-        vm.adGroupChanged = false;
+        //vm.adGroupChanged = false;
         vm.adminGroups = [];
         vm.createGroups = [];
         vm.currentStep = 0;
@@ -48,7 +48,7 @@
         activateWelcomeComplete();
 
         function activate() {
-            console.log('***in activation', identityInfo);
+            //console.log('***in activation', identityInfo);
             $rootScope.$broadcast('activation-active');
 
             // Make an exception to put this call here, rather than route resolver, so spinner behaves correctly

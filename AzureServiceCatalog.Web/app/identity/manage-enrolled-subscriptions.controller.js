@@ -2,10 +2,10 @@
     'use strict';
 
     angular.module('ascApp').controller('ManageEnrolledSubscriptions', ManageEnrolledSubscriptions);
-    ManageEnrolledSubscriptions.$inject = ['initialData', 'ascApi', 'toastr'];
+    ManageEnrolledSubscriptions.$inject = ['initialData', 'ascApi', 'toastr', 'appStorage'];
 
     /* @ngInject */
-    function ManageEnrolledSubscriptions(initialData, ascApi, toastr) {
+    function ManageEnrolledSubscriptions(initialData, ascApi, toastr, appStorage) {
         /* jshint validthis: true */
         var vm = this;
 
@@ -25,6 +25,9 @@
                 ascApi.saveSubscriptions(subscriptionsResource).then(function(data) {
                     toastr.success('The Subscriptions were saved successfully.', 'Save Successful');
                 });
+
+                appStorage.setEnrolledSubscription(JSON.stringify(subscriptionsResource.subscriptions));
+
             } else {
                 toastr.warning('There must be at least one enrolled subscription.', 'Missing Subscription');
             }

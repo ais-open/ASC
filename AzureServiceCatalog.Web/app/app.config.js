@@ -41,9 +41,9 @@
                 requireADLogin: true,
                 resolve: {
                     initialData: ['identityInfo', 'ascApi', function (identityInfo, ascApi) {
-                        if (identityInfo.isAuthenticated) {
-                            return ascApi.getTemplates();
-                        }
+                        //if (identityInfo.isAuthenticated) {
+                        //    return ascApi.getTemplates();
+                        //}
                     }]
                 }
             })
@@ -55,9 +55,9 @@
                 requireADLogin: true,
                 resolve: {
                     initialData: ['identityInfo', 'ascApi', function (identityInfo, ascApi) {
-                        if (identityInfo.isAuthenticated) {
-                            return ascApi.getEnrolledSubscriptions();
-                        }
+                        //if (identityInfo.isAuthenticated) {
+                        //    return ascApi.getEnrolledSubscriptions();
+                        //}
                     }]
                 }
             })
@@ -100,19 +100,19 @@
                 controllerAs: 'vm',
                 adminPermissionRequired: true
             })
-            .state('product-list', {
-                url: '/manage-products/product-list',
-                templateUrl: 'app/manage-products/product-list.html',
-                controller: 'ProductListCtrl',
-                controllerAs: 'vm',
-                requireADLogin: true,
-                createPermissionRequired: true,
-                resolve: {
-                    initialData: ['ascApi', function (ascApi) {
-                        return ascApi.getTemplates();
-                    }]
-                }
-            })
+            //.state('product-list', {
+            //    url: '/manage-products/product-list',
+            //    templateUrl: 'app/manage-products/product-list.html',
+            //    controller: 'ProductListCtrl',
+            //    controllerAs: 'vm',
+            //    requireADLogin: true,
+            //    createPermissionRequired: true,
+            //    resolve: {
+            //        initialData: ['ascApi', function (ascApi) {
+            //            return ascApi.getTemplates();
+            //        }]
+            //    }
+            //})
             .state('edit-product', {
                 url: '/manage-products/edit-product/:id',
                 templateUrl: 'app/manage-products/edit-product.html',
@@ -176,7 +176,7 @@
                 //deployPermissionRequired: true,
                 resolve: {
                     initialData: ['ascApi', function (ascApi) {
-                        return ascApi.getEnrolledSubscriptions();
+                        //return ascApi.getEnrolledSubscriptions();
                     }]
                 }
             })
@@ -188,7 +188,7 @@
                 //deployPermissionRequired: true,
                 resolve: {
                     initialData: ['ascApi', function (ascApi) {
-                        return ascApi.getEnrolledSubscriptions();
+                        //return ascApi.getEnrolledSubscriptions();
                     }]
                 }
             })
@@ -248,9 +248,9 @@
                 adminPermissionRequired: false,
                 resolve: {
                     initialData: ['identityInfo', 'ascApi', function (identityInfo, ascApi) {
-                        if (identityInfo.isAuthenticated) {
-                            return ascApi.getEnrolledSubscriptions();
-                        }
+                        //if (identityInfo.isAuthenticated) {
+                        //    return ascApi.getEnrolledSubscriptions();
+                        //}
                     }]
                 }
             })
@@ -276,7 +276,7 @@
                 adminPermissionRequired: true,
                 resolve: {
                     initialData: ['ascApi', function (ascApi) {
-                        return ascApi.getEnrolledSubscriptions();
+                        //return ascApi.getEnrolledSubscriptions();
                     }]
                 }
             })
@@ -326,7 +326,7 @@
                 controllerAs: 'vm',
                 resolve: {
                     initialData: ['$stateParams', 'ascApi', function ($stateParams, ascApi) {
-                        return ascApi.getEnrolledSubscriptions();
+                        //return ascApi.getEnrolledSubscriptions();
                     }]
                 }
             })

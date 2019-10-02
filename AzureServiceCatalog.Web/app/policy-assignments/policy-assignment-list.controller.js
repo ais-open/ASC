@@ -2,30 +2,50 @@
     'use strict';
 
     angular.module('ascApp').controller('PolicyAssignmentListCtrl', PolicyAssignmentListCtrl);
-    PolicyAssignmentListCtrl.$inject = ['initialData', 'ascApi', 'identityInfo', 'appStorage'];
+    PolicyAssignmentListCtrl.$inject = ['ascApi', 'identityInfo', 'appStorage'];
 
     /* @ngInject */
-    function PolicyAssignmentListCtrl(initialData, ascApi, identityInfo, appStorage) {
+    function PolicyAssignmentListCtrl(ascApi, identityInfo, appStorage) {
         /* jshint validthis: true */
         var vm = this;
         vm.getPolicyDefName = getPolicyDefName;
         vm.policyAssignments = [];
         vm.selectedSubscription = null;
-        vm.subscriptions = initialData;
+        vm.subscriptions = null;
         vm.subscriptionChanged = subscriptionChanged;
         vm.getPolicyAssignmentForSelectedSubcription = getPolicyAssignmentForSelectedSubcription;
         vm.isActivation = identityInfo.isActivation;
         vm.isAuthenticated = identityInfo.isAuthenticated;
         vm.userDetail = appStorage.getUserDetail();
         vm.userHasManageAccess = getUserAccessDetails();
+        vm.getEnrolledSubscription = getEnrolledSubscription;
 
         activate();
 
         function activate() {
+            vm.subscriptions = getEnrolledSubscription();
+
             if (vm.subscriptions && vm.subscriptions.length > 0) {
                 vm.selectedSubscription = vm.subscriptions[0];
                 subscriptionChanged();
             }
+        }
+
+        function getEnrolledSubscription() {
+            var enrolledSubscription = appStorage.getEnrolledSubscription();
+
+            if (enrolledSubscription === null) {
+                enrolledSubscription = [];
+                ascApi.getEnrolledSubscriptions().then(function (data) {
+                    for (var i = 0, length = data.length; i < length; i++) {
+                        enrolledSubscription.push(data[i]);
+                    }
+                    appStorage.setEnrolledSubscription(JSON.stringify(enrolledSubscription));
+                });
+            } else {
+                enrolledSubscription = JSON.parse(enrolledSubscription);
+            }
+            return enrolledSubscription;
         }
 
         function getPolicyDefName(policy) {

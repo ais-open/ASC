@@ -1,4 +1,4 @@
-﻿<div class="product-tile-container col-lg-3 col-md-4 col-sm-6 col-xs-12 ">
+﻿<div class="product-tile-container col-lg-3 col-md-4 col-sm-6 col-xs-12 " ng-if="vm.isAuthenticated">
     <div class="dashboardcontainer">
         <div id="dashboardButton1" class="dashboard-button-default" ng-show="{{vm.isBlueprintFeatureEnabled}}">
             <a class="navbar-brand" ui-sref="blueprints-home">
@@ -16,4 +16,7 @@
             </a>
         </div>
     </div>
+</div>
+<div  ng-if="!vm.isAuthenticated">
+    <label>You do not have enough access, please contact admin</label>
 </div>

@@ -3,18 +3,18 @@
 
     angular.module('ascApp').controller('EditProductCtrl', EditProductCtrl);
 
-    EditProductCtrl.$inject = ['initialData', 'ascApi', 'dialogsService', 'appSpinner', '$timeout', '$q', '$state', 'toastr'];
+    EditProductCtrl.$inject = ['initialData', 'ascApi', 'dialogsService', '$timeout', '$state', 'toastr'];
 
     /* @ngInject */
-    function EditProductCtrl(initialData, ascApi, dialogs, appSpinner, $timeout, $q, $state, toastr) {
+    function EditProductCtrl(initialData, ascApi, dialogs, $timeout, $state, toastr) {
         /* jshint validthis: true */
         var vm = this;
 
         vm.jsonErrors = [];
         vm.aceConfig = {
-            mode: 'json',
+            //mode: 'json',
             showGutter: true,
-            theme: 'tomorrow',
+            //theme: 'tomorrow',
             onLoad: function (editor) {
                 editor.setOptions({
                     fontSize: 14,
@@ -37,10 +37,10 @@
         vm.selectedItem = initialData || {};
         vm.origData = angular.copy(vm.selectedItem);
         vm.canSave = canSave;
-        vm.showDrop = false;
+        //vm.showDrop = false;
         vm.showJSON = true;
-        vm.showEmptyJSON = false;
-        vm.editTemplates = false;
+        //vm.showEmptyJSON = false;
+        //vm.editTemplates = false;
         activate();
 
         ////////////////

@@ -40,7 +40,7 @@
                 var subscriptionsIndex = tempArr.indexOf('subscriptions');
                 vm.subscriptionId = tempArr[subscriptionsIndex + 1];
                 vm.lockAssignment = vm.blueprintAssignment.lockMode;
-                vm.managedIdentity = vm.blueprintAssignment.managedIdentity.charAt(0).toUpperCase() + vm.blueprintAssignment.managedIdentity.slice(1)
+                vm.managedIdentity = vm.blueprintAssignment.managedIdentity.charAt(0).toUpperCase() + vm.blueprintAssignment.managedIdentity.slice(1);
                 vm.selectedVersion = vm.blueprintAssignment.blueprintVersion;
                 vm.targetScope = vm.blueprintAssignment.scope.includes('subscriptions') ? "Subscription": "Management Group";
             }
@@ -221,7 +221,7 @@
                     }
                     parameters[`${param.name}`] = {
                         "value": parameterValue
-                    }
+                    };
                 });
                 blueprintAssignment.properties['parameters'] = parameters;
                 _.forIn(vm.resourceGroups, function (rg) {

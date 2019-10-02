@@ -2,10 +2,10 @@
     'use strict';
 
     angular.module('ascApp').controller('BlueprintsHomeCtrl', BlueprintsHomeCtrl);
-    BlueprintsHomeCtrl.$inject = ['$uibModal', 'initialData', 'ascApi', 'appStorage'];
+    BlueprintsHomeCtrl.$inject = ['$uibModal', 'ascApi', 'appStorage'];
 
     /* @ngInject */
-    function BlueprintsHomeCtrl($uibModal, initialData, ascApi, appStorage) {
+    function BlueprintsHomeCtrl($uibModal, ascApi, appStorage) {
         /* jshint validthis: true */
         var vm = this;
         vm.lodash = _;
@@ -14,16 +14,19 @@
         vm.subscriptionId = "";
         vm.portalUrlForBlueprints = "";
         vm.extensionForUrl = "blade/Microsoft_Azure_Policy/BlueprintsMenuBlade/Blueprints";
-        vm.subscriptions = initialData;
+        vm.subscriptions = null;
         vm.onSubscriptionChange = onSubscriptionChange;
         vm.getPortalUrlForBlueprints = vm.getPortalUrlForBlueprints;
         vm.getBlueprints = getBlueprints;
         vm.viewDetails = viewDetails;
-        vm.getLastModifiedDate = getLastModifiedDate;
+        //vm.getLastModifiedDate = getLastModifiedDate;
         vm.getSubscriptionById = getSubscriptionById;
+        vm.getEnrolledSubscription = getEnrolledSubscription;
         activate();
 
         function activate() {
+            vm.subscriptions = getEnrolledSubscription();
+
             if (vm.subscriptions && vm.subscriptions.length > 0) {
                 var subId = appStorage.getselectedSubscription();
                 if (subId !== "" || subId !== null) {
@@ -36,6 +39,23 @@
                 }
                 getBlueprints();
             }
+        }
+
+        function getEnrolledSubscription() {
+            var enrolledSubscription = appStorage.getEnrolledSubscription();
+
+            if (enrolledSubscription === null) {
+                enrolledSubscription = [];
+                ascApi.getEnrolledSubscriptions().then(function (data) {
+                    for (var i = 0, length = data.length; i < length; i++) {
+                        enrolledSubscription.push(data[i]);
+                    }
+                    appStorage.setEnrolledSubscription(JSON.stringify(enrolledSubscription));
+                });
+            } else {
+                enrolledSubscription = JSON.parse(enrolledSubscription);
+            }
+            return enrolledSubscription;
         }
 
         function getSubscriptionById(array, key, value) {
@@ -87,10 +107,10 @@
 
         }
 
-        function getLastModifiedDate(lastModifiedDate) {
-            var newDate = new Date(lastModifiedDate);
-            var updatedLastModifiedDate = newDate.toLocaleDateString();
-            return updatedLastModifiedDate;
-        }
+        //function getLastModifiedDate(lastModifiedDate) {
+        //    var newDate = new Date(lastModifiedDate);
+        //    var updatedLastModifiedDate = newDate.toLocaleDateString();
+        //    return updatedLastModifiedDate;
+        //}
     }
 })();

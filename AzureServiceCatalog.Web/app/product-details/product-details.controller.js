@@ -3,9 +3,9 @@
 
     angular.module('ascApp').controller('ProductDetailsCtrl', ProductDetailsCtrl);
 
-    ProductDetailsCtrl.$inject = ['$state', 'initialData', 'ascApi', 'productListService', 'dialogsService', 'appStorage'];
+    ProductDetailsCtrl.$inject = ['$state', 'initialData', 'productListService', 'dialogsService', 'appStorage'];
 
-    function ProductDetailsCtrl($state, initialData, ascApi, productListService, dialogsService, appStorage) {
+    function ProductDetailsCtrl($state, initialData, productListService, dialogsService, appStorage) {
 
         /* jshint validthis: true */
         var vm = this;

@@ -10,7 +10,7 @@
         var vm = this;
         vm.directoryMissing = true;
         vm.identityInfo = identityInfo;
-        console.log('**identityInfo', identityInfo);
+        //console.log('**identityInfo', identityInfo);
         activate();
 
         function activate() {

@@ -1,4 +1,4 @@
-﻿<div  style="overflow-y: auto; height:375px">
+﻿<div  style="overflow-y: auto; height:375px" ng-if="vm.isAuthenticated">
     <h1>AVAILABLE PRODUCTS</h1>
     <div>
         <table class="table table-striped table-hover table-condensed table-fixed-layout middle-align">
@@ -16,7 +16,7 @@
                     </td>
                     <td class="col-md-9">
                         <Span ng-repeat="resource in product.data.resources">
-                            {{vm.resourceDictionary[resource.type].name || resource.type}}{{vm.getResourceNameDisplay(resource)}}
+                            {{vm.resourceDictionary[resource.type].name || resource.type}}{{vm.getResourceNameToDisplay(resource)}}
                             <span ng-if="!$last">,</span>
                         </Span>
                     </td>
@@ -37,7 +37,7 @@
     <h2 ng-if="!shell.userDetail.canCreate">Please contact an administrator to add new products</h2>
 </div>
 
-<div ng-show="vm.userHasManageAccess" style="overflow-y: auto; height:400px; margin-top: 50px;">
+<div ng-if="vm.userHasManageAccess" style="overflow-y: auto; height:400px; margin-top: 50px;">
     <h1>
         ALL PRODUCTS
         <span style="float:right; margin-right: 51px;" class="btn-group" uib-dropdown is-open="status.isopen">

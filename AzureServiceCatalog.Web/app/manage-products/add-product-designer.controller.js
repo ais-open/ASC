@@ -4,10 +4,10 @@
     angular.module('ascApp').controller('AddProductDesignerCtrl', AddProductDesignerCtrl);
 
     AddProductDesignerCtrl.$inject =
-        ['$timeout', '$state', 'ascApi', 'uuid', 'appSpinner', 'dialogsService', '$window', 'toastr', 'productListService'];
+        ['$timeout', '$state', 'ascApi', 'uuid', 'appSpinner', 'dialogsService', '$window', 'toastr'];
 
     /* @ngInject */
-    function AddProductDesignerCtrl($timeout, $state, ascApi, uuid, appSpinner, dialogs, $window, toastr, productListService) {
+    function AddProductDesignerCtrl($timeout, $state, ascApi, uuid, appSpinner, dialogs, $window, toastr) {
         /* jshint validthis: true */
         var vm = this;
 
@@ -15,7 +15,7 @@
         vm.dropped = dropped;
         vm.helpVisible = true;
         vm.helpDismissed = helpDismissed;
-        vm.productListService = productListService;
+        //vm.productListService = productListService;
         vm.resources = [];
         vm.canSave = canSave;
         vm.dialogs = dialogs;
