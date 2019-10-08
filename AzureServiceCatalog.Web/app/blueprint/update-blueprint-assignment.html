@@ -108,7 +108,7 @@
                                 <div class="form-inline" ng-show="{{vm.lodash.includes(['string', 'int', 'array', 'object'], parameter.type) && parameter.allowedValues.length === 0 && parameter.strongType !== 'PrincipalId' && parameter.strongType !== ''}}">
                                     <input type="text" class="form-control col-md-4" style="width:300px" ng-model="parameter.value" placeholder="Enter Value" required>
                                     <br />
-                                    <span class="col-sm-4">(Provide comma seperated values.)</span>
+                                    <span class="col-sm-5">(Provide comma seperated values.)</span>
                                 </div>
                                 <div class="form-inline" ng-show="{{vm.lodash.includes(['string', 'int', 'array', 'object'], parameter.type) && parameter.allowedValues.length === 0 && parameter.strongType === 'PrincipalId'}}">
                                     <input type="text" class="form-control col-md-4" style="width:259px" ng-model="parameter.value" placeholder="Enter Value" required>
