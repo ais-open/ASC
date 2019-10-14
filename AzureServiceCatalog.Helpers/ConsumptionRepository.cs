@@ -199,48 +199,5 @@ namespace AzureServiceCatalog.Helpers
                 TraceHelper.TraceOperation(thisOperationContext);
             }
         }
-
-
-
-        //private List<ResourceUsageDetails> GetUsageSummaryDataForResources(IList<GenericResourceExtended> resources, List<ConsumptionAggregate> consumptionAggregatesByRG, BaseOperationContext parentOperationContext)
-        //{
-        //    var thisOperationContext = new BaseOperationContext(parentOperationContext, "ConsumptionRepository:GetUsageSummaryDataForResources");
-        //    try
-        //    {
-        //        var resourceUsageDetailsList = new List<ResourceUsageDetails>();
-
-        //        foreach (var resource in resources)
-        //        {
-        //            ResourceUsageDetails resourceUsageDetails = new ResourceUsageDetails();
-
-        //            resourceUsageDetails.ResourceName = resource.Name;
-        //            if(consumptionAggregatesByRG.Where(x => x.Properties.resourceName == resource.Name).FirstOrDefault() != null)
-        //            {
-        //                resourceUsageDetails.EffectivePrice = consumptionAggregatesByRG.Where(x => x.Properties.resourceName == resource.Name).FirstOrDefault().Properties.effectivePrice;
-        //                resourceUsageDetails.UnitPrice = consumptionAggregatesByRG.Where(x => x.Properties.resourceName == resource.Name).FirstOrDefault().Properties.unitPrice;
-        //                resourceUsageDetails.BillingCurrency = consumptionAggregatesByRG.Where(x => x.Properties.resourceName == resource.Name).FirstOrDefault().Properties.billingCurrency;
-        //                resourceUsageDetails.MeterId = consumptionAggregatesByRG.Where(x => x.Properties.resourceName == resource.Name).FirstOrDefault().Properties.meterId;
-
-        //                foreach (var consumptionAgrt in consumptionAggregatesByRG)
-        //                {
-        //                    if (consumptionAgrt.Properties.resourceName == resource.Name)
-        //                    {
-        //                        resourceUsageDetails.Quantity += consumptionAgrt.Properties.quantity;
-        //                        resourceUsageDetails.Cost += consumptionAgrt.Properties.cost;
-        //                    }
-        //                }
-        //            }
-
-        //            resourceUsageDetailsList.Add(resourceUsageDetails);
-        //        }
-
-        //        return resourceUsageDetailsList;
-        //    }
-        //    finally
-        //    {
-        //        thisOperationContext.CalculateTimeTaken();
-        //        TraceHelper.TraceOperation(thisOperationContext);
-        //    }
-        //}
     }
 }
