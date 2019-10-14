@@ -24,6 +24,7 @@ namespace AzureServiceCatalog.Web.Controllers
     {
         TableCoreRepository coreRepository = new TableCoreRepository();
         BillingHelper billingHelper = new BillingHelper();
+        ConsumptionHelper consumptionHelper = new ConsumptionHelper();
 
         [Route("api/subscriptions/{subscriptionId}/resourceGroups")]
         public async Task<IHttpActionResult> GetResourceGroupsBySubscription(string subscriptionId)
@@ -121,6 +122,9 @@ namespace AzureServiceCatalog.Web.Controllers
             };
             try
             {
+                //Consumption API
+                //List<ResourceUsageDetails> resourcesUsageDetailsData = await consumptionHelper.GetUsage(resourceGroupName, subscriptionId, thisOperationContext);
+
                 var client = Helpers.Helpers.GetResourceManagementClient(subscriptionId, thisOperationContext);
                 var resourceList = await client.Resources.ListAsync(new ResourceListParameters { ResourceGroupName = resourceGroupName });
                 List<ResourceUsage> resourceUsageData = await billingHelper.GetUsage(resourceList, subscriptionId, thisOperationContext);
@@ -149,6 +153,9 @@ namespace AzureServiceCatalog.Web.Controllers
             };
             try
             {
+                //Consumption API
+                //List<ResourceUsageDetails> resourcesUsageDetailsData = await consumptionHelper.GetUsage(resourceGroupName, subscriptionId, thisOperationContext);
+
                 var client = Helpers.Helpers.GetResourceManagementClient(subscriptionId, thisOperationContext);
                 var resourceList = await client.Resources.ListAsync(new ResourceListParameters { ResourceGroupName = resourceGroupName });
                 var chartData = await billingHelper.GetChartData(resourceList, subscriptionId, thisOperationContext);
@@ -180,14 +187,20 @@ namespace AzureServiceCatalog.Web.Controllers
                 var client = Helpers.Helpers.GetResourceManagementClient(subscriptionId, thisOperationContext);
                 var resourceList = await client.Resources.ListAsync(new ResourceListParameters { ResourceGroupName = resourceGroupName });
 
-                var resourceUsageData = await billingHelper.GetUsage(resourceList, subscriptionId, thisOperationContext);
-                var chartData = await billingHelper.GetChartData(resourceList, subscriptionId, thisOperationContext);
+                //consumptionAPI
+                List<ResourceUsageDetails> resourceUsageMonthData = await consumptionHelper.GetConsumptionUsageDetailsForLast30Days(resourceList, subscriptionId, thisOperationContext);
+                List<ResourceUsageDetails> resourceUsageTodayData = await consumptionHelper.GetConsumptionUsageDetailsForToday(resourceList, subscriptionId, thisOperationContext);
+                var resourcesUsageDetailsData = consumptionHelper.GetUsage(resourceUsageMonthData, resourceUsageTodayData, thisOperationContext);
+                var consumptionChartData = consumptionHelper.GetChartData(resourceUsageMonthData, resourceUsageTodayData, thisOperationContext);
+
+                //var resourceUsageData = await billingHelper.GetUsage(resourceList, subscriptionId, thisOperationContext);
+                //var chartData = await billingHelper.GetChartData(resourceList, subscriptionId, thisOperationContext);
 
                 var rgData = new ResourceGroupData
                 {
                     ResourceGroupName = resourceGroupName,
-                    ResourcesUsages = resourceUsageData,
-                    ChartData = chartData
+                    ResourcesUsages = resourcesUsageDetailsData,
+                    ChartData = consumptionChartData
                 };
                 return this.Ok(rgData);
             }
