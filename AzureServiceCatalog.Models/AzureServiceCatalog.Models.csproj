@@ -188,7 +188,6 @@
     <Compile Include="Billing\UsagePayload.cs" />
     <Compile Include="BlobContainers.cs" />
     <Compile Include="BlueprintAssignment.cs" />
-    <Compile Include="ConsumptionUsageDetails.cs" />
     <Compile Include="ManagedIdentity.cs" />
     <Compile Include="BlueprintVersion.cs" />
     <Compile Include="Blueprint.cs" />
@@ -205,7 +204,6 @@
     <Compile Include="ResourceGroupData.cs" />
     <Compile Include="ResourceGroupResource.cs" />
     <Compile Include="ResourceUsage.cs" />
-    <Compile Include="ResourceUsageDetails.cs" />
     <Compile Include="Run.cs" />
     <Compile Include="SecurityGroupTypes.cs" />
     <Compile Include="Subscription.cs" />

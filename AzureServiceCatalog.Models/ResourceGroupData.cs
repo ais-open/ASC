@@ -9,7 +9,7 @@ namespace AzureServiceCatalog.Models
     public class ResourceGroupData
     {
         public string ResourceGroupName { get; set; }
-        public List<ResourceUsageDetails> ResourcesUsages { get; set; }
+        public List<ResourceUsage> ResourcesUsages { get; set; }
         public List<ChartData> ChartData { get; set; }
     }
 }

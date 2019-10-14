@@ -55,10 +55,10 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="res in vm.selectedItem.resources">
-                            <td>{{res.resourceName}}</td>
+                            <td>{{res.name}}</td>
                             <td>{{res.location}}</td>
                             <td>{{res.type}}</td>
-                            <td>{{res.costForLast30DaysFormatted}}</td>
+                            <td>{{res.costFormatted}}</td>
                             <td>{{res.todaysCostFormatted}}</td>
                         </tr>
                     </tbody>
