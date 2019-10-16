@@ -33,7 +33,7 @@ namespace AzureServiceCatalog.Models
 
         public void FormatCosts()
         {
-            if (Cost == 0)
+            if (!string.IsNullOrEmpty(MeterId))
             {
                 FormatCostsAsCurrency();
             }

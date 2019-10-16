@@ -11,7 +11,9 @@ namespace AzureServiceCatalog.Helpers
 {
     public class ConsumptionRepository
     {
-        private const string consumptionApiVersion = "2019-05-01";        
+        private const string consumptionApiVersion = "2019-05-01";
+        public ConsumptionUsageDetails consumptionUsageToday;
+        public ConsumptionUsageDetails consumptionUsageMonthly;
 
         public async Task<List<ResourceUsageDetails>> GetConsumptionUsagesDetails(ResourceListResult resourceList, string subscriptionId, CostEstimationPeriod estimationPeriod, BaseOperationContext parentOperationContext)
         {
@@ -23,10 +25,14 @@ namespace AzureServiceCatalog.Helpers
 
                 if(estimationPeriod == CostEstimationPeriod.For30Days)
                 {
+                    consumptionUsageMonthly = new ConsumptionUsageDetails();
+                    consumptionUsageMonthly = consumptionUsageDetails;
                     resourceConsumptionDetails = GetUsageMonthlyDataByResources(resourceList.Resources, consumptionUsageDetails, thisOperationContext);
                 }
                 else
                 {
+                    consumptionUsageToday = new ConsumptionUsageDetails();
+                    consumptionUsageToday = consumptionUsageDetails;
                     resourceConsumptionDetails = GetUsageDailyDataByResources(resourceList.Resources, consumptionUsageDetails, thisOperationContext);
                 }
                 
@@ -102,7 +108,7 @@ namespace AzureServiceCatalog.Helpers
             try
             {
                 var resourceUsageList = new List<ResourceUsageDetails>();
-                var usageAggList = usagePayLoad.Value.Where(x => x.Properties != null && x.Properties.cost != 0 && x.Properties.resourceName.Equals(resource.Name, StringComparison.OrdinalIgnoreCase)).ToList();
+                var usageAggList = usagePayLoad.Value.Where(x => x.Properties != null && x.Properties.cost != 0 && x.Properties.resourceName.Equals(resource.Name, StringComparison.OrdinalIgnoreCase) && x.Properties.date >= x.Properties.billingPeriodStartDate && x.Properties.date <= x.Properties.billingPeriodEndDate).ToList();
 
                 if (usageAggList != null && usageAggList.Count != 0)
                 {
@@ -116,6 +122,7 @@ namespace AzureServiceCatalog.Helpers
                         usage.Quantity += usageItem.Properties.quantity;
                         usage.Location = resource.Location;
                         usage.UsageDate = Helpers.ParseDateUtc(usageItem.Properties.date.ToString());
+                        usage.MeterId = usageItem.Properties.meterId;
                     }
                     resourceUsageList.Add(usage);
                 }
@@ -163,8 +170,12 @@ namespace AzureServiceCatalog.Helpers
             var thisOperationContext = new BaseOperationContext(parentOperationContext, "ConsumptionRepository:GetUsageDailyByResource");
             try
             {
+                DateTime dateTime = DateTime.UtcNow;
+                string dateTimeTodayAtMidnightAsString = dateTime.ToString("yyyy-MM-ddT00:00:00.0000000Z");
+                //DateTime dateTimeTodayAtMidnight =  DateTime.ParseExact(dateTimeTodayAtMidnightAsString, "yyyy-MM-ddT00:00:00.0000000Z", System.Globalization.CultureInfo.InvariantCulture);
+                DateTime dateTimeTodayAtMidnight = DateTime.Parse(dateTimeTodayAtMidnightAsString).Date;
                 var resourceUsageList = new List<ResourceUsageDetails>();
-                var usageAggList = usagePayLoad.Value.Where(x => x.Properties != null && x.Properties.cost != 0 && x.Properties.resourceName.Equals(resource.Name, StringComparison.OrdinalIgnoreCase)).ToList();
+                var usageAggList = usagePayLoad.Value.Where(x => x.Properties != null && x.Properties.cost != 0 && x.Properties.resourceName.Equals(resource.Name, StringComparison.OrdinalIgnoreCase) && x.Properties.date == dateTimeTodayAtMidnight).ToList();
 
                 if (usageAggList != null && usageAggList.Count != 0)
                 {

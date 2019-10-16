@@ -139,11 +139,11 @@ namespace AzureServiceCatalog.Helpers.ConsumptionAPI
 
                 foreach (var resourceName in distinctResourceNames)
                 {
-                    var resource = resourceUsageHistoricalData.FirstOrDefault(x => x.ResourceName == resourceName);
+                    var resource = resourceUsageHistoricalData.Where(x => x.ResourceName == resourceName).Select(x => x.UsageDate).Distinct();
                     var chartData = new ChartData();
                     chartData.Key = resourceName;
 
-                    var resourceDailyCostSummary = resourceUsageHistoricalData.Where(r => r.ResourceName == resourceName && r.TodaysCost != 0).GroupBy(r => r.UsageDate, (key, values) => new { UsageDate = key, Cost = values.Sum(x => x.CostForLast30Days) });
+                    var resourceDailyCostSummary = resourceUsageHistoricalData.Where(r => r.ResourceName == resourceName && r.UsageDate.HasValue).GroupBy(r => r.UsageDate, (key, values) => new { UsageDate = key, Cost = values.Sum(x => x.CostForLast30Days)}).OrderBy(x => x.UsageDate);
 
                     if (resourceDailyCostSummary != null)
                     {

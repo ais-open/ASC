@@ -188,10 +188,8 @@ namespace AzureServiceCatalog.Web.Controllers
                 var resourceList = await client.Resources.ListAsync(new ResourceListParameters { ResourceGroupName = resourceGroupName });
 
                 //consumptionAPI
-                List<ResourceUsageDetails> resourceUsageMonthData = await consumptionHelper.GetConsumptionUsageDetailsForLast30Days(resourceList, subscriptionId, thisOperationContext);
-                List<ResourceUsageDetails> resourceUsageTodayData = await consumptionHelper.GetConsumptionUsageDetailsForToday(resourceList, subscriptionId, thisOperationContext);
-                var resourcesUsageDetailsData = consumptionHelper.GetUsage(resourceUsageMonthData, resourceUsageTodayData, thisOperationContext);
-                var consumptionChartData = consumptionHelper.GetChartData(resourceUsageMonthData, resourceUsageTodayData, thisOperationContext);
+                var resourcesUsageDetailsData = await consumptionHelper.GetUsage(resourceList, subscriptionId, thisOperationContext);
+                var consumptionChartData = await consumptionHelper.GetChartData(resourceList, subscriptionId, thisOperationContext);
 
                 //var resourceUsageData = await billingHelper.GetUsage(resourceList, subscriptionId, thisOperationContext);
                 //var chartData = await billingHelper.GetChartData(resourceList, subscriptionId, thisOperationContext);
