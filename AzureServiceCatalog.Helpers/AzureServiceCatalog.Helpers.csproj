@@ -172,6 +172,9 @@
     <Compile Include="Billing\CostStrategyContext.cs" />
     <Compile Include="Billing\ScaledCost.cs" />
     <Compile Include="BlobHelpers.cs" />
+    <Compile Include="ConsumptionAPI\ConsumptionAPICostStrategyContext.cs" />
+    <Compile Include="ConsumptionHelper.cs" />
+    <Compile Include="ConsumptionRepository.cs" />
     <Compile Include="ManagedIdentityHelper.cs" />
     <Compile Include="BlueprintsHelper.cs" />
     <Compile Include="TraceHelper.cs" />
