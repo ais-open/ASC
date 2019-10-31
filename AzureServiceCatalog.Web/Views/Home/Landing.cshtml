@@ -212,6 +212,8 @@
 
         window.appInsights = appInsights;
         appInsights.trackPageView();
+        var storage = window['localStorage'];
+        storage.clear();
     </script>
 </body>
 

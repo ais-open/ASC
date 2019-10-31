@@ -35,6 +35,7 @@
                 }
                 if (vm.selectedSubscription === null) {
                     vm.selectedSubscription = vm.subscriptions[0];
+                    appStorage.setselectedSubcription(vm.selectedSubscription.rowKey); 
                     vm.subscriptionId = vm.selectedSubscription.rowKey;
                 }
                 getBlueprints();
@@ -51,6 +52,10 @@
                         enrolledSubscription.push(data[i]);
                     }
                     appStorage.setEnrolledSubscription(JSON.stringify(enrolledSubscription));
+                    if (enrolledSubscription.length >= 0) {
+                        vm.selectedSubscription = vm.subscriptions[0];
+                        onSubscriptionChange(enrolledSubscription[0].rowKey);
+                    }
                 });
             } else {
                 enrolledSubscription = JSON.parse(enrolledSubscription);
@@ -69,7 +74,7 @@
 
         function onSubscriptionChange(rowkey) {
             appStorage.setselectedSubcription(rowkey); 
-            vm.subscriptionId = rowKey;
+            vm.subscriptionId = rowkey;
             getBlueprints();
         }
 
