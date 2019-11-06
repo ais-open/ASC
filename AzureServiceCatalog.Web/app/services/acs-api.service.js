@@ -65,7 +65,10 @@
             getUserAssignedIdentities: getUserAssignedIdentities,
             assignBlueprint: assignBlueprint,
             getUsers: getUsers,
-            getPortalUrl: getPortalUrl
+            getPortalUrl: getPortalUrl,
+            getBudgets: getBudgets,
+            createBudget: createBudget,
+            updateBudget: updateBudget
         };
 
         return service;
@@ -333,6 +336,18 @@
 
         function getPortalUrl(extensionForUrl, extensionType) {
             return httpGet('/api/identity/portal-url?extensionForUrl=' + extensionForUrl+ '&extensionType=' + extensionType);
+        }
+
+        function getBudgets(subscriptionId) {
+            return httpGet('/api/budgets?subscriptionId=' + subscriptionId);
+        }
+
+        function createBudget(budget) {
+            return httpPost('/api/budgets', budget);
+        }
+
+        function updateBudget(budgetObjWithOldId) {
+            return httpPut('/api/budgets/', budgetObjWithOldId);
         }
 
         //#region Private Methods

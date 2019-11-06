@@ -167,11 +167,17 @@
     <Compile Include="ArmHttpHelper.cs" />
     <Compile Include="AzureADGraphAPIHelper.cs" />
     <Compile Include="AzureResourceMangerHelper.cs" />
+    <Compile Include="BudgetHelper\AzureTableRepository.cs" />
+    <Compile Include="BudgetHelper\IAzureTableRepository.cs" />
+    <Compile Include="BudgetRepositories\IRepository.cs" />
+    <Compile Include="BudgetRepositories\BudgetRepository.cs" />
     <Compile Include="BillingRepository.cs" />
     <Compile Include="Billing\BracketCost.cs" />
     <Compile Include="Billing\CostStrategyContext.cs" />
     <Compile Include="Billing\ScaledCost.cs" />
     <Compile Include="BlobHelpers.cs" />
+    <Compile Include="BudgetHelper\Mapper.cs" />
+    <Compile Include="BudgetRepositories\OrgEntityRepository.cs" />
     <Compile Include="ConsumptionAPI\ConsumptionAPICostStrategyContext.cs" />
     <Compile Include="ConsumptionHelper.cs" />
     <Compile Include="ConsumptionRepository.cs" />

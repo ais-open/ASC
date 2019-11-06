@@ -1,0 +1,84 @@
+﻿<div class="modal-header">
+    <h2>Add Budget</h2>
+</div>
+
+<div class="modal-body" ng-show="!vm.isCreateNewBudgetClicked">
+    <form class="form">
+        <div style="overflow:auto;">
+            <table class="col-md-12">
+                <tr>
+                    <td colspan="2">
+                        <div class="form-group">
+                            <label>Existing Budgets</label>
+                            <select class="form-control" name="blueprintAssignmentBudget" ng-model="vm.selectedBudget" ng-options="b as b.name for b in vm.existingBudgets" required></select>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </form>
+</div>
+
+<div class="modal-body" ng-show="vm.isCreateNewBudgetClicked">
+    <form class="form">
+        <div style="overflow:auto;">
+            <table class="col-md-12">
+                <tr>
+                    <td colspan="2">
+                        <div class="form-group">
+                            <label>Budget Name</label>
+                            <input type="text" class="form-control" id="budgetName" name="budgetName" placeholder="Budget Name" ng-model="vm.budgetName" required>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="form-group">
+                            <label>Description</label>
+                            <input type="text" class="form-control" id="budgetDescription" name="budgetDescription" placeholder="Description" ng-model="vm.budgetDescription" required>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td td style="width:50%">
+                        <div class="form-group">
+                            <label>Amount</label>
+                            <input type="text" class="form-control" id="budgetAmount" name="budgetAmount" placeholder="Amount" ng-model="vm.budgetAmount" required>
+                        </div>
+                    </td>
+                    <td style="width:50%;padding-left:5px">
+                        <div class="form-group">
+                            <label>Repeat Frequency</label>
+                            <select class="form-control" name="BudgetRepeatFrequency" ng-model="vm.budgetRepeatFrequency" required>
+                                <option ng-model="vm.budgetRepeatFrequency" value="Monthly">Monthly</option>
+                                <option ng-model="vm.budgetRepeatFrequency" value="Quarterly">Quarterly</option>
+                                <option ng-model="vm.budgetRepeatFrequency" value="Yearly">Yearly</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td td style="width:50%">
+                        <div class="form-group">
+                            <label>Start Date</label>
+                            <input type="date" class="form-control" id="budgetStartDate" name="budgetStartDate" placeholder="Start Date" ng-model="vm.budgetStartDate" required>
+                        </div>
+                    </td>
+                    <td style="width:50%;padding-left:5px">
+                        <div class="form-group">
+                            <label>End Date</label>
+                            <input type="date" class="form-control" id="budgetEndDate" name="budgetEndDate" placeholder="End Date" ng-model="vm.budgetEndDate" required>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </form>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-show="!vm.isCreateNewBudgetClicked" ng-click="vm.onCreateButtonClick()">Create New Budget</button>
+    <button class="btn btn-warning" ng-show="!vm.isCreateNewBudgetClicked" ng-click="vm.saveExistingBudget()">Save</button>
+    <button class="btn btn-primary" ng-show="vm.isCreateNewBudgetClicked" ng-click="vm.saveNewBudget()">Save</button>
+    <button class="btn btn-default" ng-click="vm.close()">Close</button>
+</div>

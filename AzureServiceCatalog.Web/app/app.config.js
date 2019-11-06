@@ -340,6 +340,17 @@
                         return ascApi.getBlueprintAssignment($stateParams.subscriptionId, $stateParams.blueprintAssignmentName);
                     }]
                 }
+            })
+            .state('view-blueprint-budget', {
+                url: '/view-blueprint-budget/:subscriptionId/:subscriptionName/:blueprintAssignmentName',
+                templateUrl: 'app/blueprint/view-blueprint-budget.html',
+                controller: 'ViewBlueprintBudgetCtrl',
+                controllerAs: 'vm',
+                resolve: {
+                    initialData: ['$stateParams', 'ascApi', function ($stateParams, ascApi) {
+                        return ascApi.getBlueprintAssignment($stateParams.subscriptionId, $stateParams.blueprintAssignmentName);
+                    }]
+                }
             });
 
         $urlRouterProvider.otherwise('/');

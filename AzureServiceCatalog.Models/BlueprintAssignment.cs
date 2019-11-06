@@ -41,5 +41,7 @@ namespace AzureServiceCatalog.Models
         public Object Parameters { get; set; }
         [JsonProperty("userAssignedIdentities")]
         public Object UserAssignedIdentities { get; set; }
+        [JsonProperty("isBudgetAssigned")]
+        public string IsBudgetAssigned { get; set; }
     }
 }

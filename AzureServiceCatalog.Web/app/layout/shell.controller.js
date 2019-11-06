@@ -89,7 +89,8 @@
             if (current) {
                 if (current.state === 'manage-policy-list' || current.state === 'edit-policy' || current.state === 'product-deployment' || current.state === 'blueprints-home'
                     || current.state === 'assign-blueprint' || current.state === 'blueprint-assignments' || current.state === 'update-blueprint-assignment'
-                    || current.state === 'manage-policy-assignments' || current.state === 'edit-policy-assignment')
+                    || current.state === 'manage-policy-assignments' || current.state === 'edit-policy-assignment' || current.state === 'add-blueprint-budget'
+                    || current.state === 'view-blueprint-budget')
                 {
                     vm.showNavLinks = false;
                 }

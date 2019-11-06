@@ -187,7 +187,10 @@
     <Compile Include="Billing\UsageFilterParameters.cs" />
     <Compile Include="Billing\UsagePayload.cs" />
     <Compile Include="BlobContainers.cs" />
+    <Compile Include="BaseModel.cs" />
     <Compile Include="BlueprintAssignment.cs" />
+    <Compile Include="Budget.cs" />
+    <Compile Include="BudgetRepeatFrequency.cs" />
     <Compile Include="ConsumptionUsageDetails.cs" />
     <Compile Include="ManagedIdentity.cs" />
     <Compile Include="BlueprintVersion.cs" />
@@ -212,6 +215,7 @@
     <Compile Include="SubscriptionsViewModel.cs" />
     <Compile Include="SupportViewModel.cs" />
     <Compile Include="Tables.cs" />
+    <Compile Include="BudgetTableEntity.cs" />
     <Compile Include="TemplateEntity.cs" />
     <Compile Include="TemplateViewModel.cs" />
     <Compile Include="UserDetailsViewModel.cs" />

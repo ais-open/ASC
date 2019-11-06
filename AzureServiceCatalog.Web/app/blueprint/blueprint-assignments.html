@@ -33,6 +33,7 @@
                     <th class="col-md-3">Provisioning State</th>
                     <th class="col-md-2"></th>
                     <th class="col-md-1"></th>
+                    <th class="col-md-2"></th>
                 </tr>
             </thead>
             <tbody>
@@ -44,6 +45,7 @@
                     <td class="col-md-3 middle-align">{{vm.lodash.startCase(blueprintAssignment.provisioningState)}}</td>
                     <td class="col-md-2 middle-align text-right"><button class="btn btn-warning" ng-click="vm.viewDetails(blueprintAssignment)">View Details...</button></td>
                     <td class="col-md-1 middle-align text-right"><button class="btn btn-warning" ui-sref="update-blueprint-assignment({ subscriptionId: vm.subscriptionId, subscriptionName: vm.subscriptionName, blueprintAssignmentName: blueprintAssignment.name })">Update</button></td>
+                    <td class="col-md-2 middle-align text-right"><button class="btn btn-warning" ng-click="vm.addBudget(blueprintAssignment)">{{blueprintAssignment.isBudgetAssigned ? 'View Budget' : 'Add Budget...'}}</button></td>
                 </tr>
             </tbody>
         </table>

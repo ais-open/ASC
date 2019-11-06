@@ -28,7 +28,9 @@
                 {
                     state: 'blueprint-assignments', title: 'Blueprint Assignments',
                     descendants: [
-                        { state: 'update-blueprint-assignment', title: 'Update Blueprint Assignment' }
+                        { state: 'update-blueprint-assignment', title: 'Update Blueprint Assignment' },
+                        { state: 'add-blueprint-budget', title: 'Add Blueprint Budget' },
+                        { state: 'view-blueprint-budget', title: 'View Blueprint Budget' }
                     ]
                 }
             ]

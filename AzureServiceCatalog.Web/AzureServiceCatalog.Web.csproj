@@ -286,6 +286,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\BudgetController.cs" />
     <Compile Include="Controllers\ManagedIdentityController.cs" />
     <Compile Include="Controllers\AuditLogsController.cs" />
     <Compile Include="Controllers\BlueprintAssignmentsController.cs" />
@@ -319,6 +320,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Content Include=".jshintrc" />
+    <Content Include="app\blueprint\view-blueprint-budget.controller.js" />
+    <Content Include="app\blueprint\view-blueprint-budget.html" />
+    <Content Include="app\blueprint\add-blueprint-budget-modal.html" />
+    <Content Include="app\blueprint\add-blueprint-budget-modal.controller.js" />
     <Content Include="app\blueprint\update-blueprint-assignment.controller.js" />
     <Content Include="app\blueprint\update-blueprint-assignment.html" />
     <Content Include="app\blueprint\blueprint-assignments.controller.js" />

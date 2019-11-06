@@ -10,6 +10,8 @@
         var vm = this;
         vm.lodash = _;
         vm.blueprintAssignments = [];
+        vm.budgets = [];
+        vm.blueprintAssignmentsHavingBudget = [];
         vm.selectedSubscription = null;
         vm.subscriptionId = $state.params.subscriptionId;
         vm.subscriptionName = $state.params.subscriptionName;
@@ -17,7 +19,7 @@
         vm.onSubscriptionChange = onSubscriptionChange;
         vm.getBlueprintAssignments = getBlueprintAssignments;
         vm.viewDetails = viewDetails;
-        //vm.update = update;
+        vm.addBudget = addBudget;
         vm.getEnrolledSubscription = getEnrolledSubscription;
         activate();
 
@@ -57,6 +59,27 @@
         function getBlueprintAssignments() {
             ascApi.getBlueprintAssignments(vm.subscriptionId).then(function (data) {
                 vm.blueprintAssignments = data;
+                //Checking if any budget is associated with this blueprint assignment
+                getBudgets();
+            });
+        }
+
+        function getBudgets() {
+            ascApi.getBudgets(vm.subscriptionId).then(function (data) {
+                vm.budgets = data;
+                vm.budgets.forEach(function (budget) {
+                    var bpIds = budget.blueprintAssignmentId.split(",");
+                    vm.blueprintAssignmentsHavingBudget = vm.blueprintAssignmentsHavingBudget.concat(bpIds);
+                });
+                vm.blueprintAssignments.forEach(function (bpAssignment) {
+                    var idx = vm.blueprintAssignmentsHavingBudget.findIndex(i => i === bpAssignment.name);
+                    if (idx >= 0) {
+                        var matchingIdx = vm.blueprintAssignments.findIndex(i => i.name === bpAssignment.name);
+                        bpAssignment.isBudgetAssigned = true;
+                        vm.blueprintAssignments.splice(matchingIdx, 1, bpAssignment);
+                    }
+                });
+                console.log(vm.blueprintAssignments);
             });
         }
 
@@ -80,8 +103,35 @@
             });
         }
 
-        //function update() {
-
-        //}
+        function addBudget(blueprintAssignment) {
+            if (blueprintAssignment.isBudgetAssigned) {
+                $state.go('view-blueprint-budget', {
+                    subscriptionId: vm.subscriptionId,
+                    subscriptionName: vm.subscriptionName,
+                    blueprintAssignmentName: blueprintAssignment.name
+                });
+            } else {
+                $uibModal.open({
+                    templateUrl: '/app/blueprint/add-blueprint-budget-modal.html',
+                    controller: 'AddBlueprintBudgetCtrl',
+                    controllerAs: 'vm',
+                    resolve: {
+                        initialData: ['ascApi', function (ascApi) {
+                            return vm.budgets;
+                        }],
+                        subscriptionId: function () {
+                            return vm.subscriptionId;
+                        },
+                        subscriptionName: function () {
+                            return vm.subscriptionName;
+                        },
+                        blueprintAssignmentName: function () {
+                            return blueprintAssignment.name;
+                        }
+                    },
+                    size: 'lg'
+                });
+            }
+        }
     }
 })();

@@ -1,0 +1,13 @@
+﻿<ol class="breadcrumb">
+    <li><a ui-sref="dashboard">Home</a></li>
+    <li>{{vm.subscriptionName}}</li>
+    <li><a ui-sref="blueprints-home">Blueprints</a></li>
+    <li><a ui-sref="blueprint-assignments({subscriptionId: vm.subscriptionId, subscriptionName: vm.subscriptionName})">Blueprint Assignments</a></li>
+    <li>View Budget</li>
+</ol>
+<form name="frmAssign" class="form-horizontal" novalidate>
+    <div>
+        <h2>{{vm.lodash.toUpper(vm.blueprintAssignment.name)}} : {{vm.lodash.toUpper("View Budget")}}</h2>
+
+    </div>
+</form>
