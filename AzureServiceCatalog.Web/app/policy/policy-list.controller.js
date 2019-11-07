@@ -53,6 +53,11 @@
                         enrolledSubscription.push(data[i]);
                     }
                     appStorage.setEnrolledSubscription(JSON.stringify(enrolledSubscription));
+                    if (enrolledSubscription.length >= 0) {
+                        vm.selectedSubscription = vm.subscriptions[0];
+                        vm.subscriptionId = enrolledSubscription[0].rowKey;
+                        getPoliciesForSelectedSubcription(enrolledSubscription[0].rowKey);
+                    }
                 });
             } else {
                 enrolledSubscription = JSON.parse(enrolledSubscription);
