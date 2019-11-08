@@ -67,6 +67,7 @@
             getUsers: getUsers,
             getPortalUrl: getPortalUrl,
             getBudgets: getBudgets,
+            getBudget: getBudget,
             createBudget: createBudget,
             updateBudget: updateBudget
         };
@@ -340,6 +341,10 @@
 
         function getBudgets(subscriptionId) {
             return httpGet('/api/budgets?subscriptionId=' + subscriptionId);
+        }
+
+        function getBudget(subscriptionId, code) {
+            return httpGet('/api/budgets/' + code + '?subscriptionId=' + subscriptionId);
         }
 
         function createBudget(budget) {

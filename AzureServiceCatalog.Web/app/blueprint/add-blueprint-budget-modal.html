@@ -1,7 +1,6 @@
 ﻿<div class="modal-header">
-    <h2>Add Budget</h2>
+    <h2>{{vm.isCreateNewBudgetClicked ? "New Budget" : "Assign Budget"}}<span><a class="pull-right btn btn-default" data-dismiss="modal" title="Cancel" ng-click="vm.close()"> X </a></span></h2>
 </div>
-
 <div class="modal-body" ng-show="!vm.isCreateNewBudgetClicked">
     <form class="form">
         <div style="overflow:auto;">
@@ -18,7 +17,6 @@
         </div>
     </form>
 </div>
-
 <div class="modal-body" ng-show="vm.isCreateNewBudgetClicked">
     <form class="form">
         <div style="overflow:auto;">
@@ -42,8 +40,8 @@
                 <tr>
                     <td td style="width:50%">
                         <div class="form-group">
-                            <label>Amount</label>
-                            <input type="text" class="form-control" id="budgetAmount" name="budgetAmount" placeholder="Amount" ng-model="vm.budgetAmount" required>
+                            <label>Amount($)</label>
+                            <input type="number" step="0.01" min="0" class="currency form-control" id="budgetAmount" name="budgetAmount" placeholder="Amount" ng-model="vm.budgetAmount" required>
                         </div>
                     </td>
                     <td style="width:50%;padding-left:5px">
@@ -75,10 +73,9 @@
         </div>
     </form>
 </div>
-
 <div class="modal-footer">
-    <button class="btn btn-primary" ng-show="!vm.isCreateNewBudgetClicked" ng-click="vm.onCreateButtonClick()">Create New Budget</button>
+    <button class="btn btn-primary" ng-show="!vm.isCreateNewBudgetClicked" ng-click="vm.onCreateButtonClick()">New Budget</button>
     <button class="btn btn-warning" ng-show="!vm.isCreateNewBudgetClicked" ng-click="vm.saveExistingBudget()">Save</button>
     <button class="btn btn-primary" ng-show="vm.isCreateNewBudgetClicked" ng-click="vm.saveNewBudget()">Save</button>
-    <button class="btn btn-default" ng-click="vm.close()">Close</button>
+    <button class="btn btn-default" ng-click="vm.close()">Cancel</button>
 </div>

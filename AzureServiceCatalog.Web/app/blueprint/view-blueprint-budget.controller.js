@@ -11,14 +11,16 @@
         vm.lodash = _;
         vm.subscriptionId = $state.params.subscriptionId;
         vm.subscriptionName = $state.params.subscriptionName;
-        vm.blueprintAssignment = null;
+        vm.blueprintAssignmentName = $state.params.blueprintAssignmentName;
+        vm.budgetCode = $state.params.budgetCode;
+        vm.budget = null;
 
         activate();
 
         function activate() {
             console.log(initialData);
             if (initialData) {
-                vm.blueprintAssignment = initialData;
+                vm.budget = initialData;
 
             }
         }

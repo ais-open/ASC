@@ -59,7 +59,6 @@
         function getBlueprintAssignments() {
             ascApi.getBlueprintAssignments(vm.subscriptionId).then(function (data) {
                 vm.blueprintAssignments = data;
-                //Checking if any budget is associated with this blueprint assignment
                 getBudgets();
             });
         }
@@ -71,6 +70,7 @@
                     var bpIds = budget.blueprintAssignmentId.split(",");
                     vm.blueprintAssignmentsHavingBudget = vm.blueprintAssignmentsHavingBudget.concat(bpIds);
                 });
+                //Checking if any budget is associated with this blueprint assignment
                 vm.blueprintAssignments.forEach(function (bpAssignment) {
                     var idx = vm.blueprintAssignmentsHavingBudget.findIndex(i => i === bpAssignment.name);
                     if (idx >= 0) {
@@ -104,11 +104,21 @@
         }
 
         function addBudget(blueprintAssignment) {
+            var budgetCode = "";
+            vm.budgets.forEach(function (budget) {
+                var temp = budget.blueprintAssignmentId.split(",");
+                var idx = temp.findIndex(i => i === blueprintAssignment.name);
+                if (idx >= 0) {
+                    budgetCode = budget.code;
+                }
+            });
+            console.log(budgetCode);
             if (blueprintAssignment.isBudgetAssigned) {
                 $state.go('view-blueprint-budget', {
                     subscriptionId: vm.subscriptionId,
                     subscriptionName: vm.subscriptionName,
-                    blueprintAssignmentName: blueprintAssignment.name
+                    blueprintAssignmentName: blueprintAssignment.name,
+                    budgetCode: budgetCode
                 });
             } else {
                 $uibModal.open({

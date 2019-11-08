@@ -51,7 +51,7 @@ namespace AzureServiceCatalog.Web.Controllers
             }
         }
 
-        [Route("{blueprintAssignmentId}")]
+        [Route("{code}")]
         public async Task<IHttpActionResult> Get(string subscriptionId, string code)
         {
             var thisOperationContext = new BaseOperationContext("BudgetController:Get")
