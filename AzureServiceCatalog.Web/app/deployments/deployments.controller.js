@@ -30,7 +30,6 @@
         }
 
         function getEnrolledSubscription() {
-            vm.subscriptions = getEnrolledSubscription();
             var enrolledSubscription = appStorage.getEnrolledSubscription();
 
             if (enrolledSubscription === null) {
@@ -40,6 +39,10 @@
                         enrolledSubscription.push(data[i]);
                     }
                     appStorage.setEnrolledSubscription(JSON.stringify(enrolledSubscription));
+                    if (enrolledSubscription.length >= 0) {
+                        vm.selectedSubscription = vm.subscriptions[0];
+                        subscriptionChanged();
+                    }
                 });
             } else {
                 enrolledSubscription = JSON.parse(enrolledSubscription);
