@@ -191,6 +191,11 @@
     <Compile Include="BlueprintAssignment.cs" />
     <Compile Include="Budget.cs" />
     <Compile Include="BudgetRepeatFrequency.cs" />
+    <Compile Include="ChartData.cs" />
+    <Compile Include="Usage.cs" />
+    <Compile Include="UsageRequest.cs" />
+    <Compile Include="UsageResponse.cs" />
+    <Compile Include="UsageTableEntity.cs" />
     <Compile Include="ConsumptionUsageDetails.cs" />
     <Compile Include="ManagedIdentity.cs" />
     <Compile Include="BlueprintVersion.cs" />

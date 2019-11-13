@@ -103,5 +103,20 @@ namespace AzureServiceCatalog.Helpers
             }
 
         }
+
+        public async Task<string> GetBlueprintAssignmentOperations(string subscriptionId, string blueprintAssignmentName, BaseOperationContext parentOperationContext)
+        {
+            var thisOperationContext = new BaseOperationContext(parentOperationContext, "BlueprintsHelper:GetBlueprintAssignmentOperations");
+            try
+            {
+                var requestUrl = $"{Config.AzureResourceManagerUrl}/subscriptions/{subscriptionId}/providers/Microsoft.Blueprint/blueprintAssignments/{blueprintAssignmentName}/assignmentOperations?api-version={blueprintApiVersion}";
+                return await ArmHttpHelper.Get(requestUrl, thisOperationContext);
+            }
+            finally
+            {
+                thisOperationContext.CalculateTimeTaken();
+                TraceHelper.TraceOperation(thisOperationContext);
+            }
+        }
     }
 }

@@ -167,6 +167,8 @@
     <Compile Include="ArmHttpHelper.cs" />
     <Compile Include="AzureADGraphAPIHelper.cs" />
     <Compile Include="AzureResourceMangerHelper.cs" />
+    <Compile Include="BudgetHelper\ChartHelper.cs" />
+    <Compile Include="BudgetHelper\UsageHelper.cs" />
     <Compile Include="BudgetHelper\AzureTableRepository.cs" />
     <Compile Include="BudgetHelper\IAzureTableRepository.cs" />
     <Compile Include="BudgetRepositories\IRepository.cs" />

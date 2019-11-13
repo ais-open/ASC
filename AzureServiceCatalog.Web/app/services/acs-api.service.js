@@ -69,7 +69,9 @@
             getBudgets: getBudgets,
             getBudget: getBudget,
             createBudget: createBudget,
-            updateBudget: updateBudget
+            updateBudget: updateBudget,
+            getBlueprintAssignmentOperations: getBlueprintAssignmentOperations,
+            getUsageData: getUsageData
         };
 
         return service;
@@ -355,6 +357,14 @@
             return httpPut('/api/budgets/', budgetObjWithOldId);
         }
 
+        function getBlueprintAssignmentOperations(subscriptionId, blueprintAssignmentName) {
+            return httpGet('/api/blueprint-assignment-operations/' + blueprintAssignmentName + '?subscriptionId=' + subscriptionId);
+        }
+
+        function getUsageData(budget) {
+            return httpPost('/api/usage', budget);
+        }
+         
         //#region Private Methods
 
         function httpDelete(url, data) {

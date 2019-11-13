@@ -9,7 +9,7 @@
                     <td colspan="2">
                         <div class="form-group">
                             <label>Existing Budgets</label>
-                            <select class="form-control" name="blueprintAssignmentBudget" ng-model="vm.selectedBudget" ng-options="b as b.name for b in vm.existingBudgets" required></select>
+                            <select class="form-control" autofocus id ="BlueprintAssignmentBudget" name="blueprintAssignmentBudget" ng-model="vm.selectedBudget" ng-options="b as b.name for b in vm.existingBudgets" required></select>
                         </div>
                     </td>
                 </tr>
@@ -25,7 +25,7 @@
                     <td colspan="2">
                         <div class="form-group">
                             <label>Budget Name</label>
-                            <input type="text" class="form-control" id="budgetName" name="budgetName" placeholder="Budget Name" ng-model="vm.budgetName" required>
+                            <input type="text" class="form-control" id="BudgetName" name="budgetName" placeholder="Budget Name" ng-model="vm.budgetName" required>
                         </div>
                     </td>
                 </tr>
@@ -47,7 +47,7 @@
                     <td style="width:50%;padding-left:5px">
                         <div class="form-group">
                             <label>Repeat Frequency</label>
-                            <select class="form-control" name="BudgetRepeatFrequency" ng-model="vm.budgetRepeatFrequency" required>
+                            <select class="form-control" name="BudgetRepeatFrequency" ng-model="vm.budgetRepeatFrequency" ng-change="vm.onBudgetRepeatFrequencyChange()" required>
                                 <option ng-model="vm.budgetRepeatFrequency" value="Monthly">Monthly</option>
                                 <option ng-model="vm.budgetRepeatFrequency" value="Quarterly">Quarterly</option>
                                 <option ng-model="vm.budgetRepeatFrequency" value="Yearly">Yearly</option>

@@ -8,6 +8,34 @@
 <form name="frmAssign" class="form-horizontal" novalidate>
     <div>
         <h2>{{vm.lodash.toUpper(vm.blueprintAssignmentName)}} : {{vm.lodash.toUpper("View Budget")}}</h2>
-
+        <h4>Budget Summary</h4>
+        <div class="col-md-12">
+            <div name="blueprintVersionForm" class="form-inline control-columns" novalidate>
+                <div class="form-group col-xs-12">
+                    <label class="col-lg-2 col-xs-12 col-sm-3">Name: </label>
+                    <input type="text" class="form-control" name="budgetName" ng-model="vm.budget.name" disabled>
+                </div>
+                <div class="form-group col-xs-12">
+                    <label class="col-lg-2 col-xs-12 col-sm-3">Description: </label>
+                    <input type="text" class="form-control" name="budgetDescription" ng-model="vm.budget.description" disabled />
+                </div>
+                <div class="form-group col-xs-12">
+                    <label class="col-lg-2 col-xs-12 col-sm-3">Amount: </label>
+                    <input type="text" class="form-control" name="budgetAmount" ng-model="vm.budget.amount" disabled />
+                </div>
+                <div class="form-group col-xs-12">
+                    <label class="col-lg-2 col-xs-12 col-sm-3">Repeat Type: </label>
+                    <input type="text" class="form-control" name="budgetRepeatType" ng-model="vm.budget.repeatTypeString" disabled />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="width: 100%; overflow: hidden;">
+        <div style="width: 600px; float: left;">
+            <nvd3 options="vm.options" data="vm.resourceData"></nvd3>
+        </div>
+        <div style="margin-left: 620px;">
+            <nvd3 options="vm.doughnutOptions" data="vm.doughnutData"></nvd3>
+        </div>
     </div>
 </form>

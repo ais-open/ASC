@@ -17,11 +17,12 @@
         vm.budgetDescription = "";
         vm.budgetAmount = "";
         vm.budgetRepeatFrequency = "";
-        vm.budgetStartDate = "";
+        vm.budgetStartDate = new Date();
         vm.budgetEndDate = "";
         vm.isCreateNewBudgetClicked = false;
         vm.close = close;
         vm.onCreateButtonClick = onCreateButtonClick;
+        vm.onBudgetRepeatFrequencyChange = onBudgetRepeatFrequencyChange;
         vm.saveExistingBudget = saveExistingBudget;
         vm.saveNewBudget = saveNewBudget;
 
@@ -31,7 +32,17 @@
 
         function onCreateButtonClick() {
             vm.isCreateNewBudgetClicked = true;
+        }
 
+        function onBudgetRepeatFrequencyChange() {
+            var date = new Date();
+            if (vm.budgetRepeatFrequency === "Monthly") {
+                vm.budgetEndDate = new Date(date.setMonth(date.getMonth() + 1));
+            } else if (vm.budgetRepeatFrequency === "Quarterly") {
+                vm.budgetEndDate = new Date(date.setMonth(date.getMonth() + 3));
+            } else if (vm.budgetRepeatFrequency === "Yearly") {
+                vm.budgetEndDate = new Date(date.setMonth(date.getMonth() + 12));
+            }
         }
 
         function saveExistingBudget() {

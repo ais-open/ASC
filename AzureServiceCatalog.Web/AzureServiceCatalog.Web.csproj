@@ -286,6 +286,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\BlueprintAssignmentOperationsController.cs" />
+    <Compile Include="Controllers\UsageController.cs" />
     <Compile Include="Controllers\BudgetController.cs" />
     <Compile Include="Controllers\ManagedIdentityController.cs" />
     <Compile Include="Controllers\AuditLogsController.cs" />
