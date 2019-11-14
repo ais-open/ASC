@@ -15,7 +15,7 @@ namespace AzureServiceCatalog.Helpers.BudgetHelper
     public interface IRepository<T> where T : BaseModel
     {
         Task<IEnumerable<T>> GetList();
-        Task<T> GetSingle(string code);
+        Task<T> GetSingle(string subscriptionId, string code);
         Task<IEnumerable<T>> GetListByDepCode(string code);
         Task Add(T model);
         Task Update(T model);

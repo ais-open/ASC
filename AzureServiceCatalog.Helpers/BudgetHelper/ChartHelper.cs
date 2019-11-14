@@ -21,6 +21,7 @@ namespace AzureServiceCatalog.Helpers.BudgetHelper
         string strvariance = "";
         string strvarPercentage = "";
         double varPercentage;
+        string doughnutchartTitle = "";
 
         public UsageRequest usageRequest;
         public UsageResponse resourceCostResponse;
@@ -46,14 +47,11 @@ namespace AzureServiceCatalog.Helpers.BudgetHelper
 
         UsageHelper usageHelper = new UsageHelper();
 
-        public async Task<BudgetChartData> GetBudgetChartData(Budget budget)
+        public async Task<BudgetChartData> GetBudgetChartData(UsageRequest requestParams)
         {
-            var model = new UsageRequest
-            {
-                StartDate = DateTime.Now.AddMonths(-6)
-            };
             //Get Azure Usage
-            resourceCostResponse = await usageHelper.GetUsageData(model);
+            requestParams.StartDate = DateTime.Now.AddMonths(-6);
+            resourceCostResponse = await usageHelper.GetUsageData(requestParams);
             resourcecostList = resourceCostResponse.Value;
             var summaryByMonth = resourcecostList.GroupBy(t => t.Month, (key, t) =>
             {
@@ -74,16 +72,25 @@ namespace AzureServiceCatalog.Helpers.BudgetHelper
                     Amount = transactionArray.Sum(ta => ta.Cost),
                 };
             }).ToList();
+            totalCost = summaryByService.Sum(a => a.Amount);
+            strtotalCost = totalCost.ToString("C", CultureInfo.CreateSpecificCulture("en-IN"));
+            doughnutchartTitle = "Cost Distribution by Service - Total Cost as of Today: " + totalCost.ToString("C", CultureInfo.CreateSpecificCulture("en-IN"));
+
+            variance = budgetAmount - totalCost;
+            varPercentage = Math.Round((variance / budgetAmount), 2) * 100;
+            strvariance = variance.ToString("C", CultureInfo.CreateSpecificCulture("en-IN"));
+            strvarPercentage = varPercentage + "%";
+
             summaryByMonth.ForEach(
                 row => chartData.Add(new TrendlineData
                 {
                     x = new DateTime(2019, row.Month, 1),
                     y = Math.Round(row.Amount, 2)
             }));
-            if (budget != null)
+            if (requestParams.Budget != null)
             {
-                bAmount = budget.Amount;
-                bRepeatTypeString = budget.RepeatTypeString;
+                bAmount = requestParams.Budget.Amount;
+                bRepeatTypeString = requestParams.Budget.RepeatTypeString;
 
                 if (bRepeatTypeString.ToLower() == "monthly")//Monthly
                 {
@@ -101,7 +108,7 @@ namespace AzureServiceCatalog.Helpers.BudgetHelper
                     budgetAmount = bAmount;
                 }
             }
-
+            strbudgetAmount = budgetAmount.ToString("C", CultureInfo.CreateSpecificCulture("en-IN"));
             summaryByMonth.ForEach(
                row =>
                  budgetchartData.Add(new TrendlineData
@@ -122,7 +129,12 @@ namespace AzureServiceCatalog.Helpers.BudgetHelper
             {
                 CostData = chartData,
                 BudgetData = budgetchartData,
-                CostDoughnutData = doughnutDataSource
+                CostDoughnutData = doughnutDataSource,
+                BudgetAmount = strbudgetAmount,
+                TotalCost = strtotalCost,
+                Variance = strvariance,
+                VariancePercentage = strvarPercentage,
+                DoughnutchartTitle = doughnutchartTitle
             };
             return data;
         }

@@ -50,10 +50,10 @@ namespace AzureServiceCatalog.Helpers.BudgetHelper
             return results;
         }
 
-        public async Task<T> GetSingle(string rowKey)
+        public async Task<T> GetSingle(string partitionKey, string rowKey)
         {
             CloudTable table = await GetTableAsync();
-            TableOperation operation = TableOperation.Retrieve<T>(tableName, rowKey);
+            TableOperation operation = TableOperation.Retrieve<T>(partitionKey, rowKey);
             TableResult result = await table.ExecuteAsync(operation);
 
             return (T)(dynamic)result.Result;
@@ -73,9 +73,9 @@ namespace AzureServiceCatalog.Helpers.BudgetHelper
             await table.ExecuteAsync(operation);
         }
 
-        public async Task Delete(string rowKey)
+        public async Task Delete(string partitionKey, string rowKey)
         {
-            T entity = await GetSingle(rowKey);
+            T entity = await GetSingle(partitionKey, rowKey);
             CloudTable table = await GetTableAsync();
             TableOperation operation = TableOperation.Delete(entity);
             await table.ExecuteAsync(operation);

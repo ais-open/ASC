@@ -20,10 +20,10 @@ namespace AzureServiceCatalog.Web.Controllers
     {
 
         [Route("")]
-        public async Task<IHttpActionResult> Post([FromBody]Budget budget)
+        public async Task<IHttpActionResult> Post([FromBody]UsageRequest requestParams)
         {
             ChartHelper chartHelper = new ChartHelper();
-            BudgetChartData chartData = await chartHelper.GetBudgetChartData(budget);
+            BudgetChartData chartData = await chartHelper.GetBudgetChartData(requestParams);
             return this.Ok(chartData);
         }
     }

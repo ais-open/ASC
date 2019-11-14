@@ -26,7 +26,7 @@ namespace AzureServiceCatalog.Web.Controllers
         }
 
         [Route("")]
-        public async Task<IHttpActionResult> Get(string subscriptionId)
+        public async Task<IHttpActionResult> Get()
         {
             var thisOperationContext = new BaseOperationContext("BudgetController:Get")
             {
@@ -62,7 +62,7 @@ namespace AzureServiceCatalog.Web.Controllers
             };
             try
             {
-                var budget = await rep.GetSingle(code);
+                var budget = await rep.GetSingle(subscriptionId, code);
                 return this.Ok(budget);
             }
             catch (Exception ex)
@@ -101,7 +101,7 @@ namespace AzureServiceCatalog.Web.Controllers
                     EndDate = item.endDate,
                     RepeatType = (BudgetRepeat)item.repeatType
                 };
-                var existingModel = await rep.GetSingle(budgetModel.BlueprintAssignmentId);
+                var existingModel = await rep.GetSingle(budgetModel.SubscriptionId, budgetModel.Code);
                 if (existingModel != null) return BadRequest();
 
                 await rep.Add(budgetModel);
@@ -143,7 +143,7 @@ namespace AzureServiceCatalog.Web.Controllers
                     EndDate = item.endDate,
                     RepeatType = item.repeatType
                 };
-                var existingModel = await rep.GetSingle(budgetModel.Code);
+                var existingModel = await rep.GetSingle(budgetModel.SubscriptionId, budgetModel.Code);
                 if (existingModel == null)
                 {
                     ErrorInformation errorInformation = new ErrorInformation();
@@ -168,8 +168,8 @@ namespace AzureServiceCatalog.Web.Controllers
             }
         }
 
-        [Route("{blueprintAssignmentId}")]
-        public async Task<IHttpActionResult> Delete(string blueprintAssignmentId)
+        [Route("{code}")]
+        public async Task<IHttpActionResult> Delete(string subcriptionId, string code)
         {
             var thisOperationContext = new BaseOperationContext("BudgetController:Delete")
             {
@@ -179,7 +179,7 @@ namespace AzureServiceCatalog.Web.Controllers
             };
             try
             {
-                var existingModel = await rep.GetSingle(blueprintAssignmentId);
+                var existingModel = await rep.GetSingle(subcriptionId, code);
                 if (existingModel == null) return BadRequest();
 
                 await rep.Delete(existingModel);

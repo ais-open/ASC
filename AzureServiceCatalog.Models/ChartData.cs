@@ -16,6 +16,11 @@ namespace AzureServiceCatalog.Models
         public List<TrendlineData> BudgetData { get; set; }
         public List<TrendlineData> CostData { get; set; }
         public List<DoughnutData> CostDoughnutData { get; set; }
+        public string BudgetAmount { get; set; }
+        public string TotalCost { get; set; }
+        public string Variance { get; set; }
+        public string VariancePercentage { get; set; }
+        public string DoughnutchartTitle { get; set; }
     }
 
     public class DoughnutData

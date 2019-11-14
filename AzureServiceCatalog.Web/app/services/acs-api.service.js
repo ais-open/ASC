@@ -341,8 +341,8 @@
             return httpGet('/api/identity/portal-url?extensionForUrl=' + extensionForUrl+ '&extensionType=' + extensionType);
         }
 
-        function getBudgets(subscriptionId) {
-            return httpGet('/api/budgets?subscriptionId=' + subscriptionId);
+        function getBudgets() {
+            return httpGet('/api/budgets');
         }
 
         function getBudget(subscriptionId, code) {
@@ -353,8 +353,8 @@
             return httpPost('/api/budgets', budget);
         }
 
-        function updateBudget(budgetObjWithOldId) {
-            return httpPut('/api/budgets/', budgetObjWithOldId);
+        function updateBudget(budgetToBeUpdated) {
+            return httpPut('/api/budgets/', budgetToBeUpdated);
         }
 
         function getBlueprintAssignmentOperations(subscriptionId, blueprintAssignmentName) {

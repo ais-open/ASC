@@ -29,9 +29,9 @@ namespace AzureServiceCatalog.Helpers.BudgetHelper
             return budgets;
         }
 
-        public async Task<Budget> GetSingle(string code)
+        public async Task<Budget> GetSingle(string subscriptionId, string code)
         {
-            var entity = await budgetDataRep.GetSingle(code);
+            var entity = await budgetDataRep.GetSingle(subscriptionId, code);
             if (entity == null) return null;
             return Mapper.Map(entity);
         }
@@ -53,7 +53,7 @@ namespace AzureServiceCatalog.Helpers.BudgetHelper
 
         public async Task Update(Budget model)
         {
-            var entity = await budgetDataRep.GetSingle(model.Code);
+            var entity = await budgetDataRep.GetSingle(model.SubscriptionId, model.Code);
 
             if (entity != null)
             {
@@ -71,11 +71,11 @@ namespace AzureServiceCatalog.Helpers.BudgetHelper
 
         public async Task Delete(Budget model)
         {
-            var entity = await budgetDataRep.GetSingle(model.BlueprintAssignmentId);
+            var entity = await budgetDataRep.GetSingle(model.SubscriptionId, model.Code);
 
             if (entity != null)
             {
-                await budgetDataRep.Delete(entity.RowKey);
+                await budgetDataRep.Delete(entity.SubscriptionId, entity.RowKey);
             }
         }
 

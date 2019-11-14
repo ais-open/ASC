@@ -64,7 +64,7 @@
         }
 
         function getBudgets() {
-            ascApi.getBudgets(vm.subscriptionId).then(function (data) {
+            ascApi.getBudgets().then(function (data) {
                 vm.budgets = data;
                 vm.budgets.forEach(function (budget) {
                     var bpIds = budget.blueprintAssignmentId.split(",");

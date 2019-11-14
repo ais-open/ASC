@@ -13,7 +13,7 @@ namespace AzureServiceCatalog.Models
     public class UsageRequest: BaseModel
     {
         public DateTime StartDate { get; set; }
-        public string Subscriptions { get; set; }
-        public string RessourceGroups { get; set; }
+        public Budget Budget { get; set; }
+        public dynamic AssignmentResources { get; set; }
     }
 }

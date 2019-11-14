@@ -29,5 +29,7 @@ namespace AzureServiceCatalog.Models
         public double Cost { get; set; }
         public string SubscriptionId { get; set; }
         public string ResourceGroup { get; set; }
+        public string ResourceName { get; set; }
+        public string ResourceId { get; set; }
     }
 }

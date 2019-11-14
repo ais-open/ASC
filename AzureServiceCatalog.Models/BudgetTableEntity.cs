@@ -13,11 +13,6 @@ namespace AzureServiceCatalog.Models
     public class BudgetTableEntity : TableEntity
     {
         public static string TableName = "Budget";
-
-        public BudgetTableEntity()
-        {
-            PartitionKey = TableName;
-        }
         public string BlueprintAssignmentId { get; set; }
         public string SubscriptionId { get; set; }
         public string Name { get; set; }

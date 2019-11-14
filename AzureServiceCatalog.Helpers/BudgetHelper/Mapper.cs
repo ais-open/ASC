@@ -15,6 +15,7 @@ namespace AzureServiceCatalog.Helpers.BudgetHelper
             return new BudgetTableEntity
             {
                 RowKey = model.Code,
+                PartitionKey = model.SubscriptionId,
                 BlueprintAssignmentId = model.BlueprintAssignmentId,
                 SubscriptionId = model.SubscriptionId,
                 Name = model.Name,

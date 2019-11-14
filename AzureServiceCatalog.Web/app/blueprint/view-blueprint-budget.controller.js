@@ -15,6 +15,7 @@
         vm.budgetCode = $state.params.budgetCode;
         vm.budget = null;
         vm.blueprintAssignmentOperation = null;
+        vm.assignmentResources = [];
         vm.getBlueprintAssignmentOperations = getBlueprintAssignmentOperations;
         vm.getUsageData = getUsageData;
         vm.options = {
@@ -106,7 +107,7 @@
             if (initialData) {
                 vm.budget = initialData;
                 vm.getBlueprintAssignmentOperations();
-                vm.getUsageData();
+                
             }
         }
 
@@ -118,7 +119,7 @@
         }
 
         function getResourcesFromAssignment(assignmentOperation) {
-            var resources = [];
+           let resources = [];
             var deployments = assignmentOperation.properties.deployments;
             deployments.forEach(function (deployment) {
                 if (typeof deployment.result !== 'undefined') {
@@ -130,10 +131,20 @@
 
                 }
             });
+            vm.assignmentResources = resources;
+            console.log(vm.assignmentResources);
+            vm.getUsageData(resources);
         }
 
-        function getUsageData() {
-            ascApi.getUsageData(vm.budget).then(function (data) {
+        function getUsageData(resources) {
+            console.log(resources);
+            console.log(typeof resources);
+            console.log(typeof vm.assignmentResources);
+            var requestParams = {
+                Budget: vm.budget,
+                AssignmentResources: vm.assignmentResources
+            }
+            ascApi.getUsageData(requestParams).then(function (data) {
                 vm.resourceData = [
                     {
                         key: "Cost",
