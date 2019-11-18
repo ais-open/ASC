@@ -26,7 +26,7 @@ namespace AzureServiceCatalog.Helpers.BudgetHelper
                 resourceId = item.id;
                 var entity = await usageDataRep.GetList(new TableQuery<UsageTableEntity>()
                     .Where(TableQuery.GenerateFilterCondition("ResourceId", QueryComparisons.Equal, resourceId)));
-                entities.Concat(entity);
+                entities = entities.Concat(entity).ToList();
             }
             if (entities.Count > 0)
             {

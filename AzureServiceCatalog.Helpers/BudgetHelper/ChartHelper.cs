@@ -72,14 +72,6 @@ namespace AzureServiceCatalog.Helpers.BudgetHelper
                     Amount = transactionArray.Sum(ta => ta.Cost),
                 };
             }).ToList();
-            totalCost = summaryByService.Sum(a => a.Amount);
-            strtotalCost = totalCost.ToString("C", CultureInfo.CreateSpecificCulture("en-IN"));
-            doughnutchartTitle = "Cost Distribution by Service - Total Cost as of Today: " + totalCost.ToString("C", CultureInfo.CreateSpecificCulture("en-IN"));
-
-            variance = budgetAmount - totalCost;
-            varPercentage = Math.Round((variance / budgetAmount), 2) * 100;
-            strvariance = variance.ToString("C", CultureInfo.CreateSpecificCulture("en-IN"));
-            strvarPercentage = varPercentage + "%";
 
             summaryByMonth.ForEach(
                 row => chartData.Add(new TrendlineData
@@ -109,6 +101,14 @@ namespace AzureServiceCatalog.Helpers.BudgetHelper
                 }
             }
             strbudgetAmount = budgetAmount.ToString("C", CultureInfo.CreateSpecificCulture("en-IN"));
+            totalCost = summaryByService.Sum(a => a.Amount);
+            strtotalCost = totalCost.ToString("C", CultureInfo.CreateSpecificCulture("en-IN"));
+            doughnutchartTitle = "Cost Distribution by Service - Total Cost as of Today: " + totalCost.ToString("C", CultureInfo.CreateSpecificCulture("en-IN"));
+
+            variance = budgetAmount - totalCost;
+            varPercentage = Math.Round((variance / budgetAmount), 2) * 100;
+            strvariance = variance.ToString("C", CultureInfo.CreateSpecificCulture("en-IN"));
+            strvarPercentage = varPercentage + "%";
             summaryByMonth.ForEach(
                row =>
                  budgetchartData.Add(new TrendlineData
@@ -116,7 +116,6 @@ namespace AzureServiceCatalog.Helpers.BudgetHelper
                      x = new DateTime(2019, row.Month, 1),
                      y = Math.Round(monthlyBudget, 2)
             }));
-            totalCost = summaryByService.Sum(a => a.Amount);
             summaryByService.ForEach(
                 row => doughnutDataSource.Add(new DoughnutData
                 {
@@ -125,6 +124,7 @@ namespace AzureServiceCatalog.Helpers.BudgetHelper
                     text = String.Format("{0:0.00}", (row.Amount / totalCost) * 100) + "%"
 
             }));
+
             BudgetChartData data = new BudgetChartData
             {
                 CostData = chartData,

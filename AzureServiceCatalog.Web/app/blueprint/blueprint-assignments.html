@@ -31,8 +31,8 @@
                     <th class="col-md-3">Assignment Name</th>
                     <th class="col-md-3">Blueprint Name</th>
                     <th class="col-md-3">Provisioning State</th>
-                    <th class="col-md-2"></th>
-                    <th class="col-md-1"></th>
+                    <th style="width: 5%;">Budget</th>
+                    <th style="width: 11%;"></th>
                     <th class="col-md-1"></th>
                 </tr>
             </thead>
@@ -43,14 +43,14 @@
                     </td>
                     <td class="col-md-3 middle-align">{{blueprintAssignment.blueprintName}}</td>
                     <td class="col-md-3 middle-align">{{vm.lodash.startCase(blueprintAssignment.provisioningState)}}</td>
-                    <td class="col-md-2 middle-align text-right"><button class="btn btn-warning" ng-click="vm.viewDetails(blueprintAssignment)">View Details...</button></td>
-                    <td class="col-md-1 middle-align text-right"><button class="btn btn-warning" ui-sref="update-blueprint-assignment({ subscriptionId: vm.subscriptionId, subscriptionName: vm.subscriptionName, blueprintAssignmentName: blueprintAssignment.name })">Update</button></td>
                     <td class="middle-align text-right">
                         <button class="btn btn-warning pull-left" ng-click="vm.addBudget(blueprintAssignment)">
                             <i class="glyphicon glyphicon-tasks" title="View Budget" ng-show="blueprintAssignment.isBudgetAssigned"></i>
                             <i class="glyphicon glyphicon-plus" title="Add Budget..." ng-show="!blueprintAssignment.isBudgetAssigned"></i>
                         </button>
                     </td>
+                    <td class="middle-align text-left"><button class="btn btn-warning" ng-click="vm.viewDetails(blueprintAssignment)">View Details...</button></td>
+                    <td class="middle-align text-left"><button class="btn btn-warning" ui-sref="update-blueprint-assignment({ subscriptionId: vm.subscriptionId, subscriptionName: vm.subscriptionName, blueprintAssignmentName: blueprintAssignment.name })">Update</button></td>
                 </tr>
             </tbody>
         </table>

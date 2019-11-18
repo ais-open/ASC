@@ -18,7 +18,7 @@
         vm.budgetAmount = "";
         vm.budgetRepeatFrequency = "";
         vm.budgetStartDate = new Date();
-        vm.budgetEndDate = "";
+        vm.budgetEndDate = new Date();
         vm.isCreateNewBudgetClicked = false;
         vm.close = close;
         vm.onCreateButtonClick = onCreateButtonClick;

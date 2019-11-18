@@ -16,6 +16,11 @@
         vm.budget = null;
         vm.blueprintAssignmentOperation = null;
         vm.assignmentResources = [];
+        vm.budgetAmount = "";
+        vm.totalCost = "";
+        vm.variance = "";
+        vm.variancePercentage = "";
+        vm.doughnutchartTitle = "Cost Distribution by Service";
         vm.getBlueprintAssignmentOperations = getBlueprintAssignmentOperations;
         vm.getUsageData = getUsageData;
         vm.options = {
@@ -45,12 +50,11 @@
                         return 0;
                     }
                 },
-
                 color: d3.scale.category10().range(),
                 duration: 300,
                 useInteractiveGuideline: true,
                 clipVoronoi: false,
-
+                xScale: d3.time.scale(),
                 xAxis: {
                     axisLabel: 'Usage Date',
                     tickFormat: function (d) {
@@ -98,7 +102,7 @@
             },
             title: {
                 enable: true,
-                text: 'Cost Distribution by Service'
+                text: vm.doughnutchartTitle
             }
         }
         activate();
@@ -145,6 +149,7 @@
                 AssignmentResources: vm.assignmentResources
             }
             ascApi.getUsageData(requestParams).then(function (data) {
+                console.log(data);
                 vm.resourceData = [
                     {
                         key: "Cost",
@@ -158,6 +163,11 @@
                     }
                 ];
                 vm.doughnutData = data.costDoughnutData;
+                vm.budgetAmount = data.budgetAmount,
+                vm.totalCost = data.totalCost,
+                vm.variance = data.variance,
+                vm.variancePercentage = data.variancePercentage,
+                vm.doughnutchartTitle = data.doughnutchartTitle
             });
         }
     }
