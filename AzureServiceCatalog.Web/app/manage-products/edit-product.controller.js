@@ -75,19 +75,26 @@
         }
 
         function save() {
-            ascApi.saveTemplate(vm.selectedItem).then(function (data) {
-                if (data) {
-                    var isNewProduct = !(vm.selectedItem.rowKey);
-                    var saveMessage = 'The ' + (isNewProduct ? 'new' : '') + ' product was saved successfully.';
-                    toastr.success(saveMessage, 'Save Successful');
-                    if (isNewProduct) {
-                        $state.go('edit-product', { id: data.rowKey });
-                    } else {
-                        vm.selectedItem = data;
-                        vm.origData = angular.copy(vm.selectedItem);
+            try {
+                var json = JSON.parse(vm.selectedItem.templateData);
+                ascApi.saveTemplate(vm.selectedItem).then(function (data) {
+                    if (data) {
+                        var isNewProduct = !(vm.selectedItem.rowKey);
+                        var saveMessage = 'The ' + (isNewProduct ? 'new' : '') + ' product was saved successfully.';
+                        toastr.success(saveMessage, 'Save Successful');
+                        if (isNewProduct) {
+                            $state.go('edit-product', { id: data.rowKey });
+                        } else {
+                            vm.selectedItem = data;
+                            vm.origData = angular.copy(vm.selectedItem);
+                        }
                     }
-                }
-            });
+                });
+            }
+            catch (err) {
+                var msg = 'Please provide the correct JSON Format for Product. ';
+                toastr.warning(msg, 'Invalid Product Details');
+            }
         }
 
         function downloadTemplate() {
