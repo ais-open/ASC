@@ -27,12 +27,11 @@
                 return;
             }
 
-            if (vm.newResourceGroupName && vm.location && vm.selectedGroups) {
+            if (vm.newResourceGroupName && vm.location) {
                 var newResourceGroup = {
                     resourceGroupName: vm.newResourceGroupName,
                     location: vm.location,
-                    subscriptionId: subscriptionId,
-                    contributorGroups: vm.selectedGroups
+                    subscriptionId: subscriptionId
                 };
 
                 ascApi.createResourceGroup(newResourceGroup).then(function (data) {
