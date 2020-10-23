@@ -59,16 +59,16 @@
                 <span ng-show="parameter.info.metadata.description" class="glyphicon glyphicon-info-sign" aria-hidden="true" uib-tooltip="{{parameter.info.metadata.description}}" tooltip-placement="left"></span>
             </label>
 
-            <div class="col-md-3" ng-show="{{vm.lodash.includes(['string', 'int'], parameter.info.type) && !parameter.info.allowedValues && !parameter.info.metadata.policy}}">
+            <div class="col-md-3" ng-show="{{vm.lodash.includes(['string', 'int', 'array', 'object'], (parameter.info.type | lowercase)) && !parameter.info.allowedValues && !parameter.info.metadata.policy}}">
                 <input type="text" class="form-control" ng-model="parameter.value" placeholder="Enter Value" required />
             </div>
-            <div class="col-md-3" ng-show="{{parameter.info.type === 'securestring' && !parameter.info.allowedValues}}">
+            <div class="col-md-3" ng-show="{{(parameter.info.type | lowercase) == 'securestring' && !parameter.info.allowedValues}}">
                 <input type="password" class="form-control" ng-model="parameter.value" placeholder="Enter Value" required />
             </div>
-            <div class="col-md-3" ng-show="{{vm.lodash.includes(['string', 'int'], parameter.info.type) && parameter.info.allowedValues}}">
+            <div class="col-md-3" ng-show="{{vm.lodash.includes(['string', 'int'], (parameter.info.type | lowercase)) && parameter.info.allowedValues}}">
                 <select class="form-control" ng-model="parameter.value" ng-options="p for p in parameter.info.allowedValues"></select>
             </div>
-            <div class="col-md-3" ng-show="{{vm.lodash.includes(['string', 'int'], parameter.info.type) && !!parameter.info.metadata.policy}}">
+            <div class="col-md-3" ng-show="{{vm.lodash.includes(['string', 'int'], (parameter.info.type | lowercase)) && !!parameter.info.metadata.policy}}">
                 <select class="form-control" ng-model="parameter.value" ng-options="p for p in vm.policyLookup[parameter.info.metadata.policy]"></select>
             </div>
         </div>
