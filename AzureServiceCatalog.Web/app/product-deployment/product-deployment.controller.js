@@ -33,7 +33,12 @@
 
         function activate() {
             _.forIn(vm.templateData.parameters, function (value, key) {
-                vm.parameters.push({ name: key, info: value, value: value.defaultValue });
+                //If value is JSON object we need to convert it into JSON string so as to display it on UI.
+                var itemValue = value.defaultValue;
+                if (value.type.toLowerCase() === "array" || value.type.toLowerCase() === "object" || value.type.toLowerCase() === "secureobject") {
+                    itemValue = JSON.stringify(value.defaultValue);
+                }
+                vm.parameters.push({ name: key, info: value, value: itemValue });
             });
         }
 
@@ -62,32 +67,62 @@
         }
 
         function deploy() {
-            var params = {};
-            _.forEach(vm.parameters, function (item) {
-                params[item.name] = { value: item.value };
-            });
+            try {
+                var params = {};
+                _.forEach(vm.parameters, function (item) {
 
-            var deployment = {
-                resourceGroupName: vm.selectedResourceGroup.name,
-                deploymentName: 'Deploy-' + moment().format('HH.mm.ss'),
-                templateName: initialData.product.rowKey,
-                subscriptionId: vm.selectedSubscription.rowKey,
-                parameters: JSON.stringify(params)
-            };
+                    //We need to stringify the default value because we are changing the value to string in previous obj to display on UI
+                    var defaultValue = item.info.defaultValue;
+                    if (item.info.type.toLowerCase() === "array" || item.info.type.toLowerCase() === "object" || item.info.type.toLowerCase() === "secureobject") {
+                        defaultValue = JSON.stringify(defaultValue);
+                    }
 
-            console.log('***deployment', deployment);
-            ascApi.validateDeployment(deployment).then(function (data) {
-                if (data.isValid) {
-                    ascApi.createDeployment(deployment).then(function (data) {
-                        console.log('Deployment created.', data);
-                        vm.operationId = data.requestId;
-                        taskMgr.addDeployTask(deployment.resourceGroupName, deployment.deploymentName, deployment.subscriptionId);
-                        //$state.go('user');
-                    });
-                } else {
-                    toastr.error(data.error.message, 'Validation Errors - Deploy Not Executed');
-                }
-            });
+                    //If template already contains default value and we are not changing the value 
+                    //then we will keep default value and not send the value of parameter in parameters object
+                    if (defaultValue != item.value) {
+                        var itemValue = item.value;
+                        if (item.info.type.toLowerCase() === "array" || item.info.type.toLowerCase() === "object" || item.info.type.toLowerCase() === "secureobject") {
+                            itemValue = JSON.parse(item.value);
+                        }
+                        if (item.info.type.toLowerCase() === "int") {
+                            itemValue = parseInt(item.value, 10);
+                        }
+                        if (item.info.type.toLowerCase() === "bool") {
+                            if (itemValue.toLowerCase() === "true") {
+                                itemValue = true;
+                            } else {
+                                itemValue = false;
+                            }
+                        }
+                        params[item.name] = { value: itemValue };
+                    }
+                });
+
+                var deployment = {
+                    resourceGroupName: vm.selectedResourceGroup.name,
+                    deploymentName: 'Deploy-' + moment().format('HH.mm.ss'),
+                    templateName: initialData.product.rowKey,
+                    subscriptionId: vm.selectedSubscription.rowKey,
+                    parameters: JSON.stringify(params)
+                };
+
+                console.log('***deployment', deployment);
+                ascApi.validateDeployment(deployment).then(function (data) {
+                    if (data.isValid) {
+                        ascApi.createDeployment(deployment).then(function (data) {
+                            console.log('Deployment created.', data);
+                            vm.operationId = data.requestId;
+                            taskMgr.addDeployTask(deployment.resourceGroupName, deployment.deploymentName, deployment.subscriptionId);
+                            //$state.go('user');
+                        });
+                    } else {
+                        toastr.error(data.error.message, 'Validation Errors - Deploy Not Executed');
+                    }
+                });
+            }
+            catch {
+                toastr.error('Please provide correct format value of parameters according to the Parameter Type.', 'Parameters Validation Errors');
+            }
         }
 
         function resourceGroupChanged() {
