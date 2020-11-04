@@ -58,13 +58,13 @@ namespace AzureServiceCatalog.Helpers
                 templateInit.IsPublished = true;
                 templateInit.TemplateData = response;
                 TemplateViewModel savedTemplateEntity = await repository.SaveTemplate(templateInit, thisOperationContext);
-                const string queryUrl2 = "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/101-create-ase-with-webapp/azuredeploy.parameters.json";
+                const string queryUrl2 = "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/101-create-ase-with-webapp/azuredeploy.json";
                 // Initially set the nextLink to the origin URL
                 TemplateViewModel templateInit2 = new TemplateViewModel();
                 var response2 = await httpClient.GetStringAsync(queryUrl2);
                 templateInit2.Name = "Web App with Redis Cache and SQL Database";
                 templateInit2.IsPublished = true;
-                templateInit2.TemplateData = response;
+                templateInit2.TemplateData = response2;
                 TemplateViewModel savedTemplateEntity2 = await repository.SaveTemplate(templateInit2, thisOperationContext);
 
                 //var notificationHelper = new NotificationHelper();
