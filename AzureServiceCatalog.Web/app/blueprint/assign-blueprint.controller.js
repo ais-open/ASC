@@ -23,7 +23,7 @@
         vm.targetScope = "";
         vm.resourceGroups = [];
         vm.parameters = [];
-        vm.extensionForUrl = "blade/Microsoft_AAD_IAM/UsersManagementMenuBlade/AllUsers";
+        vm.extensionForUrl = "blade/Microsoft_AAD_IAM/UsersManagementMenuBlade/MsGraphUsers";
         vm.extensionForBlueprints = "blade/Microsoft_Azure_Policy/BlueprintsMenuBlade/Blueprints";
         vm.portalUrlForUsers = "";
         vm.portalUrlForBlueprints = "";
